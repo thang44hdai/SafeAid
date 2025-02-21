@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <item
+        android:id="@+id/nav1"
+        android:icon="@drawable/ic_home_selector"
+        android:title="Home" />
+    <item
+        android:id="@+id/nav2"
+        android:icon="@drawable/ic_close"
+        android:title="Screen 2" />
+
+    <item
+        android:enabled="false"
+        android:title="" />
+    <item
+        android:id="@+id/nav3"
+        android:icon="@drawable/ic_close"
+        android:title="Screen 3" />
+    <item
+        android:id="@+id/nav4"
+        android:icon="@drawable/ic_close"
+        android:title="Screen 4" />
+</menu>
