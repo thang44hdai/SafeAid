@@ -23,7 +23,8 @@
             android:background="@drawable/bg_toolbar"
             android:baselineAligned="false"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme">
+            android:theme="?attr/actionBarTheme"
+            android:visibility="gone">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

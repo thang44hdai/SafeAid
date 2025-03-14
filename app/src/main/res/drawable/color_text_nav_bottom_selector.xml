@@ -4,8 +4,8 @@
         android:color="@color/primary"/>
 
     <item android:state_checked="false"
-        android:color="@color/secondary"/>
+        android:color="@color/white"/>
 
     <item android:state_enabled="false"
-        android:color="@color/secondary"/>
+        android:color="@color/white"/>
 </selector>

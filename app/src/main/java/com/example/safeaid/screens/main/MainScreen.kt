@@ -27,24 +27,29 @@ class MainScreen : BaseFragment<FragmentMainScreenBinding>() {
     override fun onInitListener() {
         viewBinding.bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.nav1 -> {
+                R.id.nav_home -> {
                     replaceFragment(HomeFragment())
                     mainViewModel.currentPage = 0
                 }
 
-                R.id.nav2 -> {
+                R.id.nav_first_aid -> {
                     replaceFragment(CameraFragment())
                     mainViewModel.currentPage = 1
                 }
 
-                R.id.nav3 -> {
+                R.id.nav_help -> {
                     replaceFragment(GalleryFragment())
                     mainViewModel.currentPage = 2
                 }
 
-                R.id.nav4 -> {
-                    replaceFragment(FingerFragment())
+                R.id.nav_test -> {
+                    replaceFragment(GalleryFragment())
                     mainViewModel.currentPage = 3
+                }
+
+                R.id.nav_profile -> {
+                    replaceFragment(FingerFragment())
+                    mainViewModel.currentPage = 4
                 }
 
                 else -> {
@@ -56,11 +61,11 @@ class MainScreen : BaseFragment<FragmentMainScreenBinding>() {
         }
 
         viewBinding.bottomNav.selectedItemId = when (mainViewModel.currentPage) {
-            0 -> R.id.nav1
-            1 -> R.id.nav2
-            2 -> R.id.nav3
-            3 -> R.id.nav4
-            else -> R.id.nav1
+            0 -> R.id.nav_home
+            1 -> R.id.nav_first_aid
+            2 -> R.id.nav_help
+            3 -> R.id.nav_test
+            else -> R.id.nav_profile
         }
     }
 

@@ -4,10 +4,10 @@
     android:id="@+id/nav_main"
     app:startDestination="@id/mainScreen">
 
-    <include app:graph="@navigation/nav_1" />
-    <include app:graph="@navigation/nav_2" />
-    <include app:graph="@navigation/nav_3" />
-    <include app:graph="@navigation/nav_4" />
+    <include app:graph="@navigation/nav_home" />
+    <include app:graph="@navigation/nav_first_aid" />
+    <include app:graph="@navigation/nav_test" />
+    <include app:graph="@navigation/nav_profile" />
     <fragment
         android:id="@+id/mainScreen"
         android:name="com.example.safeaid.screens.main.MainScreen"
