@@ -1,15 +1,217 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/profileRoot"
+    tools:context=".screens.finger.FingerFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <ScrollView
+        android:id="@+id/scrollProfile"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingTop="32dp"
+        android:paddingBottom="16dp"
+        android:overScrollMode="never"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Finger" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="16dp">
 
-    </FrameLayout>
+            <!-- Avatar + camera -->
+            <FrameLayout
+                android:layout_width="120dp"
+                android:layout_height="120dp">
+
+                <ImageView
+                    android:id="@+id/ivAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/default_avt"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/bg_circle"
+                    android:clipToOutline="true" />
+
+                <ImageButton
+                    android:id="@+id/btnEditAvatar"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="4dp"
+                    android:src="@drawable/ic_camera"
+                    android:background="@drawable/bg_circle"
+                    app:tint="@android:color/black" />
+            </FrameLayout>
+
+            <!-- Tên người dùng -->
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Hai Nam"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
+
+            <!-- Chỉnh sửa thông tin -->
+            <TextView
+                android:id="@+id/btnEditInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="6dp"
+                android:background="@drawable/bg_edit_info"
+                android:text="Chỉnh sửa thông tin"
+                android:textSize="14sp"
+                android:textColor="@android:color/black" />
+
+            <!-- Các mục chức năng -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:paddingHorizontal="16dp">
+
+                <!-- Avatar, tên, nút chỉnh sửa giống trước... -->
+
+                <!-- Phần các mục chức năng -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="24dp">
+
+                    <!-- Item 1 -->
+                    <LinearLayout
+                        style="@style/ProfileOptionItem"
+                        android:id="@+id/optionRate"
+                        android:layout_marginTop="0dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_star"
+                            app:tint="@android:color/black" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:text="Đánh giá ứng dụng"
+                            android:textSize="14sp"
+                            android:textColor="@android:color/black" />
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@android:color/darker_gray" />
+                    </LinearLayout>
+
+                    <!-- Item 2 -->
+                    <LinearLayout
+                        style="@style/ProfileOptionItem"
+                        android:id="@+id/optionChangePass"
+                        android:layout_marginTop="12dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_comment"
+                            app:tint="@android:color/black" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:text="Đổi mật khẩu"
+                            android:textSize="14sp"
+                            android:textColor="@android:color/black" />
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@android:color/darker_gray" />
+                    </LinearLayout>
+
+                    <!-- Item 3 -->
+                    <LinearLayout
+                        style="@style/ProfileOptionItem"
+                        android:id="@+id/optionSaved"
+                        android:layout_marginTop="12dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_bookmark"
+                            app:tint="@android:color/black" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:text="Đã lưu"
+                            android:textSize="14sp"
+                            android:textColor="@android:color/black" />
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@android:color/darker_gray" />
+                    </LinearLayout>
+
+                    <!-- Item 4 (Logout) -->
+                    <LinearLayout
+                        style="@style/ProfileOptionItem"
+                        android:id="@+id/optionLogout"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_option_logout">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_logout"
+                            app:tint="@color/colorLogout" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:text="Đăng xuất"
+                            android:textSize="14sp"
+                            android:textColor="@color/colorLogout" />
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_arrow_right"
+                            app:tint="@color/colorLogout" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
