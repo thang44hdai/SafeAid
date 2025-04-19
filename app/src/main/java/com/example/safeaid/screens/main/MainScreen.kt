@@ -9,6 +9,7 @@ import com.example.safeaid.screens.camera.CameraFragment
 import com.example.safeaid.screens.finger.FingerFragment
 import com.example.safeaid.screens.gallery.GalleryFragment
 import com.example.safeaid.screens.home.HomeFragment
+import com.example.safeaid.screens.quiz.QuizCategoryFragment
 
 class MainScreen : BaseFragment<FragmentMainScreenBinding>() {
     private val mainViewModel: MainViewModel by activityViewModels()
@@ -43,7 +44,7 @@ class MainScreen : BaseFragment<FragmentMainScreenBinding>() {
                 }
 
                 R.id.nav_test -> {
-                    replaceFragment(GalleryFragment())
+                    replaceFragment(QuizCategoryFragment())
                     mainViewModel.currentPage = 3
                 }
 
