@@ -9,6 +9,8 @@ import com.example.safeaid.screens.camera.CameraFragment
 import com.example.safeaid.screens.finger.FingerFragment
 import com.example.safeaid.screens.gallery.GalleryFragment
 import com.example.safeaid.screens.home.HomeFragment
+import com.example.safeaid.screens.sos.SosFragment
+
 
 class MainScreen : BaseFragment<FragmentMainScreenBinding>() {
     private val mainViewModel: MainViewModel by activityViewModels()
@@ -38,7 +40,7 @@ class MainScreen : BaseFragment<FragmentMainScreenBinding>() {
                 }
 
                 R.id.nav_help -> {
-                    replaceFragment(GalleryFragment())
+                    replaceFragment(SosFragment())
                     mainViewModel.currentPage = 2
                 }
 
