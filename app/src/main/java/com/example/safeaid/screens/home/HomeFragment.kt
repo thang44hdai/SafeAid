@@ -4,6 +4,7 @@ import android.content.Intent
 import com.example.safeaid.core.ui.BaseFragment
 import com.example.androidtraining.databinding.FragmentHomeBinding
 import com.example.safeaid.screens.community.CommunityActivity
+import com.example.safeaid.screens.leaderboard.LeaderboardActivity
 import com.example.safeaid.screens.news.NewsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,6 +29,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
         viewBinding.menuItem1.setOnClickListener {
             val intent = Intent(requireContext(), NewsActivity::class.java)
+            startActivity(intent)
+        }
+
+        viewBinding.leaderboardBtn.setOnClickListener{
+            val intent = Intent(requireContext(), LeaderboardActivity::class.java)
             startActivity(intent)
         }
     }

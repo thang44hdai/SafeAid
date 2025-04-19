@@ -22,4 +22,5 @@
     <color name="colorLogout">#EF5350</color>
     <color name="sosRed">#D46E6E</color>
     <color name="pulseColor">#33D46E6E</color>
+    <color name="gradientStart">#FFBF1A</color>
 </resources>
