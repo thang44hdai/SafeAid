@@ -72,6 +72,7 @@ class NewsDetailsActivity : AppCompatActivity() {
         }
         binding.webViewDetail.webViewClient = WebViewClient()
 
+
         // 6. Load HTML đã bọc
         binding.webViewDetail.loadDataWithBaseURL(
             /* baseUrl */      null,
