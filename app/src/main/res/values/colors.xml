@@ -19,4 +19,8 @@
     <color name="gray_neutral_3">#6A6868</color>
     <color name="pink_neutral">#9F2C57</color>
     <color name="violet_neutral_2">#9456B7</color>
+    <color name="colorLogout">#EF5350</color>
+    <color name="sosRed">#D46E6E</color>
+    <color name="pulseColor">#33D46E6E</color>
+    <color name="gradientStart">#FFBF1A</color>
 </resources>

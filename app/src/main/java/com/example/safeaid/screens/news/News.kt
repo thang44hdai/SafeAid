@@ -1,0 +1,110 @@
+package com.example.safeaid.screens.news
+
+import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.androidtraining.databinding.ActivityNewsBinding
+
+// Mình bổ sung htmlContent để demo
+data class NewsItem(
+    val title: String,
+    val timeAgo: String,
+    val thumbnailUrl: String,
+    val htmlContent: String
+)
+
+class NewsActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityNewsBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityNewsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        setupRecyclerView()
+    }
+
+    private fun setupRecyclerView() {
+        // Dữ liệu mẫu có thêm htmlContent
+        val sampleList = listOf(
+            NewsItem(
+                title = "Bảo đảm công tác khám, chữa bệnh, cấp cứu tai nạn dịp nghỉ lễ",
+                timeAgo = "10 phút trước",
+                thumbnailUrl = "",
+                htmlContent = "<div class=\"detail-mcontent\">\n" +
+                        "\n" +
+                        "                    <h2 class=\"detail-sapo\" data-role=\"sapo\">\n" +
+                        "                        (Chinhphu.vn) – Thứ trưởng Bộ Y tế Trần Văn Thuấn yêu cầu các cơ sở y tế đảm bảo trực đầy đủ theo 4 cấp, tổ chức tốt việc cấp cứu, khám chữa bệnh cho người dân, đồng thời phân công trực cấp cứu ngoại viện… dịp nghỉ lễ 30/4 và 1/5 sắp tới.\n" +
+                        "                    </h2>\n" +
+                        "                    <div class=\"detail-info\">\n" +
+                        "                        <div class=\"detail-author-top\">\n" +
+                        "                            \n" +
+                        "                        </div>\n" +
+                        "                        <div class=\"detail-time\">\n" +
+                        "                            <div data-role=\"publishdate\">\n" +
+                        "                                25/04/2025\n" +
+                        "                                <span class=\"icon\">\n" +
+                        "                                    <svg width=\"5\" height=\"6\" viewBox=\"0 0 5 6\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+                        "                                        <circle cx=\"2.5\" cy=\"3\" r=\"2.5\" fill=\"#747683\" fill-opacity=\"0.32\"></circle>\n" +
+                        "                                    </svg>\n" +
+                        "                                </span>\n" +
+                        "                                13:05\n" +
+                        "                            </div>\n" +
+                        "                        </div>\n" +
+                        "                    </div>\n" +
+                        "                    <div class=\"detail-content afcbc-body clearfix\" data-role=\"content\">\n" +
+                        "                        <figure class=\"VCSortableInPreviewMode\" type=\"Photo\" style=\"\"><div><a href=\"https://bcp.cdnchinhphu.vn/334894974524682240/2025/4/25/base64-1745558639599368576596.png\" data-fancybox=\"img-lightbox\" title=\"Bộ Y tế yêu cầu các cơ sở y tế trực 24/24 trong dịp nghỉ lễ sắp tới - Ảnh: VGP/HM\" target=\"_blank\" class=\"detail-img-lightbox\"><img data-author=\"\" src=\"https://bcp.cdnchinhphu.vn/thumb_w/777/334894974524682240/2025/4/25/base64-1745558639599368576596.png\" id=\"img_840096212325355520\" w=\"2000\" h=\"1500\" alt=\"Bảo đảm công tác khám, chữa bệnh, cấp cứu tai nạn dịp nghỉ lễ- Ảnh 1.\" title=\"Bảo đảm công tác khám, chữa bệnh, cấp cứu tai nạn dịp nghỉ lễ- Ảnh 1.\" rel=\"lightbox\" photoid=\"840096212325355520\" data-original=\"https://bcp.cdnchinhphu.vn/334894974524682240/2025/4/25/base64-1745558639599368576596.png\" type=\"photo\" style=\"max-width:100%;\" width=\"2000\" height=\"1500\" loading=\"lazy\" class=\"lightbox-content\"></a><div class=\"button-dowload-img\">\n" +
+                        "                                    <a href=\"https://bcp.cdnchinhphu.vn/334894974524682240/2025/4/25/base64-1745558639599368576596.png\" title=\"Bộ Y tế yêu cầu các cơ sở y tế trực 24/24 trong dịp nghỉ lễ sắp tới - Ảnh: VGP/HM\">\n" +
+                        "                                        <svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+                        "                                            <path d=\"M17.4998 11.6665C17.2788 11.6665 17.0669 11.7543 16.9106 11.9106C16.7543 12.0669 16.6665 12.2788 16.6665 12.4998V15.8332C16.6665 16.0542 16.5787 16.2661 16.4224 16.4224C16.2661 16.5787 16.0542 16.6665 15.8332 16.6665H4.1665C3.94549 16.6665 3.73353 16.5787 3.57725 16.4224C3.42097 16.2661 3.33317 16.0542 3.33317 15.8332V12.4998C3.33317 12.2788 3.24537 12.0669 3.08909 11.9106C2.93281 11.7543 2.72085 11.6665 2.49984 11.6665C2.27882 11.6665 2.06686 11.7543 1.91058 11.9106C1.7543 12.0669 1.6665 12.2788 1.6665 12.4998V15.8332C1.6665 16.4962 1.9299 17.1321 2.39874 17.6009C2.86758 18.0698 3.50346 18.3332 4.1665 18.3332H15.8332C16.4962 18.3332 17.1321 18.0698 17.6009 17.6009C18.0698 17.1321 18.3332 16.4962 18.3332 15.8332V12.4998C18.3332 12.2788 18.2454 12.0669 18.0891 11.9106C17.9328 11.7543 17.7208 11.6665 17.4998 11.6665ZM9.40817 13.0915C9.48742 13.1674 9.58088 13.2268 9.68317 13.2665C9.78292 13.3106 9.89078 13.3334 9.99984 13.3334C10.1089 13.3334 10.2168 13.3106 10.3165 13.2665C10.4188 13.2268 10.5123 13.1674 10.5915 13.0915L13.9248 9.75817C14.0818 9.60125 14.1699 9.38842 14.1699 9.1665C14.1699 8.94459 14.0818 8.73176 13.9248 8.57484C13.7679 8.41792 13.5551 8.32976 13.3332 8.32976C13.1113 8.32976 12.8984 8.41792 12.7415 8.57484L10.8332 10.4915V2.49984C10.8332 2.27882 10.7454 2.06686 10.5891 1.91058C10.4328 1.7543 10.2209 1.6665 9.99984 1.6665C9.77882 1.6665 9.56686 1.7543 9.41058 1.91058C9.2543 2.06686 9.1665 2.27882 9.1665 2.49984V10.4915L7.25817 8.57484C7.18047 8.49714 7.08823 8.4355 6.98671 8.39345C6.88519 8.3514 6.77639 8.32976 6.6665 8.32976C6.55662 8.32976 6.44781 8.3514 6.3463 8.39345C6.24478 8.4355 6.15254 8.49714 6.07484 8.57484C5.99714 8.65254 5.9355 8.74478 5.89345 8.8463C5.8514 8.94781 5.82976 9.05662 5.82976 9.1665C5.82976 9.27639 5.8514 9.38519 5.89345 9.48671C5.9355 9.58823 5.99714 9.68047 6.07484 9.75817L9.40817 13.0915Z\" fill=\"white\"></path>\n" +
+                        "                                        </svg>\n" +
+                        "                                    </a>\n" +
+                        "                                </div></div><figcaption class=\"PhotoCMS_Caption\"><p data-placeholder=\"Nhập chú thích ảnh\" class=\"\">Bộ Y tế yêu cầu các cơ sở y tế trực 24/24 trong dịp nghỉ lễ sắp tới - Ảnh: VGP/HM</p></figcaption></figure><h2>Phân công trực cấp cứu ngoại viện</h2><p>Thứ trưởng Trần Văn Thuấn cho biết, yêu cầu này nhằm tăng cường bảo đảm công tác khám, chữa bệnh, cấp cứu tai nạn giao thông trong dịp nghỉ lễ, đồng thời thực hiện hiệu quả Công điện số 39/CĐ-TTg ngày 17/4/2025 của Thủ tướng Chính phủ về bảo đảm trật tự, an toàn giao thông phục vụ nhu cầu đi lại của nhân dân dịp nghỉ lễ 30/4 - 1/5 và cao điểm du lịch hè 2025.<br></p><p>Theo đó, Bộ Y tế yêu cầu các cơ sở y tế đảm bảo trực đầy đủ theo 4 cấp gồm: trực lãnh đạo, trực chuyên môn, trực hành chính - hậu cần và trực bảo vệ - tự vệ.</p><p>Tổ chức tốt việc cấp cứu, khám chữa bệnh, bảo đảm tất cả người bệnh cấp cứu được khám và điều trị, không được từ chối hoặc xử trí chậm trễ trường hợp cấp cứu. Nếu trái tuyến, trái chuyên khoa cần xử lý cấp cứu ban đầu ổn định, giải thích đầy đủ cho người bệnh, người nhà người bệnh trước khi chuyển đi cơ sở y tế khác.</p><p>Phân công thường trực cấp cứu ngoại viện, sẵn sàng và khẩn trương ứng phó trong trường hợp cấp cứu tai nạn hàng loạt, tai nạn giao thông nghiêm trọng, thảm họa tập trung đông người…</p><p>Đồng thời, đảm bảo an toàn vệ sinh thực phẩm, phòng tránh ngộ độc thực phẩm, đuối nước, giẫm đạp... cảnh báo tai nạn tại các địa điểm tập trung đông khách du lịch.</p><figure class=\"VCSortableInPreviewMode\" type=\"Photo\" style=\"\"><div><a href=\"https://bcp.cdnchinhphu.vn/334894974524682240/2025/4/25/base64-1745558883517699996645.png\" data-fancybox=\"img-lightbox\" title=\"Các cơ sở y tế không được từ chối hoặc xử trí chậm trễ trường hợp cấp cứu - Ảnh: VGP/HM\" target=\"_blank\" class=\"detail-img-lightbox\"><img data-author=\"\" src=\"https://bcp.cdnchinhphu.vn/thumb_w/777/334894974524682240/2025/4/25/base64-1745558883517699996645.png\" id=\"img_840096536151171072\" w=\"2000\" h=\"1500\" alt=\"Bảo đảm công tác khám, chữa bệnh, cấp cứu tai nạn dịp nghỉ lễ- Ảnh 2.\" title=\"Bảo đảm công tác khám, chữa bệnh, cấp cứu tai nạn dịp nghỉ lễ- Ảnh 2.\" rel=\"lightbox\" photoid=\"840096536151171072\" data-original=\"https://bcp.cdnchinhphu.vn/334894974524682240/2025/4/25/base64-1745558883517699996645.png\" type=\"photo\" style=\"max-width:100%;\" width=\"2000\" height=\"1500\" loading=\"lazy\" class=\"lightbox-content\"></a><div class=\"button-dowload-img\">\n" +
+                        "                                    <a href=\"https://bcp.cdnchinhphu.vn/334894974524682240/2025/4/25/base64-1745558883517699996645.png\" title=\"Các cơ sở y tế không được từ chối hoặc xử trí chậm trễ trường hợp cấp cứu - Ảnh: VGP/HM\">\n" +
+                        "                                        <svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n" +
+                        "                                            <path d=\"M17.4998 11.6665C17.2788 11.6665 17.0669 11.7543 16.9106 11.9106C16.7543 12.0669 16.6665 12.2788 16.6665 12.4998V15.8332C16.6665 16.0542 16.5787 16.2661 16.4224 16.4224C16.2661 16.5787 16.0542 16.6665 15.8332 16.6665H4.1665C3.94549 16.6665 3.73353 16.5787 3.57725 16.4224C3.42097 16.2661 3.33317 16.0542 3.33317 15.8332V12.4998C3.33317 12.2788 3.24537 12.0669 3.08909 11.9106C2.93281 11.7543 2.72085 11.6665 2.49984 11.6665C2.27882 11.6665 2.06686 11.7543 1.91058 11.9106C1.7543 12.0669 1.6665 12.2788 1.6665 12.4998V15.8332C1.6665 16.4962 1.9299 17.1321 2.39874 17.6009C2.86758 18.0698 3.50346 18.3332 4.1665 18.3332H15.8332C16.4962 18.3332 17.1321 18.0698 17.6009 17.6009C18.0698 17.1321 18.3332 16.4962 18.3332 15.8332V12.4998C18.3332 12.2788 18.2454 12.0669 18.0891 11.9106C17.9328 11.7543 17.7208 11.6665 17.4998 11.6665ZM9.40817 13.0915C9.48742 13.1674 9.58088 13.2268 9.68317 13.2665C9.78292 13.3106 9.89078 13.3334 9.99984 13.3334C10.1089 13.3334 10.2168 13.3106 10.3165 13.2665C10.4188 13.2268 10.5123 13.1674 10.5915 13.0915L13.9248 9.75817C14.0818 9.60125 14.1699 9.38842 14.1699 9.1665C14.1699 8.94459 14.0818 8.73176 13.9248 8.57484C13.7679 8.41792 13.5551 8.32976 13.3332 8.32976C13.1113 8.32976 12.8984 8.41792 12.7415 8.57484L10.8332 10.4915V2.49984C10.8332 2.27882 10.7454 2.06686 10.5891 1.91058C10.4328 1.7543 10.2209 1.6665 9.99984 1.6665C9.77882 1.6665 9.56686 1.7543 9.41058 1.91058C9.2543 2.06686 9.1665 2.27882 9.1665 2.49984V10.4915L7.25817 8.57484C7.18047 8.49714 7.08823 8.4355 6.98671 8.39345C6.88519 8.3514 6.77639 8.32976 6.6665 8.32976C6.55662 8.32976 6.44781 8.3514 6.3463 8.39345C6.24478 8.4355 6.15254 8.49714 6.07484 8.57484C5.99714 8.65254 5.9355 8.74478 5.89345 8.8463C5.8514 8.94781 5.82976 9.05662 5.82976 9.1665C5.82976 9.27639 5.8514 9.38519 5.89345 9.48671C5.9355 9.58823 5.99714 9.68047 6.07484 9.75817L9.40817 13.0915Z\" fill=\"white\"></path>\n" +
+                        "                                        </svg>\n" +
+                        "                                    </a>\n" +
+                        "                                </div></div><figcaption class=\"PhotoCMS_Caption\"><p data-placeholder=\"Nhập chú thích ảnh\">Các cơ sở y tế không được từ chối hoặc xử trí chậm trễ trường hợp cấp cứu - Ảnh: VGP/HM</p></figcaption></figure><h2>Đảm bảo trực đường dây nóng 24/24</h2><p>Các cơ sở y tế cũng phải đảm bảo thường trực đường dây nóng 24/24 để sẵn sàng chỉ đạo, phối hợp, chi viện, ứng cứu trong trường hợp cần thiết. </p><p>Trường hợp có diễn biến đặc biệt như cấp cứu thảm hoạ, tai nạn hàng loạt, ngộ độc thực phẩm và các trường hợp đặc biệt khác, các đơn vị báo cáo khẩn về cơ quan quản lý trực tiếp qua đường dây nóng, đồng thời báo cáo nhanh bằng văn bản về tình hình diễn biến đặc biệt, để kịp thời giải quyết.</p><p>Theo yêu cầu của Bộ Y tế, cơ sở khám chữa bệnh phải báo cáo trực tuyến vào 8 giờ sáng hàng ngày (từ 29/4 - 4/5/2025) về số liệu từng ngày của tình hình khám chữa bệnh, cấp cứu tai nạn giao thông trên trang web của Cục Quản lý khám, chữa bệnh, Bộ Y tế<a href=\"mailto:\"></a>. Đối với trường hợp không có dữ liệu khám chữa bệnh phát sinh, các cơ sở y tế vẫn phải gửi báo cáo.</p><p>Đối với các ca tử vong (bao gồm cả tử vong trên đường đến cơ sở khám chữa bệnh, nặng xin về) nghi do tai nạn giao thông, Bộ Y tế yêu cầu các cơ sở y tế báo cáo riêng tại Phân hệ quản lý nguyên nhân tử vong trên Cổng thông tin quản lý hoạt động khám bệnh, chữa bệnh theo hướng dẫn của Bộ Y tế.</p><p>Cơ quan quản lý chuyên môn (Sở Y tế, Y tế các bộ, ngành) có trách nhiệm đôn đốc, tổng hợp báo cáo trực tuyến hàng ngày từ 29/4 - 4/5. </p><p>Bộ Y tế đề nghị các đơn vị nâng cao tinh thần trách nhiệm, chủ động thực hiện đầy đủ các nội dung trên để bảo đảm công tác y tế trong kỳ nghỉ lễ cho người dân.</p><p style=\"text-align: right;\"><b>Thuý Hà</b></p><!-- bonewsrelation --><div class=\"VCSortableInPreviewMode alignCenter type-6\" type=\"RelatedNewsBox\" data-style=\"align-center\" relatednewsboxtype=\"type-6\"><div class=\"kbwscwl-relatedbox type-6 baochinhphu\" style=\"width: 100%;\"><br>\n" +
+                        "                    </div>\n" +
+                        "                    \n" +
+                        "\n" +
+                        "\n" +
+                        "\n" +
+                        "\n" +
+                        "                </div>"
+            ),
+            NewsItem(
+                title = "Bộ GD&ĐT: Tài liệu hướng dẫn sơ cứu cơ bản",
+                timeAgo = "20 phút trước",
+                thumbnailUrl = "",
+                htmlContent = "<h2>Bộ GD&ĐT</h2><p>Hướng dẫn sơ cứu cơ bản...</p>"
+            ),
+            // ... thêm các item khác
+        )
+
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.toolbar.setNavigationOnClickListener { finish() }
+
+        // Truyền lambda để mở chi tiết
+        val newsAdapter = NewsAdapter(sampleList) { item ->
+            val intent = Intent(this, NewsDetailsActivity::class.java).apply {
+                putExtra("news_title", item.title)
+                putExtra("news_html", item.htmlContent)
+            }
+            startActivity(intent)
+        }
+
+        // Khi bấm FAB: mở Activity thêm mới tin tức
+        binding.fabAddNews.setOnClickListener {
+            val intent = Intent(this, AddNewsActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.rvNewsList.layoutManager = LinearLayoutManager(this)
+        binding.rvNewsList.adapter = newsAdapter
+    }
+}
