@@ -9,7 +9,7 @@
 
     <style name="Theme.NoStatusBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowFullscreen">false</item>
-        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:statusBarColor">@color/primary</item>
         <item name="android:windowLightStatusBar">true</item> <!-- false -> light, true -> dark-->
         <item name="android:windowBackground">@color/white</item>
     </style>

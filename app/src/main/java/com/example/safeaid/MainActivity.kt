@@ -1,13 +1,11 @@
 package com.example.safeaid
 
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -17,29 +15,16 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.androidtraining.R
 import com.example.androidtraining.databinding.ActivityMainBinding
+import com.example.safeaid.core.ui.BaseContainerFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var navHostFragment: NavHostFragment
-
-    private val multiplePermissionId = 14
-    private val multiplePermissionNameList = if (Build.VERSION.SDK_INT >= 33) {
-        arrayListOf(
-            android.Manifest.permission.CAMERA,
-            android.Manifest.permission.RECORD_AUDIO
-        )
-    } else {
-        arrayListOf(
-            android.Manifest.permission.CAMERA,
-            android.Manifest.permission.RECORD_AUDIO,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
-        )
-    }
+    private val mainNavigator: MainNavigator by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
         setUpNav()
+        observeNavigator()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -94,25 +80,18 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener(listener)
     }
 
-    private fun checkMultiplePermission(): Boolean {
-        val listPermissionNeeded = arrayListOf<String>()
-        for (permission in multiplePermissionNameList) {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    permission
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                listPermissionNeeded.add(permission)
+    private fun observeNavigator() {
+        lifecycleScope.launch {
+            for (event in mainNavigator.navigation) {
+                onNavigationEvent(event)
             }
         }
-        if (listPermissionNeeded.isNotEmpty()) {
-            ActivityCompat.requestPermissions(
-                this,
-                listPermissionNeeded.toTypedArray(),
-                multiplePermissionId
-            )
-            return false
+    }
+
+    private fun onNavigationEvent(event: BaseContainerFragment.NavigationEvent) {
+        val navController = navHostFragment.findNavController()
+        when (event) {
+
         }
-        return true
     }
 }
