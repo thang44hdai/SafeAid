@@ -12,5 +12,21 @@
         android:id="@+id/mainScreen"
         android:name="com.example.safeaid.screens.main.MainScreen"
         android:label="" />
+    <fragment
+        android:id="@+id/quizFragment"
+        android:name="com.example.safeaid.screens.quiz.QuizFragment"
+        android:label="QuizFragment" />
+    <fragment
+        android:id="@+id/testQuizFragment"
+        android:name="com.example.safeaid.screens.quiz.TestQuizFragment"
+        android:label="TestQuizFragment" />
+    <fragment
+        android:id="@+id/quizResultFragment"
+        android:name="com.example.safeaid.screens.quiz.QuizResultFragment"
+        android:label="QuizResultFragment" />
+    <fragment
+        android:id="@+id/searchQuizFragment"
+        android:name="com.example.safeaid.screens.quiz.SearchQuizFragment"
+        android:label="SearchQuizFragment" />
 
 </navigation>

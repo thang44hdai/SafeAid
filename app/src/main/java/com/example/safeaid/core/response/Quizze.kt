@@ -1,6 +1,7 @@
 package com.example.safeaid.core.response
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Quizze(
     @SerializedName("description")
@@ -13,4 +14,4 @@ data class Quizze(
     val thumbnailUrl: String?,
     @SerializedName("title")
     val title: String
-)
+) : Serializable

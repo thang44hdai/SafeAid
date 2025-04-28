@@ -7,9 +7,9 @@ import com.example.safeaid.core.ui.BaseFragment
 import com.example.androidtraining.databinding.FragmentMainScreenBinding
 import com.example.safeaid.screens.camera.CameraFragment
 import com.example.safeaid.screens.finger.FingerFragment
-import com.example.safeaid.screens.gallery.GalleryFragment
 import com.example.safeaid.screens.home.HomeFragment
 import com.example.safeaid.screens.quiz.QuizCategoryFragment
+import com.example.safeaid.screens.quiz.TestQuizFragment
 import com.example.safeaid.screens.sos.SosFragment
 
 
@@ -21,7 +21,13 @@ class MainScreen : BaseFragment<FragmentMainScreenBinding>() {
     }
 
     override fun onInit() {
-        replaceFragment(HomeFragment())
+        when (mainViewModel.currentPage) {
+            0 -> replaceFragment(HomeFragment())
+            1 -> replaceFragment(CameraFragment())
+            2 -> replaceFragment(SosFragment())
+            3 -> replaceFragment(QuizCategoryFragment())
+            else -> replaceFragment(FingerFragment())
+        }
     }
 
     override fun onInitObserver() {

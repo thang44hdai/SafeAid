@@ -1,6 +1,7 @@
 package com.example.safeaid
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -16,6 +17,11 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.androidtraining.R
 import com.example.androidtraining.databinding.ActivityMainBinding
 import com.example.safeaid.core.ui.BaseContainerFragment
+import com.example.safeaid.screens.quiz.GoToDoQuizFragment
+import com.example.safeaid.screens.quiz.GoToMainScreen
+import com.example.safeaid.screens.quiz.GoToQuizFragment
+import com.example.safeaid.screens.quiz.GoToSearchFragment
+import com.example.safeaid.screens.quiz.OnSubmitTest
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -91,7 +97,47 @@ class MainActivity : AppCompatActivity() {
     private fun onNavigationEvent(event: BaseContainerFragment.NavigationEvent) {
         val navController = navHostFragment.findNavController()
         when (event) {
+            is PopBackStack -> {
+                navController.popBackStack()
+            }
 
+            is GoToQuizFragment -> {
+                val bundle = Bundle().apply {
+                    putSerializable("quizId", event.item)
+                }
+                navController.navigate(R.id.quizFragment, bundle)
+            }
+
+            is GoToDoQuizFragment -> {
+                val bundle = Bundle().apply {
+                    putSerializable("quiz", event.quiz)
+                    putSerializable("questions", event.quizQuestion)
+                }
+                navController.navigate(R.id.testQuizFragment, bundle)
+            }
+
+            is OnSubmitTest -> {
+                val bundle = Bundle().apply {
+                    putSerializable("listQuestion", event.listQuestion)
+                    putInt("duration", event.duration)
+                    putString("time", event.time)
+                    putSerializable("quiz", event.quiz)
+                }
+                navController.navigate(R.id.quizResultFragment, bundle)
+            }
+
+            is GoToMainScreen -> {
+                navController.navigate(R.id.mainScreen)
+            }
+
+            is GoToSearchFragment -> {
+                val bundle = Bundle().apply {
+                    putString("search", event.search)
+                }
+                navController.navigate(R.id.searchQuizFragment, bundle)
+            }
         }
     }
 }
+
+class PopBackStack() : BaseContainerFragment.NavigationEvent()
