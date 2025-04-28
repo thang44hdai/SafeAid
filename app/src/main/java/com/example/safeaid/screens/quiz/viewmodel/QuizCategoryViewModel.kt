@@ -1,10 +1,15 @@
 package com.example.safeaid.screens.quiz.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.example.safeaid.core.base.ApiCaller
 import com.example.safeaid.core.base.BaseViewModel
 import com.example.safeaid.core.response.Category
 import com.example.safeaid.core.service.ApiService
 import com.example.safeaid.core.utils.DataResult
+import com.example.safeaid.core.utils.doIfFailure
+import com.example.safeaid.core.utils.doIfSuccess
+import com.example.safeaid.core.utils.onLoading
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,13 +22,18 @@ class QuizCategoryViewModel @Inject constructor(
     var selectedQuizCategoryPostition: Int = 0
     fun getQuizCategory() {
         viewModelScope.launch(Dispatchers.IO) {
-            val response = apiService.getCategoryQuiz()
-            if (response.isSuccessful) {
-                response.body()?.let { body ->
-                    updateState(DataResult.Success(QuizCategoryState.ListCategory(body.categories)))
+            ApiCaller.safeApiCall(
+                apiCall = { apiService.getCategoryQuiz() },
+                callback = { result ->
+                    result.doIfSuccess {
+                        updateState(DataResult.Success(QuizCategoryState.ListCategory(it.categories)))
+                    }
+                    result.doIfFailure {
+                        Log.i("hihihi", "$it")
+                    }
+                    result.onLoading { }
                 }
-            } else {
-            }
+            )
         }
     }
 
