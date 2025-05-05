@@ -58,7 +58,7 @@ class SearchQuizFragment : BaseFragment<FragmentSearchQuizBinding>() {
     override fun onInit() {
         val key = arguments?.getString("search") as String
 
-        currentFilter.copy(keyword = key)
+        currentFilter = currentFilter.copy(keyword = key)
 
         viewBinding.tvSearch.setText(key)
         viewBinding.rcvQuiz.adapter = adapter

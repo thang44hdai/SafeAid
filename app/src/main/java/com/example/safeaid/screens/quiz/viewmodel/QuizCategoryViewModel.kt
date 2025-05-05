@@ -102,6 +102,7 @@ sealed class QuizCategoryState {
     class ListCategory(val categories: List<Category>) : QuizCategoryState()
     class QuestionsByQuizId(val questions: QuizResponse) : QuizCategoryState()
     class HistoryQuestions(val quizzes: QuizAttemptResponse) : QuizCategoryState()
+    class HistoryOfQuiz(val quizzes: QuizAttemptResponse) : QuizCategoryState()
 }
 
 sealed class QuizCategoryEvent {}

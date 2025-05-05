@@ -28,5 +28,13 @@
         android:id="@+id/searchQuizFragment"
         android:name="com.example.safeaid.screens.quiz.SearchQuizFragment"
         android:label="SearchQuizFragment" />
+    <fragment
+        android:id="@+id/quizHistoryFragment"
+        android:name="com.example.safeaid.screens.quiz_history.QuizHistoryListFragment"
+        android:label="QuizHistoryFragment" />
+    <fragment
+        android:id="@+id/quizHistoryDetailFragment"
+        android:name="com.example.safeaid.screens.quiz_history.QuizHistoryDetailFragment"
+        android:label="QuizHistoryDetailFragment" />
 
 </navigation>

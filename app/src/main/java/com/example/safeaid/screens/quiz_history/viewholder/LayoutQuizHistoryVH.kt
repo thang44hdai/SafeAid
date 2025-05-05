@@ -1,34 +1,34 @@
-package com.example.safeaid.screens.quiz.viewholder
+package com.example.safeaid.screens.quiz_history.viewholder
 
 import android.view.View
 import com.bumptech.glide.Glide
+import com.example.androidtraining.databinding.LayoutQuizHistoryItemBinding
 import com.example.androidtraining.databinding.QuizHistoryItemBinding
 import com.example.safeaid.core.response.QuizAttempt
-import com.example.safeaid.core.response.Quizze
 import com.example.safeaid.core.ui.recyclerview.core.RecyclerViewHolder
 import com.example.safeaid.core.utils.setOnDebounceClick
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
-class QuizHistoryVH(view: View, private val callBack: ((Quizze) -> Unit)?) :
+class LayoutQuizHistoryVH(view: View, private val callBack: ((QuizAttempt) -> Unit)?) :
     RecyclerViewHolder<QuizAttempt>(view) {
-    private val viewBinding = QuizHistoryItemBinding.bind(view)
+    private val viewBinding = LayoutQuizHistoryItemBinding.bind(view)
 
     override fun bind(position: Int, item: QuizAttempt) {
         viewBinding.tvTitle.text = "${item.quiz?.title}"
-        viewBinding.tvTime.text =
-            "${formatSecondsToTime(item.duration ?: 0)} - ${convertIsoToDateLegacy(item.completedAt)}"
+        viewBinding.tvTime.text = formatSecondsToTime(item.duration ?: 0)
         viewBinding.tvResult.text = "${item.score} / ${item.maxScore}"
+        viewBinding.tvDate.text = "Ngày kiểm tra: ${convertIsoToDateLegacy(item.completedAt)}"
 
         item.quiz?.thumbnailUrl?.let { url ->
             Glide.with(viewBinding.root.context)
                 .load(url)
-                .into(viewBinding.thumbnail) // Set the image into the ImageView
+                .into(viewBinding.thumbnail)
         }
 
         viewBinding.cv.setOnDebounceClick {
-            item.quiz?.let { callBack?.invoke(it) }
+            callBack?.invoke(item)
         }
     }
 

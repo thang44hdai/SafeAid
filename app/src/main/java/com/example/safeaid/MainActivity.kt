@@ -17,11 +17,13 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.androidtraining.R
 import com.example.androidtraining.databinding.ActivityMainBinding
 import com.example.safeaid.core.ui.BaseContainerFragment
+import com.example.safeaid.screens.home.GoToQuizHistory
 import com.example.safeaid.screens.quiz.GoToDoQuizFragment
 import com.example.safeaid.screens.quiz.GoToMainScreen
 import com.example.safeaid.screens.quiz.GoToQuizFragment
 import com.example.safeaid.screens.quiz.GoToSearchFragment
 import com.example.safeaid.screens.quiz.OnSubmitTest
+import com.example.safeaid.screens.quiz_history.GoToQuizHistoryDetail
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -135,6 +137,17 @@ class MainActivity : AppCompatActivity() {
                     putString("search", event.search)
                 }
                 navController.navigate(R.id.searchQuizFragment, bundle)
+            }
+
+            is GoToQuizHistory -> {
+                navController.navigate(R.id.quizHistoryFragment)
+            }
+
+            is GoToQuizHistoryDetail -> {
+                val bundle = Bundle().apply {
+                    putSerializable("quizAttempt", event.item)
+                }
+                navController.navigate(R.id.quizHistoryDetailFragment, bundle)
             }
         }
     }

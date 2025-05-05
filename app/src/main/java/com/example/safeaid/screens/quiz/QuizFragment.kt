@@ -4,18 +4,22 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.example.androidtraining.R
 import com.example.androidtraining.databinding.FragmentQuizzBinding
 import com.example.safeaid.MainNavigator
 import com.example.safeaid.PopBackStack
+import com.example.safeaid.core.response.QuizAttempt
 import com.example.safeaid.core.response.QuizResponse
 import com.example.safeaid.core.response.Quizze
 import com.example.safeaid.core.ui.BaseContainerFragment
 import com.example.safeaid.core.ui.BaseFragment
+import com.example.safeaid.core.ui.recyclerview.adapterOf
 import com.example.safeaid.core.utils.DataResult
 import com.example.safeaid.core.utils.doIfFailure
 import com.example.safeaid.core.utils.doIfSuccess
 import com.example.safeaid.core.utils.setOnDebounceClick
 import com.example.safeaid.screens.quiz.data.ItemQuizCategory
+import com.example.safeaid.screens.quiz.viewholder.QuizHistoryVH
 import com.example.safeaid.screens.quiz.viewmodel.QuizCategoryState
 import com.example.safeaid.screens.quiz.viewmodel.QuizCategoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +33,18 @@ class QuizFragment : BaseFragment<FragmentQuizzBinding>() {
     private val mainNavigator: MainNavigator by activityViewModels()
     private lateinit var quiz: Quizze
     private var quizQuestion: QuizResponse = QuizResponse(listOf())
+
+    private val quizHistoryAdapter = adapterOf<QuizAttempt> {
+        diff(
+            areItemsTheSame = { old, new -> old.attemptId == new.attemptId },
+            areContentsTheSame = { old, new -> old == new }
+        )
+        register(
+            layoutResource = R.layout.quiz_history_item,
+            viewHolder = { view -> QuizHistoryVH(view, null) }
+        )
+    }
+
     override fun isHostFragment(): Boolean = false
 
     override fun onInit() {
@@ -37,6 +53,7 @@ class QuizFragment : BaseFragment<FragmentQuizzBinding>() {
             viewModel.getQuestionByQuiz(quiz.quizId)
             viewBinding.tv1.text = quiz.title
         }
+        viewBinding.rcvDone.adapter = quizHistoryAdapter
     }
 
     override fun onInitObserver() {
@@ -67,6 +84,11 @@ class QuizFragment : BaseFragment<FragmentQuizzBinding>() {
                     viewBinding.tvTime.text = "Thời gian làm bài là ${quiz.duration}"
                 }
 
+                is QuizCategoryState.HistoryOfQuiz -> {
+                    viewBinding.tvHistory.text = "Lịch sử (${data.quizzes.quizAttempts?.size ?: 0})"
+                    quizHistoryAdapter.submitList(data.quizzes.quizAttempts)
+                }
+
                 else -> {}
             }
         }
@@ -75,4 +97,5 @@ class QuizFragment : BaseFragment<FragmentQuizzBinding>() {
     }
 }
 
-class GoToDoQuizFragment(val quiz: Quizze, val quizQuestion: QuizResponse) : BaseContainerFragment.NavigationEvent()
+class GoToDoQuizFragment(val quiz: Quizze, val quizQuestion: QuizResponse) :
+    BaseContainerFragment.NavigationEvent()
