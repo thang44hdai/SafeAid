@@ -1,10 +1,10 @@
 package com.example.safeaid.screens.quiz
 
-import android.os.Build
 import android.os.CountDownTimer
-import androidx.annotation.RequiresApi
 import androidx.core.view.GravityCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import com.bumptech.glide.Glide
 import com.example.androidtraining.R
 import com.example.androidtraining.databinding.FragmentTestQuizBinding
 import com.example.safeaid.MainNavigator
@@ -15,6 +15,7 @@ import com.example.safeaid.core.response.Quizze
 import com.example.safeaid.core.ui.BaseContainerFragment
 import com.example.safeaid.core.ui.BaseDialog
 import com.example.safeaid.core.ui.BaseFragment
+import com.example.safeaid.core.ui.ImageZoomDialog
 import com.example.safeaid.core.ui.recyclerview.adapterOf
 import com.example.safeaid.core.utils.NotificationUtils
 import com.example.safeaid.core.utils.setOnDebounceClick
@@ -112,6 +113,7 @@ class TestQuizFragment : BaseFragment<FragmentTestQuizBinding>() {
         viewBinding.rcvAnswer.adapter = answerApdater
         questionAdapter.submitList(listQuestion)
         questionExpandAdapter.submitList(listQuestion)
+
     }
 
     override fun onInitObserver() {
@@ -170,9 +172,26 @@ class TestQuizFragment : BaseFragment<FragmentTestQuizBinding>() {
         } as MutableList<Question>
 
         viewBinding.tvTitle.text = question.content
+        if (question.imageUrl == null) {
+            viewBinding.imv.isVisible = false
+        } else {
+            viewBinding.imv.isVisible = true
+            Glide.with(viewBinding.imv.context)
+                .load(question.imageUrl)
+                .into(viewBinding.imv)
+        }
         questionAdapter.submitList(listQuestion)
         questionExpandAdapter.submitList(listQuestion)
         answerApdater.submitList(question.answers)
+
+        viewBinding.imv.setOnClickListener {
+            question.imageUrl?.let { it1 ->
+                val dialog = ImageZoomDialog(question.imageUrl)
+                dialog.show(parentFragmentManager, "zoom")
+
+            }
+        }
+
     }
 
     private fun onClickAnswer(answer: Answer) {

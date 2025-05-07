@@ -94,7 +94,7 @@ dependencies {
     kapt("androidx.room:room-compiler:2.5.0")
     implementation("androidx.room:room-ktx:2.5.0")
 
-    implementation ("jp.wasabeef:richeditor-android:2.0.0")
+    implementation("jp.wasabeef:richeditor-android:2.0.0")
     implementation("com.github.bumptech.glide:glide:4.13.0")
     implementation("com.github.skydoves:powerspinner:1.2.7")
 

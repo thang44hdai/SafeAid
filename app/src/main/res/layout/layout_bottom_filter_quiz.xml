@@ -151,7 +151,17 @@
             android:layout_height="wrap_content"
             android:text="Ngày làm bài"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/ic_reload"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ic_reload" />
+
+        <ImageView
+            android:id="@+id/ic_reload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/ic_reload"
+            app:layout_constraintStart_toEndOf="@+id/tv3"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

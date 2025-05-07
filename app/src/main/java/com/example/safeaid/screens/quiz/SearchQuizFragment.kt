@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.onEach
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import java.util.TimeZone
 
 class SearchQuizFragment : BaseFragment<FragmentSearchQuizBinding>() {
     private val viewModel: SearchQuizViewModel by activityViewModels()
@@ -152,12 +153,16 @@ class SearchQuizFragment : BaseFragment<FragmentSearchQuizBinding>() {
         viewBinding.layoutBottomFilter.tvFromDate.setOnClickListener {
             showDatePicker { selectedDate ->
                 viewBinding.layoutBottomFilter.tvFromDate.text = selectedDate
+                currentFilter = currentFilter.copy(fromDate = selectedDate)
+                applyFilters()
             }
         }
 
         viewBinding.layoutBottomFilter.tvToDate.setOnClickListener {
             showDatePicker { selectedDate ->
                 viewBinding.layoutBottomFilter.tvToDate.text = selectedDate
+                currentFilter = currentFilter.copy(toDate = selectedDate)
+                applyFilters()
             }
         }
 
@@ -175,6 +180,12 @@ class SearchQuizFragment : BaseFragment<FragmentSearchQuizBinding>() {
             currentFilter = currentFilter.copy(score = text)
             applyFilters()
         }
+        viewBinding.layoutBottomFilter.icReload.setOnDebounceClick {
+            currentFilter = currentFilter.copy(fromDate = null, toDate = null)
+            viewBinding.layoutBottomFilter.tvFromDate.text = "Từ ngày"
+            viewBinding.layoutBottomFilter.tvToDate.text = "Đến ngày"
+            applyFilters()
+        }
     }
 
     private fun updateUi(state: DataResult<SearchQuizState>?) {
@@ -183,6 +194,7 @@ class SearchQuizFragment : BaseFragment<FragmentSearchQuizBinding>() {
                 is SearchQuizState.ListFilerItem -> {
                     filterData = data.data as MutableList<QuizFilterItem>
                     adapter.submitList(filterData)
+                    applyFilters()
                 }
 
                 is SearchQuizState.ListCategory -> {
@@ -220,7 +232,7 @@ class SearchQuizFragment : BaseFragment<FragmentSearchQuizBinding>() {
 
     private fun applyFilters() {
         val filtered = filterData.filter { item ->
-            val matchesKeyword = item.quiz.title.contains(currentFilter.keyword)
+            val matchesKeyword = item.quiz.title.contains(currentFilter.keyword, ignoreCase = true)
 
             val matchesStatus = when (currentFilter.status) {
                 QuizStatus.ALL -> true
@@ -257,8 +269,8 @@ class SearchQuizFragment : BaseFragment<FragmentSearchQuizBinding>() {
         if (filter == "No")
             return true
         return when (filter) {
-            "0-30 phút" -> duration <= 30
-            "30 phút - 60 phút" -> duration in 31..60
+            "0-30 phút" -> duration <= 30 * 60
+            "30 phút - 60 phút" -> duration in 31 * 60..60 * 60
             "60 phút+" -> duration > 60
             else -> true
         }
@@ -278,14 +290,16 @@ class SearchQuizFragment : BaseFragment<FragmentSearchQuizBinding>() {
     }
 
     private fun checkDateRange(date: String?, from: String?, to: String?): Boolean {
-        if (date == null)
-            return true
+        if (date == null) return true
 
-        val format = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        val quizDate = runCatching { format.parse(date) }.getOrNull() ?: return true
+        val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        isoFormat.timeZone = TimeZone.getTimeZone("UTC")
 
-        val fromDate = from?.let { runCatching { format.parse(it) }.getOrNull() }
-        val toDate = to?.let { runCatching { format.parse(it) }.getOrNull() }
+        val displayFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+        val quizDate = runCatching { isoFormat.parse(date) }.getOrNull() ?: return true
+        val fromDate = from?.let { runCatching { displayFormat.parse(it) }.getOrNull() }
+        val toDate = to?.let { runCatching { displayFormat.parse(it) }.getOrNull() }
 
         return (fromDate == null || !quizDate.before(fromDate)) &&
                 (toDate == null || !quizDate.after(toDate))

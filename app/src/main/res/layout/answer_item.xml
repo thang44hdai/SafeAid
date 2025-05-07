@@ -9,7 +9,7 @@
         android:id="@+id/tv_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_answer_selected"
+        android:background="@drawable/bg_answer_normal"
         android:gravity="center"
         android:text="A"
         android:textColor="@color/white"

@@ -7,22 +7,24 @@ import com.example.androidtraining.databinding.AnswerItemBinding
 import com.example.safeaid.core.response.Answer
 import com.example.safeaid.core.ui.recyclerview.core.RecyclerViewHolder
 
-class AnswerHistoryVH(view: View) :
+class AnswerHistoryVH(view: View, private val getSelectedAnswerId: (item: Answer) -> String?) :
     RecyclerViewHolder<Answer>(view) {
     private val viewBinding = AnswerItemBinding.bind(view)
+
 
     override fun bind(position: Int, item: Answer) {
         viewBinding.tvLabel.text = ('A' + position).toString()
 
         viewBinding.tvValue.text = item.content
-        if (item.isSelected) {
-            viewBinding.tvLabel.setBackgroundResource(R.drawable.bg_answer_selected)
-            viewBinding.tvValue.setTypeface(null, Typeface.BOLD)
-        } else {
-            viewBinding.tvLabel.setBackgroundResource(R.drawable.bg_answer_normal)
-            viewBinding.tvValue.setTypeface(null, Typeface.NORMAL)
+
+        val selectedAnswerId = getSelectedAnswerId.invoke(item)
+
+        if (item.answerId == selectedAnswerId) {
+            viewBinding.tvLabel.setBackgroundResource(R.drawable.bg_question)
         }
 
-
+        if (item.isCorrect == 1) {
+            viewBinding.tvLabel.setBackgroundResource(R.drawable.bg_question_correct)
+        }
     }
 }

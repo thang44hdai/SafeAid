@@ -46,7 +46,7 @@ class QuizCategoryViewModel @Inject constructor(
     }
 
     fun getQuestionByQuiz(quizId: String) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             ApiCaller.safeApiCall(
                 apiCall = { apiService.getQuestionByQuizId(quizId) },
                 callback = { result ->
@@ -62,7 +62,7 @@ class QuizCategoryViewModel @Inject constructor(
     }
 
     fun saveQuizResult(request: QuizAttemptRequest, callback: () -> Unit) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             ApiCaller.safeApiCall(
                 apiCall = { apiService.saveResultQuiz(request) },
                 callback = { result ->
@@ -93,6 +93,29 @@ class QuizCategoryViewModel @Inject constructor(
             )
         }
     }
+
+    fun getHistoryOfQuiz(quiz: Quizze) {
+        viewModelScope.launch {
+            ApiCaller.safeApiCall(
+                apiCall = {
+                    apiService.getHistoryOfQuiz(
+                        "5e7e033d-c4e7-42bc-88e5-dbc2555e38a3",
+                        quiz.quizId
+                    )
+                },
+                callback = { result ->
+                    result.doIfSuccess {
+                        it.sortQuizAttemptsByCompletedAt()
+                        updateState(DataResult.Success(QuizCategoryState.HistoryOfQuiz(it)))
+                    }
+                    result.doIfFailure {
+                    }
+                    result.onLoading { }
+                }
+            )
+        }
+    }
+
 
     override fun onTriggerEvent(event: QuizCategoryEvent) {
     }

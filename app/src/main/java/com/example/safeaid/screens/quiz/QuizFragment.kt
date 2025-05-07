@@ -1,5 +1,6 @@
 package com.example.safeaid.screens.quiz
 
+import android.util.Log
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -54,6 +55,7 @@ class QuizFragment : BaseFragment<FragmentQuizzBinding>() {
             viewBinding.tv1.text = quiz.title
         }
         viewBinding.rcvDone.adapter = quizHistoryAdapter
+        viewModel.getHistoryOfQuiz(quiz)
     }
 
     override fun onInitObserver() {
@@ -81,7 +83,8 @@ class QuizFragment : BaseFragment<FragmentQuizzBinding>() {
                     viewBinding.tv2.text = data.questions.questions.size.toString() + " câu hỏi"
                     viewBinding.countQuestion.text =
                         data.questions.questions.size.toString() + " câu hỏi"
-                    viewBinding.tvTime.text = "Thời gian làm bài là ${quiz.duration}"
+                    viewBinding.tvTime.text =
+                        "Thời gian làm bài là ${formatSecondsToTime(quiz.duration)}"
                 }
 
                 is QuizCategoryState.HistoryOfQuiz -> {
@@ -94,6 +97,18 @@ class QuizFragment : BaseFragment<FragmentQuizzBinding>() {
         }
         state?.doIfFailure { }
 
+    }
+
+    private fun formatSecondsToTime(seconds: Int): String {
+        val hours = seconds / 3600
+        val minutes = (seconds % 3600) / 60
+        val secs = seconds % 60
+
+        return if (hours > 0) {
+            String.format("%02d:%02d:%02d", hours, minutes, secs)
+        } else {
+            String.format("%02d:%02d", minutes, secs)
+        }
     }
 }
 

@@ -3,6 +3,7 @@ package com.example.safeaid.core.service
 import QuizCategoryResponse
 import com.example.safeaid.core.request.QuizAttemptRequest
 import com.example.safeaid.core.response.QuizAttemptResponse
+import com.example.safeaid.core.response.QuizHistoryDetailResponse
 import com.example.safeaid.core.response.QuizResponse
 import kotlinx.serialization.json.JsonObject
 import retrofit2.Response
@@ -29,4 +30,16 @@ interface ApiService {
     suspend fun getResultQuiz(
         @Path("userId") userId: String
     ): Response<QuizAttemptResponse>
+
+    @GET("/api/quiz-attempts/{userId}/{quizId}")
+    suspend fun getHistoryOfQuiz(
+        @Path("userId") userId: String,
+        @Path("quizId") quizId: String
+    ): Response<QuizAttemptResponse>
+
+    @GET("/api/quiz-attempts/{quiz_attempt_id}/{quiz_id}/details")
+    suspend fun getHistoryDetail(
+        @Path("quiz_attempt_id") quizAttemptId: String,
+        @Path("quiz_id") quizId: String
+    ): Response<QuizHistoryDetailResponse>
 }

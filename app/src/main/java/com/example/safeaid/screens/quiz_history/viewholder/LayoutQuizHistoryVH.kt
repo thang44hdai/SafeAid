@@ -7,28 +7,30 @@ import com.example.androidtraining.databinding.QuizHistoryItemBinding
 import com.example.safeaid.core.response.QuizAttempt
 import com.example.safeaid.core.ui.recyclerview.core.RecyclerViewHolder
 import com.example.safeaid.core.utils.setOnDebounceClick
+import com.example.safeaid.screens.quiz_history.data.QuizHistory
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
 class LayoutQuizHistoryVH(view: View, private val callBack: ((QuizAttempt) -> Unit)?) :
-    RecyclerViewHolder<QuizAttempt>(view) {
+    RecyclerViewHolder<QuizHistory>(view) {
     private val viewBinding = LayoutQuizHistoryItemBinding.bind(view)
 
-    override fun bind(position: Int, item: QuizAttempt) {
-        viewBinding.tvTitle.text = "${item.quiz?.title}"
-        viewBinding.tvTime.text = formatSecondsToTime(item.duration ?: 0)
-        viewBinding.tvResult.text = "${item.score} / ${item.maxScore}"
-        viewBinding.tvDate.text = "Ngày kiểm tra: ${convertIsoToDateLegacy(item.completedAt)}"
+    override fun bind(position: Int, item: QuizHistory) {
+        viewBinding.tvTitle.text = "${item.quizAttempt.quiz?.title} - ${item.category?.name}"
+        viewBinding.tvTime.text = formatSecondsToTime(item.quizAttempt.duration ?: 0)
+        viewBinding.tvResult.text = "${item.quizAttempt.score} / ${item.quizAttempt.maxScore}"
+        viewBinding.tvDate.text =
+            "Ngày kiểm tra: ${convertIsoToDateLegacy(item.quizAttempt.completedAt)}"
 
-        item.quiz?.thumbnailUrl?.let { url ->
+        item.quizAttempt.quiz?.thumbnailUrl?.let { url ->
             Glide.with(viewBinding.root.context)
                 .load(url)
                 .into(viewBinding.thumbnail)
         }
 
         viewBinding.cv.setOnDebounceClick {
-            callBack?.invoke(item)
+            callBack?.invoke(item.quizAttempt)
         }
     }
 

@@ -22,7 +22,8 @@ data class Question(
     @SerializedName("quiz_id")
     val quizId: String,
     var isSelected: Boolean = false,
-    var isFlag: Boolean = false
+    var isFlag: Boolean = false,
+    var selectedAnswerId: String? = null
 ) : Serializable {
     fun isAnswered(): Boolean {
         return answers.any { it.isSelected }
