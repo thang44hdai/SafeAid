@@ -4,6 +4,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="primary">#FE4D66</color>
     <color name="secondary">#484C52</color>
+    <color name="main_bg">#F8F8FA</color>
+    <color name="question_normal">#D4D4D4</color>
 
 
     <color name="group_item">#E0E0E0</color>
