@@ -9,5 +9,12 @@
         <item name="android:paddingEnd">16dp</item>
         <item name="android:background">@drawable/bg_option</item>
     </style>
-
+    <style name="Theme.SafeAid" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- giữ cho window vẽ system bars -->
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <!-- status bar trong suốt -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!-- nếu muốn nav bar cũng trong suốt -->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
 </resources>

@@ -18,4 +18,20 @@ class NewsRepository @Inject constructor(
 
     suspend fun fetchAllNews(): Response<NewsListResponse> =
         apiService.getNewsList()
+
+    suspend fun postNews(
+        bearerToken: String,
+        title: RequestBody,
+        content: RequestBody,
+        thumbnailPath: RequestBody,
+        media: List<MultipartBody.Part>
+    ): Response<NewsListResponse> {
+        return apiService.createNews(
+            bearerToken = bearerToken,
+            title = title,
+            content = content,
+            thumbnailPath = thumbnailPath,
+            media = media
+        )
+    }
 }

@@ -2,59 +2,97 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.safeaid.screens.news.AddNewsActivity">
+    android:layout_height="match_parent">
 
     <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
+        style="@style/Widget.MaterialComponents.Toolbar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/white"
-        app:title="Viết bài"
-        app:titleTextColor="@android:color/black"
+        android:background="@color/white"
         app:navigationIcon="@drawable/back_btn"
+        app:title="Viết bài"
         app:titleCentered="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- RichEditor chiếm trống giữa -->
+    <!-- Tiêu đề bài báo -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilTitle"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Nhập tiêu đề…"
+        app:boxStrokeColor="@color/primary"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Thumbnail placeholder -->
+    <ImageView
+        android:id="@+id/ivThumbnail"
+        android:layout_width="0dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_image_placeholder"
+        android:scaleType="centerCrop"
+        android:contentDescription="Chọn thumbnail"
+        android:onClick="onSelectThumbnail"
+        app:layout_constraintTop_toBottomOf="@id/tilTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- RichEditor -->
     <jp.wasabeef.richeditor.RichEditor
         android:id="@+id/editor"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:background="@android:color/white"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintBottom_toTopOf="@+id/formatBar"
+        app:layout_constraintTop_toBottomOf="@id/ivThumbnail"
+        app:layout_constraintBottom_toTopOf="@+id/btnInsertPhoto"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Thanh công cụ formatting dính đáy -->
-    <LinearLayout
-        android:id="@+id/formatBar"
+    <!-- Nút chèn ảnh -->
+    <ImageButton
+        android:id="@+id/btnInsertPhoto"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_insert_photo"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Chèn ảnh"
+        app:layout_constraintBottom_toTopOf="@+id/btnPublish"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Nút Đăng bài cố định đáy -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPublish"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp"
+        android:layout_margin="16dp"
+        android:text="Đăng bài"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
-
-        <Button
-            android:id="@+id/btnPublish"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Đăng bài"/>
-    </LinearLayout>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
