@@ -3,6 +3,7 @@ package com.example.safeaid.screens.person
 import android.content.Intent
 import com.example.safeaid.core.ui.BaseFragment
 import com.example.androidtraining.databinding.FragmentFingerBinding
+import com.example.safeaid.screens.changepassword.ChangePasswordActivity
 import com.example.safeaid.screens.editprofile.EditProfileActivity
 
 class PersonFragment : BaseFragment<FragmentFingerBinding>(){
@@ -20,6 +21,11 @@ class PersonFragment : BaseFragment<FragmentFingerBinding>(){
         viewBinding.btnEditInfo.setOnClickListener {
             // Chuyển sang màn EditProfile
             val intent = Intent(requireContext(), EditProfileActivity::class.java)
+            startActivity(intent)
+        }
+
+        viewBinding.optionChangePass.setOnClickListener{
+            val intent = Intent(requireContext(), ChangePasswordActivity::class.java)
             startActivity(intent)
         }
     }
