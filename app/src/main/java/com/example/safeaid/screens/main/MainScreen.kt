@@ -6,10 +6,9 @@ import com.example.androidtraining.R
 import com.example.safeaid.core.ui.BaseFragment
 import com.example.androidtraining.databinding.FragmentMainScreenBinding
 import com.example.safeaid.screens.camera.CameraFragment
-import com.example.safeaid.screens.finger.FingerFragment
+import com.example.safeaid.screens.person.PersonFragment
 import com.example.safeaid.screens.home.HomeFragment
 import com.example.safeaid.screens.quiz.QuizCategoryFragment
-import com.example.safeaid.screens.quiz.TestQuizFragment
 import com.example.safeaid.screens.sos.SosFragment
 
 
@@ -26,7 +25,7 @@ class MainScreen : BaseFragment<FragmentMainScreenBinding>() {
             1 -> replaceFragment(CameraFragment())
             2 -> replaceFragment(SosFragment())
             3 -> replaceFragment(QuizCategoryFragment())
-            else -> replaceFragment(FingerFragment())
+            else -> replaceFragment(PersonFragment())
         }
     }
 
@@ -57,7 +56,7 @@ class MainScreen : BaseFragment<FragmentMainScreenBinding>() {
                 }
 
                 R.id.nav_profile -> {
-                    replaceFragment(FingerFragment())
+                    replaceFragment(PersonFragment())
                     mainViewModel.currentPage = 4
                 }
 
