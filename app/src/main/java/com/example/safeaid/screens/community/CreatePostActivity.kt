@@ -1,25 +1,37 @@
+// java/com/example/safeaid/screens/community/CreatePostActivity.kt
 package com.example.safeaid.screens.community
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.androidtraining.R
 import com.example.androidtraining.databinding.ActivityCreatePostBinding
+import com.example.safeaid.screens.community.viewmodel.CreatePostState
+import com.example.safeaid.screens.community.viewmodel.CreatePostViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.MultipartBody
 
+@AndroidEntryPoint
 class CreatePostActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityCreatePostBinding
+    private val viewModel: CreatePostViewModel by viewModels()
     private var selectedImageUri: Uri? = null
 
     private val pickImage =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri?.also {
                 selectedImageUri = it
                 binding.flImageContainer.visibility = View.VISIBLE
                 binding.ivPhotoPreview.setImageURI(it)
@@ -28,67 +40,99 @@ class CreatePostActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityCreatePostBinding.inflate(layoutInflater)
+        enableEdgeToEdge()
         setContentView(binding.root)
 
-        // edge-to-edge padding
+        // edge-to-edge
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val sys = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(sys.left, sys.top, sys.right, sys.bottom)
             insets
         }
 
-        // Toolbar
+        // toolbar
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { finish() }
 
-        // Chọn ảnh
-        binding.btnAddImage.setOnClickListener {
-            pickImage.launch("image/*")
-        }
-
-        // Xóa ảnh
+        // image pick / remove
+        binding.btnAddImage.setOnClickListener { pickImage.launch("image/*") }
         binding.btnRemovePhoto.setOnClickListener {
             selectedImageUri = null
             binding.flImageContainer.visibility = View.GONE
         }
 
-        // Zoom ảnh khi click vào preview
+        // Zoom
         binding.ivPhotoPreview.setOnClickListener {
             selectedImageUri?.let { uri ->
-                // TODO: show full-screen preview/dialog
+                // show full screen preview...
                 Toast.makeText(this, "Zoom ảnh: $uri", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // Đăng bài
-        binding.toolbar.setOnMenuItemClickListener { item ->
-            if (item.itemId == R.id.action_publish) {
-                publishPost()
-                true
-            } else false
+        // observe ViewModel
+        viewModel.state.observe(this) { s ->
+            when (s) {
+                is CreatePostState.Loading -> binding.progressBar.visibility = View.VISIBLE
+                is CreatePostState.Success -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(this, s.response.message, Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                is CreatePostState.Error -> {
+                    binding.progressBar.visibility = View.GONE
+                    Toast.makeText(this, s.message, Toast.LENGTH_LONG).show()
+                }
+                else -> Unit
+            }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_post, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        android.R.id.home -> { finish(); true }
+        R.id.action_publish -> {
+            publishPost()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     private fun publishPost() {
-        val content = binding.etContent.text.toString().trim()
-        if (content.isEmpty()) {
+        val contentText = binding.etContent.text.toString().trim()
+        if (contentText.isEmpty()) {
             Toast.makeText(this, "Bạn chưa nhập nội dung", Toast.LENGTH_SHORT).show()
             return
         }
-        // TODO: upload selectedImageUri nếu có, lấy URL rồi gọi ViewModel/Repo
-        Toast.makeText(
-            this,
-            "Đang đăng...\nNội dung: $content\nẢnh: ${selectedImageUri?.lastPathSegment ?: "Không có"}",
-            Toast.LENGTH_LONG
-        ).show()
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem) =
-        when (item.itemId) {
-            android.R.id.home -> { finish(); true }
-            else -> super.onOptionsItemSelected(item)
-        }
+        // 1) Build RequestBody for text
+        val contentRb = contentText
+            .toRequestBody("text/plain".toMediaType())
+
+        // no title in this screen
+        val titleRb: okhttp3.RequestBody? = null
+
+        // 2) Build MultipartBody.Part for the single image (if any)
+        val parts = selectedImageUri?.let { uri ->
+            contentResolver.openInputStream(uri)?.use { stream ->
+                val bytes = stream.readBytes()
+                val mime  = contentResolver.getType(uri) ?: "image/*"
+                val rb    = bytes.toRequestBody(mime.toMediaType())
+                listOf(
+                    MultipartBody.Part.createFormData("images", "upload.jpg", rb)
+                )
+            }
+        } ?: emptyList()
+
+        // 3) Grab your JWT however you store it
+        val token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZGQ5NWE1NDctODAyNC00N2U5LTgzODEtOTFmNjJjOWI4MDM4IiwiZW1haWwiOiJobmFtMTIzQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2OTQwNDQ0fQ.kuMBBlgYiqhVgvNF1gaM0yCQX61rSbI8vpRem-kEviA"
+
+        // 4) Call ViewModel
+        viewModel.createPost(token, contentRb, titleRb, parts)
+    }
 }

@@ -2,15 +2,21 @@ package com.example.safeaid.core.service
 
 import QuizCategoryResponse
 import com.example.safeaid.core.request.QuizAttemptRequest
+import com.example.safeaid.core.response.CreatePostResponse
 import com.example.safeaid.core.response.PostListResponse
 import com.example.safeaid.core.response.QuizAttemptResponse
 import com.example.safeaid.core.response.QuizHistoryDetailResponse
 import com.example.safeaid.core.response.QuizResponse
 import kotlinx.serialization.json.JsonObject
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -52,4 +58,13 @@ interface ApiService {
         @Query("page")  page: Int   = 1,
         @Query("limit") limit: Int  = 10
     ): Response<PostListResponse>
+
+    @Multipart
+    @POST("/api/posts")
+    suspend fun createPost(
+        @Header("Authorization") bearerToken: String,
+        @Part("content") content: RequestBody,
+        @Part("title") title: RequestBody?,
+        @Part images: List<MultipartBody.Part>?
+    ): Response<CreatePostResponse>
 }
