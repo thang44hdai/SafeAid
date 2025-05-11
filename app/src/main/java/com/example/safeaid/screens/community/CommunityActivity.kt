@@ -40,6 +40,11 @@ class CommunityActivity : AppCompatActivity() {
             insets
         }
 
+        // ➊ Xử lý click vào “Đăng bài mới”
+        binding.cardShare.setOnClickListener {
+            startActivity(Intent(this, CreatePostActivity::class.java))
+        }
+
         // RecyclerView + adapter
         adapter = CommunityAdapter(emptyList()) { post ->
             startActivity(

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Toolbar với nút Đăng -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:contentInsetStartWithNavigation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu_post"
+        app:navigationIcon="@drawable/back_btn"
+        app:title="Bài viết mới"
+        app:titleCentered="true" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+    </ScrollView>
+
+    <!-- 1) Avatar + tên người dùng -->
+    <LinearLayout
+        android:id="@+id/llUserInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp"
+        android:paddingHorizontal="14dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/default_avt"
+            android:scaleType="centerCrop"
+            android:background="@drawable/circular_background"
+            android:clipToOutline="true"/>
+
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="John Doe"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"/>
+    </LinearLayout>
+
+    <!-- 2) Nội dung (chỉ placeholder, không viền) -->
+    <EditText
+        android:id="@+id/etContent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:hint="Viết gì đó..."
+        android:background="@android:color/transparent"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:minLines="4"
+        android:paddingHorizontal="14dp"
+        app:layout_constraintTop_toBottomOf="@id/llUserInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/flImageContainer"/>
+
+    <!-- 3) Preview ảnh với nút X để bỏ chọn (mặc định gone) -->
+    <FrameLayout
+        android:id="@+id/flImageContainer"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:visibility="gone"
+        android:paddingHorizontal="14dp"
+        app:layout_constraintTop_toBottomOf="@id/etContent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnAddImage">
+
+        <ImageView
+            android:id="@+id/ivPhotoPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="Ảnh đính kèm"/>
+
+        <ImageButton
+            android:id="@+id/btnRemovePhoto"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end|top"
+            android:padding="4dp"
+            android:src="@drawable/ic_close_24"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@android:color/white" />
+    </FrameLayout>
+
+    <!-- 4) Nút thêm ảnh (màu xanh lá) -->
+    <ImageButton
+        android:id="@+id/btnAddImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_insert_photo"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Thêm ảnh"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
