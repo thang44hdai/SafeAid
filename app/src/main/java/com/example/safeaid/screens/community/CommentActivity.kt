@@ -1,6 +1,6 @@
 package com.example.safeaid.screens.community
 
-import CommentItem
+import com.example.safeaid.screens.community.data.CommentItem
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager

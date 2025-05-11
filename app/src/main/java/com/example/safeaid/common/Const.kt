@@ -1,5 +1,5 @@
 package com.example.safeaid.common
 
 object Const {
-    val BASE_URL = "http://10.0.2.2:5000/"
+    val BASE_URL = "http://192.168.36.102:5000/"
 }

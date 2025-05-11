@@ -1,6 +1,6 @@
 package com.example.safeaid.screens.community
 
-import CommentItem
+import com.example.safeaid.screens.community.data.CommentItem
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
