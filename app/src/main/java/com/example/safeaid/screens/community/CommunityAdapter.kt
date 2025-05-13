@@ -55,7 +55,7 @@ class CommunityAdapter(
             // stats
             binding.tvLikes.text    = item.like_count.toString()
             binding.tvComments.text = item.comment_count.toString()
-            binding.tvViews.text    = item.view_count.toString()
+//            binding.tvViews.text    = item.view_count.toString()
 
             // xử lý click vào comments
             binding.tvComments.setOnClickListener { onCommentsClick(item) }

@@ -58,6 +58,12 @@ class CommunityActivity : AppCompatActivity() {
             }
         }
 
+        val swipe = binding.swipeRefresh
+        swipe.setOnRefreshListener {
+            viewModel.loadPosts(1)
+            swipe.isRefreshing = false
+        }
+
         // RecyclerView + adapter
         adapter = CommunityAdapter(emptyList()) { post ->
             startActivity(
@@ -87,6 +93,7 @@ class CommunityActivity : AppCompatActivity() {
                             }
                             is CommunityState.Success -> {
                                 adapter.updateList(state.posts)
+
                             }
                             is CommunityState.Error -> {
                                 Toast.makeText(

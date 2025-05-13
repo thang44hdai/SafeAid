@@ -2,6 +2,8 @@ package com.example.safeaid.core.service
 
 import QuizCategoryResponse
 import com.example.safeaid.core.request.QuizAttemptRequest
+import com.example.safeaid.core.response.CommentDto
+import com.example.safeaid.core.response.CommentListResponse
 import com.example.safeaid.core.response.CreatePostResponse
 import com.example.safeaid.core.response.PostListResponse
 import com.example.safeaid.core.response.QuizAttemptResponse
@@ -67,4 +69,17 @@ interface ApiService {
         @Part("title") title: RequestBody?,
         @Part images: List<MultipartBody.Part>?
     ): Response<CreatePostResponse>
+
+    @GET("/api/posts/{postId}/comments")
+    suspend fun getComments(
+        @Header("Authorization") bearer: String,
+        @Path("postId") postId: String
+    ): Response<List<CommentDto>>
+
+    @POST("/api/posts/{postId}/comments")
+    suspend fun createComment(
+        @Header("Authorization") bearer: String,
+        @Path("postId") postId: String,
+        @Body body: Map<String, String>
+    ): Response<CommentDto>
 }

@@ -2,8 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    app:cardCornerRadius="12dp"
+    android:layout_marginBottom="8dp"
     app:cardElevation="4dp">
 
     <LinearLayout
@@ -51,17 +50,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- title -->
-
-        <!-- content -->
-<!--        <TextView-->
-<!--            android:id="@+id/tvTitle"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:textSize="16sp"-->
-<!--            android:textStyle="bold" />-->
-
         <TextView
             android:id="@+id/tvContent"
             android:layout_marginTop="4dp"
@@ -80,33 +68,68 @@
 
         <!-- stats -->
         <LinearLayout
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tvLikes"
-                android:layout_width="wrap_content"
+            <!-- 1️⃣ Like, căn về start -->
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_like"
-                android:drawablePadding="4dp"/>
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="start|center_vertical">
 
-            <TextView
-                android:id="@+id/tvComments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:drawableLeft="@drawable/ic_comment"
-                android:drawablePadding="4dp"/>
+                <TextView
+                    android:id="@+id/tvLikes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_like"
+                    android:drawablePadding="4dp"
+                    android:text="0"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/black"/>
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvViews"
-                android:layout_width="wrap_content"
+            <!-- 2️⃣ Comment, căn giữa -->
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:drawableLeft="@drawable/ic_share"
-                android:drawablePadding="4dp"/>
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tvComments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_comment"
+                    android:drawablePadding="4dp"
+                    android:text="0"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/black"/>
+            </LinearLayout>
+
+            <!-- 3️⃣ Share, căn về end -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="end|center_vertical">
+
+                <TextView
+                    android:id="@+id/tvShares"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/ic_share"
+                    android:drawablePadding="8dp"
+                    android:text="8"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/black"/>
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
