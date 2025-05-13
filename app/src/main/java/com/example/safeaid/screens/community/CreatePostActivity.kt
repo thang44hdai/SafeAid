@@ -1,6 +1,8 @@
 // java/com/example/safeaid/screens/community/CreatePostActivity.kt
 package com.example.safeaid.screens.community
 
+import android.app.Activity
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -78,6 +80,10 @@ class CreatePostActivity : AppCompatActivity() {
                 is CreatePostState.Success -> {
                     binding.progressBar.visibility = View.GONE
                     Toast.makeText(this, s.response.message, Toast.LENGTH_SHORT).show()
+                    val data = Intent().apply {
+                        putExtra("new_post_id", s.response.post.post_id)
+                    }
+                    setResult(Activity.RESULT_OK, data)
                     finish()
                 }
                 is CreatePostState.Error -> {

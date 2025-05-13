@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -26,6 +27,13 @@ class CommunityActivity : AppCompatActivity() {
     private val viewModel: CommunityViewModel by viewModels()
     private lateinit var adapter: CommunityAdapter
 
+    private val createPostLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val newId = result.data?.getStringExtra("new_post_id")
+            viewModel.loadPosts(1)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -42,7 +50,12 @@ class CommunityActivity : AppCompatActivity() {
 
         // ➊ Xử lý click vào “Đăng bài mới”
         binding.cardShare.setOnClickListener {
-            startActivity(Intent(this, CreatePostActivity::class.java))
+//            startActivity(Intent(this, CreatePostActivity::class.java))
+            binding.cardShare.setOnClickListener {
+                createPostLauncher.launch(
+                    Intent(this, CreatePostActivity::class.java)
+                )
+            }
         }
 
         // RecyclerView + adapter
