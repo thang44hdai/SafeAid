@@ -1,17 +1,21 @@
 package com.example.safeaid.screens.community
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.bumptech.glide.Glide
 import com.example.androidtraining.R
 import com.example.androidtraining.databinding.ItemPostBinding
 import com.example.safeaid.screens.community.data.PostDto
+import kotlin.math.log
 
 class CommunityAdapter(
     private var items: List<PostDto>,
-    private val onCommentsClick: (PostDto) -> Unit
+    private val onCommentsClick: (PostDto) -> Unit,
+    private val onLikeToggle: (PostDto, Boolean) -> Unit
 ) : RecyclerView.Adapter<CommunityAdapter.PostViewHolder>() {
 
     fun updateList(newList: List<PostDto>) {
@@ -23,7 +27,6 @@ class CommunityAdapter(
         : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: PostDto) {
-            //Dùng Glide để load ảnh avatar nếu là null thì dùng ảnh mặc định
             Glide.with(binding.ivAvatar.context)
                 .load(item.user.profile_image_path ?: R.drawable.default_avt)
                 .placeholder(R.drawable.default_avt)
@@ -31,22 +34,19 @@ class CommunityAdapter(
 
             // header
             binding.tvUser.text = item.user.username
-            // Lấy phần HH:mm từ created_at ISO
             binding.tvTime.text = item.created_at
                 .substringAfter('T')
-                .substringBefore('.')  // ví dụ "08:13:11" → giữ nguyên hoặc chỉ HH:mm
+                .substringBefore('.')
 
-            // title & content
+
 //            binding.tvTitle.text = item.title
             binding.tvContent.text = item.content
 
-            // ảnh media đầu tiên (nếu có)
             if (item.media.isNotEmpty()) {
                 binding.ivMedia.visibility = View.VISIBLE
                 val media = item.media[0]
-                // nếu dùng Glide, nhớ thêm dependency và cấp quyền INTERNET
                 Glide.with(binding.ivMedia.context)
-                    .load(/* nếu media_link chỉ là path thì prepend base URL */ media.media_link)
+                    .load(media.media_link)
                     .into(binding.ivMedia)
             } else {
                 binding.ivMedia.visibility = View.GONE
@@ -54,10 +54,21 @@ class CommunityAdapter(
 
             // stats
             binding.tvLikes.text    = item.like_count.toString()
+            binding.tvLikes.setTextColor(
+                if (item.liked_by_user) Color.RED else Color.GRAY
+            )
+
+            binding.tvLikes.setOnClickListener {
+                val pos = bindingAdapterPosition.takeIf { it != NO_POSITION } ?: return@setOnClickListener
+                val post = items[pos]
+                post.liked_by_user = if (post.liked_by_user) false else true
+                post.like_count += if (post.liked_by_user) +1 else -1
+                notifyItemChanged(pos)
+                onLikeToggle(post, post.liked_by_user)
+            }
             binding.tvComments.text = item.comment_count.toString()
 //            binding.tvViews.text    = item.view_count.toString()
 
-            // xử lý click vào comments
             binding.tvComments.setOnClickListener { onCommentsClick(item) }
         }
     }

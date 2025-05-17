@@ -1,4 +1,3 @@
-// java/com/example/safeaid/screens/community/viewmodel/CommunityViewModel.kt
 package com.example.safeaid.screens.community.viewmodel
 
 import androidx.lifecycle.LiveData
@@ -17,16 +16,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-// --- State hiển thị lên UI ---
+
 sealed class CommunityState {
     object Loading : CommunityState()
     data class Success(val posts: List<PostDto>) : CommunityState()
     data class Error(val message: String) : CommunityState()
 }
 
-// --- Các event (nếu cần mở rộng sau này) ---
+
 sealed class CommunityEvent {
     object LoadPosts : CommunityEvent()
+    data class LikePost(val postId: String) : CommunityEvent()
+    data class UnLikePost(val postId: String) : CommunityEvent()
 }
 
 @HiltViewModel
@@ -34,24 +35,21 @@ class CommunityViewModel @Inject constructor(
     private val apiService: ApiService
 ) : BaseViewModel<CommunityState, CommunityEvent>() {
 
-    /** Biến track trang hiện tại & tổng trang (nếu API hỗ trợ) */
     var currentPage = 1
     val pageSize = 10
-    // giả sử API không trả tổng page thì bạn có thể bỏ
 
-    /** Gọi API lấy danh sách post */
+
     fun loadPosts(page: Int = currentPage) {
         // emit loading
         updateState(DataResult.Success(CommunityState.Loading))
         viewModelScope.launch {
             ApiCaller.safeApiCall(
-                apiCall = { apiService.getPosts(page, pageSize) },
+                apiCall = { apiService.getPosts("Bearer ${getToken()}", page, pageSize) },
                 callback = { result ->
                     result.onLoading {
                         updateState(DataResult.Success(CommunityState.Loading))
                     }
                     result.doIfSuccess { resp: PostListResponse ->
-                        // cập nhật currentPage nếu cần
                         currentPage = resp.page
                         updateState(DataResult.Success(CommunityState.Success(resp.posts)))
                     }
@@ -63,9 +61,58 @@ class CommunityViewModel @Inject constructor(
         }
     }
 
+    private fun likePost(postId: String) {
+        viewModelScope.launch {
+            ApiCaller.safeApiCall(
+                apiCall = { apiService.likePost("Bearer ${getToken()}", postId) },
+                callback = { result ->
+                    result.doIfSuccess {
+                        updateLocalLike(postId, liked = true)
+                    }
+                }
+            )
+        }
+    }
+
+    private fun unLikePost(postId: String) {
+        viewModelScope.launch {
+            ApiCaller.safeApiCall(
+                apiCall = { apiService.unLikePost("Bearer ${getToken()}", postId) },
+                callback = { result ->
+                    result.doIfSuccess {
+                        updateLocalLike(postId, liked = false)
+                    }
+                }
+            )
+        }
+    }
+
+    private fun updateLocalLike(postId: String, liked: Boolean) {
+        val dr = viewState.value
+        if (dr is DataResult.Success<*>) {
+            val state = dr.data
+            if (state is CommunityState.Success) {
+                val updated = state.posts.toMutableList()
+                val idx = updated.indexOfFirst { it.post_id == postId }
+                if (idx != -1) {
+                    val p = updated[idx]
+                    updated[idx] = p
+                    updateState(DataResult.Success(CommunityState.Success(updated)))
+                }
+            }
+        }
+    }
+
     override fun onTriggerEvent(event: CommunityEvent) {
         when (event) {
-            CommunityEvent.LoadPosts -> loadPosts()
+            CommunityEvent.LoadPosts        -> loadPosts()
+            is CommunityEvent.LikePost      -> likePost(event.postId)
+            is CommunityEvent.UnLikePost    -> unLikePost(event.postId)
         }
+    }
+
+    private fun getToken(): String {
+        // TODO: lấy token thật từ SharedPrefs / DataStore
+        return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZGQ5NWE1NDctODAyNC00N2U5LTgzODEtOTFmNjJjOWI4MDM4IiwiZW1haWwiOiJobmFtMTIzQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2OTQwNDQ0fQ.kuMBBlgYiqhVgvNF1gaM0yCQX61rSbI8vpRem-kEviA"
     }
 }

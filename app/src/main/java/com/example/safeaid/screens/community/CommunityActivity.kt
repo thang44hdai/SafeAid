@@ -16,9 +16,11 @@ import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidtraining.databinding.ActivityCommunityBinding
 import com.example.safeaid.core.utils.DataResult
+import com.example.safeaid.screens.community.viewmodel.CommunityEvent
 import com.example.safeaid.screens.community.viewmodel.CommunityState
 import com.example.safeaid.screens.community.viewmodel.CommunityViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.jvm.java
 
 @AndroidEntryPoint
 class CommunityActivity : AppCompatActivity() {
@@ -48,14 +50,8 @@ class CommunityActivity : AppCompatActivity() {
             insets
         }
 
-        // ➊ Xử lý click vào “Đăng bài mới”
         binding.cardShare.setOnClickListener {
-//            startActivity(Intent(this, CreatePostActivity::class.java))
-            binding.cardShare.setOnClickListener {
-                createPostLauncher.launch(
-                    Intent(this, CreatePostActivity::class.java)
-                )
-            }
+            createPostLauncher.launch(Intent(this, CreatePostActivity::class.java))
         }
 
         val swipe = binding.swipeRefresh
@@ -64,29 +60,31 @@ class CommunityActivity : AppCompatActivity() {
             swipe.isRefreshing = false
         }
 
-        // RecyclerView + adapter
-        adapter = CommunityAdapter(emptyList()) { post ->
-            startActivity(
-                Intent(this, CommentActivity::class.java)
-                    .putExtra("post_id", post.post_id)
-            )
-        }
+        adapter = CommunityAdapter(
+            items = emptyList(),
+            onCommentsClick = { post ->
+                startActivity(
+                    Intent(this, CommentActivity::class.java)
+                        .putExtra("post_id", post.post_id)
+                )
+            },
+            onLikeToggle = { post, nowLiked ->
+                if (nowLiked) viewModel.onTriggerEvent(CommunityEvent.LikePost(post.post_id))
+                else         viewModel.onTriggerEvent(CommunityEvent.UnLikePost(post.post_id))
+            }
+        )
         binding.rvPosts.apply {
             layoutManager = LinearLayoutManager(this@CommunityActivity)
             adapter = this@CommunityActivity.adapter
         }
 
-        // observe the StateFlow<DataResult<CommunityState>> by converting it to LiveData
         viewModel.viewState
             .asLiveData()
             .observe(this, Observer { result ->
-                // result is DataResult<CommunityState>?
                 when (result) {
                     is DataResult.Success<*> -> {
-                        // hide any network‐error
                         binding.progressBar.visibility = View.GONE
 
-                        // unwrap the inner CommunityState
                         when (val state = result.data as? CommunityState) {
                             is CommunityState.Loading -> {
                                 binding.progressBar.visibility = View.VISIBLE
@@ -102,15 +100,13 @@ class CommunityActivity : AppCompatActivity() {
                                     Toast.LENGTH_LONG
                                 ).show()
                             }
-                            else -> { /* no‐op */ }
+                            else -> {}
                         }
                     }
                     is DataResult.Loading -> {
-                        // network in‐flight
                         binding.progressBar.visibility = View.VISIBLE
                     }
                     is DataResult.Error -> {
-                        // network‐level failure
                         binding.progressBar.visibility = View.GONE
                         Toast.makeText(
                             this,
@@ -119,12 +115,10 @@ class CommunityActivity : AppCompatActivity() {
                         ).show()
                     }
                     else -> {
-                        // first emission might be null
                     }
                 }
             })
 
-        // trigger initial load
         viewModel.onTriggerEvent(com.example.safeaid.screens.community.viewmodel.CommunityEvent.LoadPosts)
     }
 }

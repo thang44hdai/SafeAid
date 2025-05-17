@@ -9,9 +9,10 @@ data class PostDto(
     val content: String,
     val created_at: String,
     val updated_at: String,
-    val like_count: Int,
+    var like_count: Int,
     val comment_count: Int,
     val view_count: Int,
     val user: UserDto,
-    val media: List<PostMediaDto>
+    val media: List<PostMediaDto>,
+    var liked_by_user: Boolean,
 )
