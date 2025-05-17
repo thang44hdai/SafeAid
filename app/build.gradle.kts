@@ -98,4 +98,9 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.13.0")
     implementation("com.github.skydoves:powerspinner:1.2.7")
 
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+    implementation ("androidx.activity:activity-ktx:1.7.2")
+
+    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
 }
