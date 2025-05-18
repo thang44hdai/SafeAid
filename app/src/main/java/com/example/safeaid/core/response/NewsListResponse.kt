@@ -19,6 +19,19 @@ data class NewsDto(
     @SerializedName("view_count")
     val viewCount: Int,
     // nếu API trả thumbnail_path, bạn cũng map ở đây
-    @SerializedName("thumbnail_path")
-    val thumbnail: String?
+    @SerializedName("thumbnail_url")
+    val thumbnail: String?,
+    @SerializedName("media")
+    val media: List<MediaDto>? = null
+)
+
+data class MediaDto(
+    @SerializedName("media_id")
+    val id: String,
+    @SerializedName("media_url")
+    val url: String,
+    @SerializedName("media_type")
+    val type: String,
+    @SerializedName("caption")
+    val caption: String? = null,
 )
