@@ -20,7 +20,7 @@ interface ApiService {
         @Header("Authorization") bearerToken: String,
         @Part("title") title: RequestBody,
         @Part("content") content: RequestBody,
-        @Part("thumbnail_path") thumbnailPath: RequestBody,
-        @Part media: List<MultipartBody.Part>
+        @Part thumbnail: MultipartBody.Part?,
+        @Part media: List<MultipartBody.Part>? = null
     ): Response<NewsListResponse>
 }

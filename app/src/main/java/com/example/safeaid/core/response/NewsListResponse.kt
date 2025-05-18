@@ -22,7 +22,9 @@ data class NewsDto(
     @SerializedName("thumbnail_url")
     val thumbnail: String?,
     @SerializedName("media")
-    val media: List<MediaDto>? = null
+    val media: List<MediaDto>? = null,
+    @SerializedName("time_ago")
+    val timeAgo: String,
 )
 
 data class MediaDto(

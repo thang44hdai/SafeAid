@@ -85,7 +85,7 @@ class NewsActivity : AppCompatActivity() {
 
     private fun toUiModel(dto: NewsDto) = NewsItem(
         title        = dto.title,
-        timeAgo      = dto.createdAt.substring(11, 16),  // vd lấy “HH:mm”
+        timeAgo      = dto.timeAgo,
         thumbnailUrl = dto.thumbnail.orEmpty(),
         htmlContent  = dto.content
     )

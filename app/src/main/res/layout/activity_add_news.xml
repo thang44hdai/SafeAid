@@ -42,20 +42,62 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Thumbnail placeholder -->
-    <ImageView
-        android:id="@+id/ivThumbnail"
+    <FrameLayout
+        android:id="@+id/ivThumbnailFrame"
         android:layout_width="0dp"
-        android:layout_height="180dp"
+        android:layout_height="0dp"
         android:layout_marginTop="12dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_image_placeholder"
-        android:scaleType="centerCrop"
-        android:contentDescription="Chọn thumbnail"
-        android:onClick="onSelectThumbnail"
+        app:layout_constraintDimensionRatio="16:9"
         app:layout_constraintTop_toBottomOf="@id/tilTitle"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/ivThumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_image_placeholder"
+            android:scaleType="centerCrop"
+            android:contentDescription="Ảnh Thumbnail"
+            android:onClick="onSelectThumbnail" />
+
+        <!-- Placeholder khi chưa chọn ảnh -->
+        <LinearLayout
+            android:id="@+id/thumbnailPlaceholder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="?attr/selectableItemBackground"
+            android:visibility="visible">
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_image_placeholder"
+                app:tint="@android:color/darker_gray" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chọn ảnh Thumbnail"
+                app:tint="@android:color/darker_gray"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Nút xóa ảnh -->
+        <ImageButton
+            android:id="@+id/btnRemoveThumbnail"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="end|top"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_close"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Xóa ảnh Thumbnail"
+            android:visibility="gone"
+            android:onClick="onRemoveThumbnail" />
+    </FrameLayout>
 
     <!-- RichEditor -->
     <jp.wasabeef.richeditor.RichEditor
@@ -66,7 +108,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:background="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/ivThumbnail"
+        app:layout_constraintTop_toBottomOf="@id/ivThumbnailFrame"
         app:layout_constraintBottom_toTopOf="@+id/btnInsertPhoto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

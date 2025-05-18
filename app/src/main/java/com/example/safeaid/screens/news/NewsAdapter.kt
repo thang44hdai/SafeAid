@@ -9,8 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.androidtraining.databinding.ItemNewsBinding
 import kotlin.random.Random
 
-// import đúng NewsItem
-// (bỏ dòng `import NewsItem`)
+
 class NewsAdapter(
     private val onItemClick: (NewsItem) -> Unit
 ) : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
