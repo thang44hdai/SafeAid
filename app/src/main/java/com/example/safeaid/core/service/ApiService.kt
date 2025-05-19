@@ -1,14 +1,18 @@
 package com.example.safeaid.core.service
 
 import QuizCategoryResponse
+import com.example.safeaid.core.request.LoginRequest
 import com.example.safeaid.core.request.QuizAttemptRequest
+import com.example.safeaid.core.request.RegisterRequest
 import com.example.safeaid.core.response.CommentDto
 import com.example.safeaid.core.response.CommentListResponse
 import com.example.safeaid.core.response.CreatePostResponse
+import com.example.safeaid.core.response.LoginResponse
 import com.example.safeaid.core.response.PostListResponse
 import com.example.safeaid.core.response.QuizAttemptResponse
 import com.example.safeaid.core.response.QuizHistoryDetailResponse
 import com.example.safeaid.core.response.QuizResponse
+import com.example.safeaid.core.response.RegisterResponse
 import kotlinx.serialization.json.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -96,4 +100,15 @@ interface ApiService {
         @Header("Authorization") bearer: String,
         @Path("postId") postId: String
     ): Response<Unit>
+
+    //Authentication
+    @POST("/api/auth/login")
+    suspend fun login(
+        @Body body: LoginRequest
+    ): retrofit2.Response<LoginResponse>
+
+    @POST("/api/auth/register")
+    suspend fun register(
+        @Body request: RegisterRequest
+    ): Response<RegisterResponse>
 }
