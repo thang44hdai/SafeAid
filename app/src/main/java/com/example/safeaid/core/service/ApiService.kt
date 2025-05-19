@@ -35,6 +35,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -53,6 +54,7 @@ interface ApiService {
 
     @POST("/api/quiz-attempts")
     suspend fun saveResultQuiz(
+        @Header("Authorization") bearerToken: String,
         @Body request: QuizAttemptRequest
     ): Response<JsonObject>
 
@@ -204,5 +206,11 @@ interface ApiService {
     @GET("/api/quizzes/{quizId}")
     suspend fun getQuizById(
         @Path("quizId") quizId: String,
+    ): Response<QuizIdRes>
+
+    @PATCH("/api/notifications/{notification_id}/read")
+    suspend fun markAsRead(
+        @Header("Authorization") bearerToken: String,
+        @Path("notification_id") notificationId: String,
     ): Response<QuizIdRes>
 }
