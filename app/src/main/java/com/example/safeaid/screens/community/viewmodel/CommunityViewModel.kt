@@ -1,5 +1,6 @@
 package com.example.safeaid.screens.community.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import com.example.safeaid.core.base.BaseViewModel
 import com.example.safeaid.core.response.PostListResponse
 import com.example.safeaid.core.service.ApiService
 import com.example.safeaid.core.utils.DataResult
+import com.example.safeaid.core.utils.Prefs
 import com.example.safeaid.core.utils.doIfFailure
 import com.example.safeaid.core.utils.doIfSuccess
 import com.example.safeaid.core.utils.onLoading
@@ -15,7 +17,7 @@ import com.example.safeaid.screens.community.data.PostDto
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 sealed class CommunityState {
     object Loading : CommunityState()
@@ -32,7 +34,8 @@ sealed class CommunityEvent {
 
 @HiltViewModel
 class CommunityViewModel @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    @ApplicationContext private val context: Context
 ) : BaseViewModel<CommunityState, CommunityEvent>() {
 
     var currentPage = 1
@@ -113,6 +116,11 @@ class CommunityViewModel @Inject constructor(
 
     private fun getToken(): String {
         // TODO: lấy token thật từ SharedPrefs / DataStore
-        return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZGQ5NWE1NDctODAyNC00N2U5LTgzODEtOTFmNjJjOWI4MDM4IiwiZW1haWwiOiJobmFtMTIzQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2OTQwNDQ0fQ.kuMBBlgYiqhVgvNF1gaM0yCQX61rSbI8vpRem-kEviA"
+        val token = Prefs.getToken(context) ?: ""
+        return if (token.isNotEmpty()) {
+            token
+        } else {
+            ""
+        }
     }
 }
