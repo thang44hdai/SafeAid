@@ -5,7 +5,6 @@ import com.example.safeaid.core.request.LoginRequest
 import com.example.safeaid.core.request.QuizAttemptRequest
 import com.example.safeaid.core.request.RegisterRequest
 import com.example.safeaid.core.response.CommentDto
-import com.example.safeaid.core.response.CommentListResponse
 import com.example.safeaid.core.response.CreatePostResponse
 import com.example.safeaid.core.response.LoginResponse
 import com.example.safeaid.core.response.PostListResponse
@@ -16,6 +15,7 @@ import com.example.safeaid.core.response.RegisterResponse
 import kotlinx.serialization.json.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import com.example.safeaid.core.response.NewsListResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -111,4 +111,17 @@ interface ApiService {
     suspend fun register(
         @Body request: RegisterRequest
     ): Response<RegisterResponse>
+
+    @GET("/api/news")
+    suspend fun getNewsList(): Response<NewsListResponse>
+
+    @Multipart
+    @POST("/api/news")
+    suspend fun createNews(
+        @Header("Authorization") bearerToken: String,
+        @Part("title") title: RequestBody,
+        @Part("content") content: RequestBody,
+        @Part thumbnail: RequestBody,
+        @Part media: List<MultipartBody.Part>? = null
+    ): Response<NewsListResponse>
 }
