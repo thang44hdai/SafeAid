@@ -4,6 +4,7 @@ package com.example.safeaid.screens.news
 import NewsItem
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -68,8 +69,18 @@ class NewsActivity : AppCompatActivity() {
                 }
                 is NewsState.Success -> {
                     binding.progressBar.visibility = View.GONE
+                    // Log the raw DTO data
+                    Log.d("NewsActivity", "News data received: ${state.items.size} items")
+                    state.items.forEachIndexed { index, newsDto ->
+                        Log.d("NewsActivity", "News[$index]: title=${newsDto.title}, " +
+                                "thumbnail=${newsDto.thumbnail}, " +
+                                "timeAgo=${newsDto.timeAgo}, " +
+                                "contentLength=${newsDto.content.length}")
+                    }
+
                     // map từ DTO sang UI model rồi đưa vào Adapter
                     val uiList = state.items.map(::toUiModel)
+                    Log.d("NewsActivity", "Mapped to UI models: ${uiList.size} items")
                     adapter.updateList(uiList)
                 }
                 is NewsState.Error -> {

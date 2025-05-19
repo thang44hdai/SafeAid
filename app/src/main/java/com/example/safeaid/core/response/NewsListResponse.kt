@@ -18,7 +18,6 @@ data class NewsDto(
     val updatedAt: String,
     @SerializedName("view_count")
     val viewCount: Int,
-    // nếu API trả thumbnail_path, bạn cũng map ở đây
     @SerializedName("thumbnail_url")
     val thumbnail: String?,
     @SerializedName("media")
