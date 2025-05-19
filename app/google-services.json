@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "746363528917",
+    "project_id": "safe-aid",
+    "storage_bucket": "safe-aid.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746363528917:android:7d195a14c06603104ee45c",
+        "android_client_info": {
+          "package_name": "com.example.androidtraining"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTwKUbb7qssjDKCljXXaG7M3sjUQPLKlQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

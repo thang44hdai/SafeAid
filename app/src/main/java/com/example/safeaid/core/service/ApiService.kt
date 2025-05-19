@@ -59,8 +59,8 @@ interface ApiService {
     @GET("/api/posts")
     suspend fun getPosts(
         @Header("Authorization") bearerToken: String,
-        @Query("page")  page: Int   = 1,
-        @Query("limit") limit: Int  = 10
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10
     ): Response<PostListResponse>
 
     @Multipart
@@ -96,4 +96,7 @@ interface ApiService {
         @Header("Authorization") bearer: String,
         @Path("postId") postId: String
     ): Response<Unit>
+
+    @POST("/api/news/sendNoti")
+    suspend fun getNotification(): Response<Any>
 }
