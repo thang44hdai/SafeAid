@@ -44,6 +44,10 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        binding.tvRegister.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
+
         vm.state.observe(this) { state ->
             when (state) {
                 is AuthState.Loading -> {
@@ -54,7 +58,6 @@ class LoginActivity : AppCompatActivity() {
                     binding.btnLogin.isEnabled = true
                     binding.btnLogin.text = "Đăng nhập"
                     Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
-                    // TODO: điều hướng sang MainActivity
                     startActivity(Intent(this, MainActivity::class.java))
                 }
                 is AuthState.Error -> {
