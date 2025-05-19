@@ -1,7 +1,6 @@
 package com.example.safeaid.screens.guide
 
 import android.os.Bundle
-import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels

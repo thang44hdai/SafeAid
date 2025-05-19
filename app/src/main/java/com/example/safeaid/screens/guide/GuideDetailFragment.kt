@@ -1,6 +1,7 @@
 package com.example.safeaid.screens.guide
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -66,9 +67,14 @@ class GuideDetailFragment : BaseFragment<FragmentGuideDetailBinding>() {
         viewBinding.btnBack.setOnClickListener {
             mainNavigator.offerNavEvent(PopBackStack())
         }
-    
+
         viewBinding.btnBookmark.setOnClickListener {
-            mainNavigator.offerNavEvent(GoToBookmark())
+            // Lấy guideId từ arguments
+            arguments?.getString("guideId")?.let { guideId ->
+                viewModel.addToFavourite(guideId)
+                // Có thể thêm Toast thông báo thành công
+                Toast.makeText(context, "Đã thêm vào danh sách yêu thích", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

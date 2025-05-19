@@ -2,17 +2,31 @@ package com.example.safeaid.screens.bookmark
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidtraining.databinding.FragmentBookmarkBinding
 import com.example.safeaid.MainNavigator
 import com.example.safeaid.PopBackStack
 import com.example.safeaid.core.ui.BaseFragment
-import com.example.safeaid.screens.guide.GoToCategoryGuides
+import com.example.safeaid.core.utils.DataResult
+import com.example.safeaid.core.utils.ErrorResponse
+import com.example.safeaid.screens.bookmark.viewholder.BookmarkState
+import com.example.safeaid.screens.bookmark.viewholder.BookmarkViewModel
+import com.example.safeaid.screens.guide.GoToGuideDetail
 import com.example.safeaid.screens.guide.GuideItem
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>() {
     private val mainNavigator: MainNavigator by activityViewModels()
+    private val viewModel: BookmarkViewModel by viewModels()
     private var isSelectionMode = false
     private val selectedItems = mutableSetOf<String>()
     private lateinit var bookmarkAdapter: BookmarkAdapter
@@ -21,10 +35,23 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>() {
 
     override fun onInit() {
         setupRecyclerView()
+        // Gọi API để lấy dữ liệu bookmark
         loadBookmarks()
     }
 
-    override fun onInitObserver() {}
+    override fun onInitObserver() {
+        viewModel.viewState
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .onEach { state ->
+                when (state) {
+                    is DataResult.Success -> handleSuccess(state.data)
+                    is DataResult.Error -> handleError(state.error)
+                    is DataResult.Loading -> handleLoading()
+                    null -> {}
+                }
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
 
     override fun onInitListener() {
         viewBinding.btnBack.setOnClickListener {
@@ -67,14 +94,17 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>() {
     }
 
     private fun loadBookmarks() {
-        // Load bookmarked guides from local storage
-        // This is just example data
-        val bookmarks = listOf(
-            GuideItem("1", "Hoả Hoạn", "Quy trình thoát hiểm khi có cháy"),
-            GuideItem("2", "Hoả Hoạn", "Quy trình thoát hiểm khi có cháy"),
-            GuideItem("3", "Hoả Hoạn", "Quy trình thoát hiểm khi có cháy")
-        )
-        bookmarkAdapter.submitList(bookmarks)
+        viewModel.loadBookmarks()
+    }
+
+    private fun navigateToGuideDetail(guide: GuideItem) {
+        if (!isSelectionMode) {
+            val bundle = Bundle().apply {
+                putString("guideId", guide.id)
+                putString("guideTitle", guide.title)
+            }
+            mainNavigator.offerNavEvent(GoToGuideDetail(bundle))
+        }
     }
 
     private fun enterSelectionMode() {
@@ -95,20 +125,30 @@ class BookmarkFragment : BaseFragment<FragmentBookmarkBinding>() {
     }
 
     private fun deleteSelectedItems() {
-        // Delete selected items from local storage
-        // Reload the list
-        loadBookmarks()
+        selectedItems.forEach { guideId ->
+            viewModel.deleteBookmark(guideId)
+        }
         exitSelectionMode()
     }
 
-    private fun navigateToGuideDetail(guide: GuideItem) {
-        if (!isSelectionMode) {
-            val bundle = Bundle().apply {
-                putString("guideId", guide.id)
+    private fun handleSuccess(state: BookmarkState) {
+        when (state) {
+            is BookmarkState.ListBookmarks -> {
+                bookmarkAdapter.submitList(state.bookmarks)
             }
-            mainNavigator.offerNavEvent(GoToCategoryGuides(bundle))
+            else -> {}
         }
     }
+
+    private fun handleError(state: ErrorResponse) {
+        when (state) {
+            else -> {
+                Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun handleLoading() {}
 
     private fun updateDeleteButtonVisibility() {
         viewBinding.btnDeleteSelected.visibility = if (selectedItems.isNotEmpty()) {

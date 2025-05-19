@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:text="Xoá"
+                android:text=""
                 android:textColor="#FF0000"
                 android:visibility="gone" />
 

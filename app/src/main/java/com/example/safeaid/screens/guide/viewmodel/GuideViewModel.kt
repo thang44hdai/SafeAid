@@ -153,6 +153,23 @@ class GuideViewModel @Inject constructor(
         }
     }
 
+    fun addToFavourite(guideId: String) {
+        viewModelScope.launch {
+            val request = mapOf("guide_id" to guideId) // Tạo request body đúng format
+            ApiCaller.safeApiCall(
+                apiCall = { apiService.addFavouriteGuide(request, token) },
+                callback = { result ->
+                    result.doIfSuccess {
+                        // Xử lý khi thêm thành công
+                    }
+                    result.doIfFailure { error ->
+                        // Xử lý khi có lỗi
+                    }
+                }
+            )
+        }
+    }
+
     override fun onTriggerEvent(event: GuideEvent) {
         TODO("Not yet implemented")
     }

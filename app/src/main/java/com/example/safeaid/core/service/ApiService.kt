@@ -2,6 +2,7 @@ package com.example.safeaid.core.service
 
 import QuizCategoryResponse
 import com.example.safeaid.core.request.QuizAttemptRequest
+import com.example.safeaid.core.response.BookmarkResponse
 import com.example.safeaid.core.response.Guide
 import com.example.safeaid.core.response.GuideCategoryResponse
 import com.example.safeaid.core.response.GuideResponse
@@ -13,6 +14,7 @@ import com.example.safeaid.core.response.QuizResponse
 import kotlinx.serialization.json.JsonObject
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
@@ -86,4 +88,21 @@ interface ApiService {
         @Path("stepId") stepId: String,
         @Header("Authorization") token: String
     ): Response<List<GuideStepMediaResponse>>
+
+    @GET("/api/favourite-guide-lists")
+    suspend fun getFavouriteList(
+        @Header("Authorization") token: String
+    ): Response<BookmarkResponse>
+
+    @DELETE("/api/favourite-guide-items/{guideId}")
+    suspend fun deleteFavouriteGuide(
+        @Path("guideId") guideId: String,
+        @Header("Authorization") token: String
+    ): Response<Unit>
+
+    @POST("/api/favourite-guide-items")
+    suspend fun addFavouriteGuide(
+        @Body request: Map<String, String>, // Thay đổi kiểu dữ liệu của request body
+        @Header("Authorization") token: String
+    ): Response<Unit>
 }
