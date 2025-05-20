@@ -22,32 +22,6 @@
             android:layout_toEndOf="@id/checkbox"
             android:src="@drawable/ic_guide" />
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_toStartOf="@id/btnNext"
-            android:layout_toEndOf="@id/ivIcon"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tvDescription"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvTitle"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_toStartOf="@id/btnNext"
-            android:layout_toEndOf="@id/ivIcon"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textColor="#666666"
-            android:textSize="14sp" />
-
         <ImageButton
             android:id="@+id/btnNext"
             android:layout_width="24dp"
@@ -56,6 +30,34 @@
             android:layout_centerVertical="true"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_arrow_right" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toStartOf="@id/btnNext"
+            android:layout_toEndOf="@id/ivIcon"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="#666666"
+                android:textSize="14sp" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 </layout>
