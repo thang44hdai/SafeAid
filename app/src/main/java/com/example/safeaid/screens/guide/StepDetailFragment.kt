@@ -1,5 +1,8 @@
 package com.example.safeaid.screens.guide
 
+import android.app.Dialog
+import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -81,6 +84,10 @@ class StepDetailFragment : BaseFragment<FragmentStepDetailBinding>() {
                         .load(thumbnail)
                         .into(viewBinding.ivThumbnail)
 
+                    viewBinding.ivThumbnail.setOnClickListener {
+                        showFullScreenImage()
+                    }
+
                     Glide.with(requireContext())
                         .load(thumbnail) // hoặc dùng icon nút play tùy bạn
                         .into(viewBinding.btnPlay)
@@ -100,4 +107,26 @@ class StepDetailFragment : BaseFragment<FragmentStepDetailBinding>() {
     }
 
     private fun handleLoading() {}
+
+    private fun showFullScreenImage() {
+        // Tạo Dialog để hiển thị ảnh phóng to
+        val dialog = Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        val imageView = ImageView(requireContext()).apply {
+            layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            setImageDrawable(viewBinding.ivThumbnail.drawable)
+        }
+
+        dialog.setContentView(imageView)
+
+        // Đóng dialog khi click vào ảnh
+        imageView.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
 }

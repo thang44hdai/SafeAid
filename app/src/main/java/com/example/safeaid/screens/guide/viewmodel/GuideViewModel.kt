@@ -129,6 +129,8 @@ class GuideViewModel @Inject constructor(
                     result.doIfSuccess { steps ->
                         _guideSteps.value = steps
                         updateState(DataResult.Success(GuideState.GuideDetail(_selectedGuide.value)))
+                        updateState(DataResult.Success(GuideState.GuideStepDetail(steps.firstOrNull())))
+                        updateState(DataResult.Success(GuideState.ListSteps(steps)))
                     }
                     result.doIfFailure {}
                     result.onLoading {}
@@ -182,6 +184,7 @@ sealed class GuideState {
     data class Error(val message: String) : GuideState()
     object Loading : GuideState()
     data class GuideDetail(val guide: Guide?) : GuideState()
+    data class ListSteps(val steps: List<GuideStepResponse>) : GuideState()
     data class GuideStepDetail(val step: GuideStepResponse?) : GuideState()
     data class GuideStepMediaDetail(val media: List<GuideStepMediaResponse>?) : GuideState()
 }

@@ -97,7 +97,6 @@ dependencies {
     implementation("jp.wasabeef:richeditor-android:2.0.0")
     implementation("com.github.bumptech.glide:glide:4.13.0")
     implementation("com.github.skydoves:powerspinner:1.2.7")
-    implementation ("androidx.cardview:cardview:1.0.0")
-
-
+    implementation("androidx.cardview:cardview:1.0.0")
+    implementation("androidx.fragment:fragment-ktx:1.8.6")
 }

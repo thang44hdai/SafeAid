@@ -1,13 +1,13 @@
 package com.example.safeaid.screens.guide
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.androidtraining.databinding.FragmentGuideDetailBinding
 import com.example.safeaid.core.ui.BaseFragment
@@ -18,6 +18,7 @@ import com.example.safeaid.core.utils.DataResult
 import com.example.safeaid.screens.guide.viewmodel.GuideState
 import com.example.safeaid.screens.guide.viewmodel.GuideViewModel
 import com.example.safeaid.core.response.GuideStepResponse
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -36,8 +37,22 @@ class GuideDetailFragment : BaseFragment<FragmentGuideDetailBinding>() {
     override fun isHostFragment(): Boolean = false
 
     override fun onInit() {
-        setupRecyclerView()
+//        setupRecyclerView()
         loadGuideDetail(arguments?.getString("guideId").toString())  // Gọi API load guide detail
+        
+//        // Setup ViewPager and TabLayout
+//        val pagerAdapter = GuideDetailPagerAdapter(this)
+//        viewBinding.viewPager.adapter = pagerAdapter
+//
+//        // Link TabLayout with ViewPager2
+//        TabLayoutMediator(viewBinding.tabLayout, viewBinding.viewPager) { tab, position ->
+//            tab.text = when (position) {
+//                0 -> "Hướng dẫn"
+//                1 -> "Liên quan"
+//                2 -> "Đánh giá"
+//                else -> null
+//            }
+//        }.attach()
     }
 
     private fun loadGuideDetail(guideId: String) {
@@ -57,8 +72,21 @@ class GuideDetailFragment : BaseFragment<FragmentGuideDetailBinding>() {
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.guideSteps.observe(viewLifecycleOwner) { steps: List<GuideStepResponse> ->
-            stepAdapter.submitList(steps)
+        viewModel.guideSteps.observe(viewLifecycleOwner) { steps ->
+
+            // Gắn adapter khi đã có dữ liệu
+            val pagerAdapter = GuideDetailPagerAdapter(this, steps)
+            viewBinding.viewPager.adapter = pagerAdapter
+
+            // Attach TabLayout lại
+            TabLayoutMediator(viewBinding.tabLayout, viewBinding.viewPager) { tab, position ->
+                tab.text = when (position) {
+                    0 -> "Hướng dẫn"
+                    1 -> "Liên quan"
+                    2 -> "Đánh giá"
+                    else -> null
+                }
+            }.attach()
         }
     }
 
@@ -76,14 +104,19 @@ class GuideDetailFragment : BaseFragment<FragmentGuideDetailBinding>() {
                 Toast.makeText(context, "Đã thêm vào danh sách yêu thích", Toast.LENGTH_SHORT).show()
             }
         }
-    }
 
-    private fun setupRecyclerView() {
-        viewBinding.rvSteps.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = stepAdapter
+        viewBinding.btnBookmark.setOnLongClickListener {
+            mainNavigator.offerNavEvent(GoToBookmark())
+            true
         }
     }
+
+//    private fun setupRecyclerView() {
+//        viewBinding.rvSteps.apply {
+//            layoutManager = LinearLayoutManager(context)
+//            adapter = stepAdapter
+//        }
+//    }
 
     private fun handleSuccess(state: GuideState) {
         when (state) {
