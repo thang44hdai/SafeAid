@@ -1,7 +1,6 @@
 package com.example.safeaid.screens.guide
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -17,7 +16,7 @@ import com.example.safeaid.core.ui.BaseContainerFragment
 import com.example.safeaid.core.utils.DataResult
 import com.example.safeaid.screens.guide.viewmodel.GuideState
 import com.example.safeaid.screens.guide.viewmodel.GuideViewModel
-import com.example.safeaid.core.response.GuideStepResponse
+import com.example.safeaid.screens.guide.tablayout.GuideDetailPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -27,32 +26,13 @@ import kotlinx.coroutines.flow.onEach
 class GuideDetailFragment : BaseFragment<FragmentGuideDetailBinding>() {
     private val mainNavigator: MainNavigator by activityViewModels()
     private val viewModel: GuideViewModel by viewModels()
-    private val stepAdapter = StepAdapter { step ->
-        val bundle = Bundle().apply {
-            putParcelable("step", step)
-        }
-        mainNavigator.offerNavEvent(GoToStepDetail(bundle))
-    }
+    private var categoryId: String? = null
 
     override fun isHostFragment(): Boolean = false
 
     override fun onInit() {
-//        setupRecyclerView()
+        categoryId = arguments?.getString("categoryId")
         loadGuideDetail(arguments?.getString("guideId").toString())  // Gọi API load guide detail
-        
-//        // Setup ViewPager and TabLayout
-//        val pagerAdapter = GuideDetailPagerAdapter(this)
-//        viewBinding.viewPager.adapter = pagerAdapter
-//
-//        // Link TabLayout with ViewPager2
-//        TabLayoutMediator(viewBinding.tabLayout, viewBinding.viewPager) { tab, position ->
-//            tab.text = when (position) {
-//                0 -> "Hướng dẫn"
-//                1 -> "Liên quan"
-//                2 -> "Đánh giá"
-//                else -> null
-//            }
-//        }.attach()
     }
 
     private fun loadGuideDetail(guideId: String) {
@@ -75,7 +55,7 @@ class GuideDetailFragment : BaseFragment<FragmentGuideDetailBinding>() {
         viewModel.guideSteps.observe(viewLifecycleOwner) { steps ->
 
             // Gắn adapter khi đã có dữ liệu
-            val pagerAdapter = GuideDetailPagerAdapter(this, steps)
+            val pagerAdapter = GuideDetailPagerAdapter(this, steps, categoryId ?: "")
             viewBinding.viewPager.adapter = pagerAdapter
 
             // Attach TabLayout lại
@@ -111,22 +91,15 @@ class GuideDetailFragment : BaseFragment<FragmentGuideDetailBinding>() {
         }
     }
 
-//    private fun setupRecyclerView() {
-//        viewBinding.rvSteps.apply {
-//            layoutManager = LinearLayoutManager(context)
-//            adapter = stepAdapter
-//        }
-//    }
-
     private fun handleSuccess(state: GuideState) {
         when (state) {
             is GuideState.GuideDetail -> {
                 state.guide?.let { guide ->
                     viewBinding.tvGuideTitle.text = guide.title
                     viewBinding.tvGuideDescription.text = guide.description
-                    Glide.with(viewBinding.ivGuideImage.context)
-                        .load(guide.media[0].mediaUrl)
-                        .into(viewBinding.ivGuideImage)
+//                    Glide.with(viewBinding.ivGuideImage.context)
+//                        .load(guide.media[0].mediaUrl)
+//                        .into(viewBinding.ivGuideImage)
                 }
             }
             else -> {}
