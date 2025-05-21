@@ -33,8 +33,18 @@ class ForgotPasswordActivity : AppCompatActivity() {
             insets
         }
 
+        setupInputValidation()
         setupClickListeners()
         observeViewModel()
+    }
+    
+    private fun setupInputValidation() {
+        // Xóa thông báo lỗi khi người dùng bắt đầu nhập lại
+        binding.etEmail.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.tilEmail.error = null
+            }
+        }
     }
 
     private fun setupClickListeners() {
@@ -51,6 +61,9 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         // Xử lý khi nhấn nút đặt lại mật khẩu
         binding.btnResetPassword.setOnClickListener {
+            // Xóa thông báo lỗi cũ
+            binding.tilEmail.error = null
+            
             val email = binding.etEmail.text.toString().trim()
             viewModel.resetPassword(email)
         }
@@ -71,10 +84,41 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 }
                 is ForgotPasswordState.Error -> {
                     showLoading(false)
-                    Toast.makeText(this, state.message, Toast.LENGTH_SHORT).show()
+                    handleError(state.message)
                 }
             }
         }
+    }
+    
+    private fun handleError(errorMessage: String) {
+        when {
+            errorMessage.contains("Email không được để trống") -> {
+                binding.tilEmail.error = errorMessage
+            }
+            errorMessage.contains("Email không hợp lệ") -> {
+                binding.tilEmail.error = errorMessage
+            }
+            errorMessage.contains("Không tìm thấy email") -> {
+                binding.tilEmail.error = errorMessage
+                showErrorDialog("Email không tồn tại", errorMessage)
+            }
+            else -> {
+                // Lỗi khác hiển thị thông qua Toast và có thể dialog
+                Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+                showErrorDialog("Không thể gửi email", errorMessage)
+            }
+        }
+    }
+    
+    private fun showErrorDialog(title: String, message: String) {
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 
     private fun showLoading(isLoading: Boolean) {
@@ -108,11 +152,25 @@ class ForgotPasswordActivity : AppCompatActivity() {
         binding.tvBackToLogin.setPadding(32, 16, 32, 16)
         binding.tvBackToLogin.setBackgroundResource(R.drawable.bg_success)
         
+        // Hiển thị dialog thông báo thành công
+        showSuccessDialog(message)
+        
         // Tự động quay lại màn hình đăng nhập sau 3 giây
         binding.root.postDelayed({
             finish()
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
-        }, 3000)
+        }, 5000) // Tăng thời gian chờ lên 5 giây
+    }
+    
+    private fun showSuccessDialog(message: String) {
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle("Đã gửi email!")
+        builder.setMessage(message)
+        builder.setPositiveButton("Đóng") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 
     override fun onBackPressed() {

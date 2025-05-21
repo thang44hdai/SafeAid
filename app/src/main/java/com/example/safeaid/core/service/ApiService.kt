@@ -4,27 +4,13 @@ import QuizCategoryResponse
 import com.example.safeaid.core.request.LoginRequest
 import com.example.safeaid.core.request.QuizAttemptRequest
 
-import com.example.safeaid.core.response.BookmarkResponse
-import com.example.safeaid.core.response.Guide
-import com.example.safeaid.core.response.GuideCategoryResponse
-import com.example.safeaid.core.response.GuideResponse
-import com.example.safeaid.core.response.GuideStepMediaResponse
-import com.example.safeaid.core.response.GuideStepResponse
-
 import com.example.safeaid.core.request.RegisterRequest
-import com.example.safeaid.core.response.CommentDto
-import com.example.safeaid.core.response.CreatePostResponse
-import com.example.safeaid.core.response.LoginResponse
-import com.example.safeaid.core.response.PostListResponse
+import com.example.safeaid.core.request.ResetPasswordRequest
+import com.example.safeaid.core.response.*
 
-import com.example.safeaid.core.response.QuizAttemptResponse
-import com.example.safeaid.core.response.QuizHistoryDetailResponse
-import com.example.safeaid.core.response.QuizResponse
-import com.example.safeaid.core.response.RegisterResponse
 import kotlinx.serialization.json.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import com.example.safeaid.core.response.NewsListResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -179,6 +165,11 @@ interface ApiService {
     suspend fun register(
         @Body request: RegisterRequest
     ): Response<RegisterResponse>
+
+    @POST("/api/auth/reset-password")
+    suspend fun resetPassword(
+        @Body request: ResetPasswordRequest
+    ): Response<ResetPasswordResponse>
 
     @GET("/api/news")
     suspend fun getNewsList(): Response<NewsListResponse>

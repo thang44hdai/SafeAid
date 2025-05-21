@@ -32,6 +32,35 @@ class RegisterActivity : AppCompatActivity() {
             insets
         }
 
+        setupInputValidation()
+        setupClickListeners()
+        observeViewModel()
+    }
+    
+    private fun setupInputValidation() {
+        // Xóa thông báo lỗi khi người dùng bắt đầu nhập lại
+        binding.etUsername.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) binding.tilUsername.error = null
+        }
+        
+        binding.etEmail.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) binding.tilEmail.error = null
+        }
+        
+        binding.etPhone.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) binding.tilPhone.error = null
+        }
+        
+        binding.etPassword.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) binding.tilPassword.error = null
+        }
+        
+        binding.etConfirm.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) binding.tilConfirm.error = null
+        }
+    }
+
+    private fun setupClickListeners() {
         // Quay lại màn hình đăng nhập khi nhấn nút Back
         binding.btnBack.setOnClickListener {
             onBackPressed()
@@ -42,13 +71,49 @@ class RegisterActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        // Xử lý sự kiện nút Đăng ký
+        binding.btnRegister.setOnClickListener {
+            // Xóa tất cả thông báo lỗi cũ
+            clearAllErrors()
+            
+            val username = binding.etUsername.text.toString().trim()
+            val email = binding.etEmail.text.toString().trim()
+            val phone = binding.etPhone.text.toString().trim()
+            val password = binding.etPassword.text.toString()
+            val confirm = binding.etConfirm.text.toString()
+            
+            // Kiểm tra đã đồng ý với điều khoản chưa
+            if (!binding.cbTerms.isChecked) {
+                Toast.makeText(this, "Vui lòng đồng ý với Điều khoản và Chính sách", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            
+            // Kiểm tra mật khẩu xác nhận có khớp không
+            if (password != confirm) {
+                binding.tilConfirm.error = "Mật khẩu xác nhận không khớp"
+                return@setOnClickListener
+            }
+            
+            // Gọi API đăng ký
+            vm.register(username = username, email = email, phone = phone, password = password)
+        }
+    }
+    
+    private fun clearAllErrors() {
+        binding.tilUsername.error = null
+        binding.tilEmail.error = null
+        binding.tilPhone.error = null
+        binding.tilPassword.error = null
+        binding.tilConfirm.error = null
+    }
+
+    private fun observeViewModel() {
         // Theo dõi trạng thái đăng ký
         vm.state.observe(this) { state ->
             when (state) {
                 is RegisterState.Loading -> {
                     binding.btnRegister.isEnabled = false
                     binding.btnRegister.text = "Đang xử lý..."
-                    Toast.makeText(this, "Đang xử lý...", Toast.LENGTH_SHORT).show()
                 }
                 is RegisterState.Success -> {
                     binding.btnRegister.isEnabled = true
@@ -62,7 +127,43 @@ class RegisterActivity : AppCompatActivity() {
                 is RegisterState.Error -> {
                     binding.btnRegister.isEnabled = true
                     binding.btnRegister.text = "Đăng ký"
-                    Toast.makeText(this, state.error, Toast.LENGTH_LONG).show()
+                    
+                    // Hiển thị lỗi trên trường tương ứng
+                    when {
+                        state.error.contains("Tên đăng nhập không được để trống") -> {
+                            binding.tilUsername.error = state.error
+                        }
+                        state.error.contains("Email không được để trống") -> {
+                            binding.tilEmail.error = state.error
+                        }
+                        state.error.contains("Email không hợp lệ") -> {
+                            binding.tilEmail.error = state.error
+                        }
+                        state.error.contains("Số điện thoại không được để trống") -> {
+                            binding.tilPhone.error = state.error
+                        }
+                        state.error.contains("Số điện thoại không hợp lệ") -> {
+                            binding.tilPhone.error = state.error
+                        }
+                        state.error.contains("Mật khẩu không được để trống") -> {
+                            binding.tilPassword.error = state.error
+                        }
+                        state.error.contains("Mật khẩu phải có ít nhất") -> {
+                            binding.tilPassword.error = state.error
+                        }
+                        state.error.contains("Email hoặc số điện thoại đã được sử dụng") -> {
+                            // Hiển thị lỗi trùng email hoặc số điện thoại
+                            binding.tilEmail.error = state.error
+                            binding.tilPhone.error = state.error
+                            
+                            // Hiển thị dialog thông báo
+                            showErrorDialog("Thông tin đã tồn tại", state.error)
+                        }
+                        else -> {
+                            // Lỗi khác hiển thị thông qua Toast
+                            Toast.makeText(this, state.error, Toast.LENGTH_LONG).show()
+                        }
+                    }
                 }
                 is RegisterState.Idle -> {
                     binding.btnRegister.isEnabled = true
@@ -70,35 +171,17 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
         }
-
-        // Xử lý sự kiện nút Đăng ký
-        binding.btnRegister.setOnClickListener {
-            val username = binding.etUsername.text.toString().trim()
-            val email = binding.etEmail.text.toString().trim()
-            val phone = binding.etPhone.text.toString().trim()
-            val password = binding.etPassword.text.toString()
-            val confirm = binding.etConfirm.text.toString()
-            
-            // Kiểm tra đã đồng ý với điều khoản chưa
-            if (!binding.cbTerms.isChecked) {
-                Toast.makeText(this, "Vui lòng đồng ý với Điều khoản và Chính sách", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            
-            // Validate thông tin đăng ký
-            if (username.isEmpty() || email.isEmpty() || phone.isEmpty() || password.isEmpty() || confirm.isEmpty()) {
-                Toast.makeText(this, "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            
-            if (password != confirm) {
-                Toast.makeText(this, "Mật khẩu không khớp", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-            
-            // Gọi API đăng ký
-            vm.register(username = username, email = email, phone = phone, password = password)
+    }
+    
+    private fun showErrorDialog(title: String, message: String) {
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle(title)
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
         }
+        val dialog = builder.create()
+        dialog.show()
     }
     
     override fun onBackPressed() {
