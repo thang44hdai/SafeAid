@@ -6,7 +6,12 @@ import com.example.androidtraining.R
 import com.example.safeaid.core.ui.BaseFragment
 import com.example.androidtraining.databinding.FragmentMainScreenBinding
 import com.example.safeaid.screens.camera.CameraFragment
+
+import com.example.safeaid.screens.finger.FingerFragment
+import com.example.safeaid.screens.guide.GuideFragment
+
 import com.example.safeaid.screens.person.PersonFragment
+
 import com.example.safeaid.screens.home.HomeFragment
 import com.example.safeaid.screens.quiz.QuizCategoryFragment
 import com.example.safeaid.screens.sos.SosFragment
@@ -41,7 +46,7 @@ class MainScreen : BaseFragment<FragmentMainScreenBinding>() {
                 }
 
                 R.id.nav_first_aid -> {
-                    replaceFragment(CameraFragment())
+                    replaceFragment(GuideFragment())
                     mainViewModel.currentPage = 1
                 }
 

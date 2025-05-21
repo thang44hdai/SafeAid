@@ -17,6 +17,9 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.androidtraining.R
 import com.example.androidtraining.databinding.ActivityMainBinding
 import com.example.safeaid.core.ui.BaseContainerFragment
+import com.example.safeaid.screens.guide.GoToBookmark
+import com.example.safeaid.screens.guide.GoToGuideDetail
+import com.example.safeaid.screens.guide.GoToStepDetail
 import com.example.safeaid.screens.home.GoToQuizHistory
 import com.example.safeaid.screens.quiz.GoToDoQuizFragment
 import com.example.safeaid.screens.quiz.GoToMainScreen
@@ -148,6 +151,24 @@ class MainActivity : AppCompatActivity() {
                     putSerializable("quizAttempt", event.item)
                 }
                 navController.navigate(R.id.quizHistoryDetailFragment, bundle)
+            }
+            
+            is GoToGuideDetail -> {
+                val bundle = Bundle().apply {
+                    putString("guideId", event.extras?.getString("guideId"))
+                }
+                navController.navigate(R.id.guideDetailFragment, bundle)
+            }
+        
+            is GoToStepDetail -> {
+                val bundle = Bundle().apply {
+                    putParcelable("step", event.extras?.getParcelable("step"))
+                }
+                navController.navigate(R.id.stepDetailFragment, bundle)
+            }
+        
+            is GoToBookmark -> {
+                navController.navigate(R.id.bookmarkFragment)
             }
         }
     }

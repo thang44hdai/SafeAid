@@ -3,11 +3,20 @@ package com.example.safeaid.core.service
 import QuizCategoryResponse
 import com.example.safeaid.core.request.LoginRequest
 import com.example.safeaid.core.request.QuizAttemptRequest
+
+import com.example.safeaid.core.response.BookmarkResponse
+import com.example.safeaid.core.response.Guide
+import com.example.safeaid.core.response.GuideCategoryResponse
+import com.example.safeaid.core.response.GuideResponse
+import com.example.safeaid.core.response.GuideStepMediaResponse
+import com.example.safeaid.core.response.GuideStepResponse
+
 import com.example.safeaid.core.request.RegisterRequest
 import com.example.safeaid.core.response.CommentDto
 import com.example.safeaid.core.response.CreatePostResponse
 import com.example.safeaid.core.response.LoginResponse
 import com.example.safeaid.core.response.PostListResponse
+
 import com.example.safeaid.core.response.QuizAttemptResponse
 import com.example.safeaid.core.response.QuizHistoryDetailResponse
 import com.example.safeaid.core.response.QuizResponse
@@ -21,7 +30,9 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
+
 import retrofit2.http.Multipart
+
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -58,6 +69,63 @@ interface ApiService {
         @Path("quiz_attempt_id") quizAttemptId: String,
         @Path("quiz_id") quizId: String
     ): Response<QuizHistoryDetailResponse>
+
+    
+    // Thêm endpoint mới cho Guide Categories
+    @GET("/api/guide-categories")
+    suspend fun getGuideCategories(
+        @Header("Authorization") token: String
+    ): Response<List<GuideCategoryResponse>>
+
+    // Thêm endpoint mới cho Guides
+    @GET("/api/guides/")
+    suspend fun getGuides(
+        @Header("Authorization") token: String
+    ): Response<GuideResponse>
+
+    // Thêm endpoint mới cho Guide Detail
+    @GET("/api/guides/{guideId}")
+    suspend fun getGuideById(
+        @Path("guideId") guideId: String,
+        @Header("Authorization") token: String
+    ): Response<Guide>
+
+    // Sửa lại các endpoint guide step
+    @GET("/api/guide-steps/guide/{guideId}")
+    suspend fun getGuideSteps(
+        @Path("guideId") guideId: String,
+        @Header("Authorization") token: String
+    ): Response<List<GuideStepResponse>>
+
+    @GET("/api/guide-steps/{stepId}")
+    suspend fun getGuideStep(
+        @Path("stepId") stepId: String,
+        @Header("Authorization") token: String
+    ): Response<GuideStepResponse>
+
+    @GET("/api/guide-step-media/step/{stepId}")
+    suspend fun getGuideStepMedia(
+        @Path("stepId") stepId: String,
+        @Header("Authorization") token: String
+    ): Response<List<GuideStepMediaResponse>>
+
+    @GET("/api/favourite-guide-lists")
+    suspend fun getFavouriteList(
+        @Header("Authorization") token: String
+    ): Response<BookmarkResponse>
+
+    @DELETE("/api/favourite-guide-items/{guideId}")
+    suspend fun deleteFavouriteGuide(
+        @Path("guideId") guideId: String,
+        @Header("Authorization") token: String
+    ): Response<Unit>
+
+    @POST("/api/favourite-guide-items")
+    suspend fun addFavouriteGuide(
+        @Body request: Map<String, String>, // Thay đổi kiểu dữ liệu của request body
+        @Header("Authorization") token: String
+    ): Response<Unit>
+
 
     //community
     @GET("/api/posts")

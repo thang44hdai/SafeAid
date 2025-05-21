@@ -1,0 +1,14 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <!-- Existing destinations -->
+    
+    <fragment
+        android:id="@+id/guideDetailFragment"
+        android:name="com.example.safeaid.screens.guide.GuideDetailFragment"
+        android:label="GuideDetailFragment">
+        <argument
+            android:name="guideId"
+            app:argType="string" />
+    </fragment>
+</navigation>

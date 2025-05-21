@@ -36,5 +36,24 @@
         android:id="@+id/quizHistoryDetailFragment"
         android:name="com.example.safeaid.screens.quiz_history.QuizHistoryDetailFragment"
         android:label="QuizHistoryDetailFragment" />
-
+    <fragment
+        android:id="@+id/guideDetailFragment"
+        android:name="com.example.safeaid.screens.guide.GuideDetailFragment"
+        android:label="GuideDetailFragment">
+        <argument
+            android:name="guideId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/stepDetailFragment"
+        android:name="com.example.safeaid.screens.guide.StepDetailFragment"
+        android:label="StepDetailFragment">
+        <argument
+            android:name="step"
+            app:argType="com.example.safeaid.core.response.GuideStepResponse" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookmarkFragment"
+        android:name="com.example.safeaid.screens.bookmark.BookmarkFragment"
+        android:label="BookmarkFragment" />
 </navigation>
