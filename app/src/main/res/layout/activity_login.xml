@@ -5,131 +5,250 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="16dp">
+    android:background="@color/white">
 
-    <!-- Tiêu đề -->
+    <!-- Header Section with Logo and Welcome Text -->
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="48dp"
+        android:elevation="4dp"/>
+
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Đăng nhập"
-        android:textSize="28sp"
+        android:text="SafeAid"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/primary"
-        app:layout_constraintTop_toTopOf="parent"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/ivLogo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"/>
 
-    <!-- Subtitle -->
     <TextView
         android:id="@+id/tvSubtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Chào mừng bạn quay trở lại"
+        android:text="Chào mừng trở lại"
         android:textSize="16sp"
-        android:textColor="@android:color/black"
+        android:textColor="@color/secondary"
+        android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:layout_constraintStart_toStartOf="@id/tvTitle"
-        app:layout_constraintEnd_toEndOf="@id/tvTitle"
-        android:layout_marginTop="8dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="24dp"/>
 
-    <!-- Email -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilEmail"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <!-- Card Container for Login Form -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Email"
-        app:boxStrokeColor="@color/primary"
-        app:boxBackgroundColor="#FFFAFAFA"
         app:layout_constraintTop_toBottomOf="@id/tvSubtitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp">
+        android:layout_marginTop="32dp"
+        android:layout_marginHorizontal="24dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:strokeWidth="0dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etEmail"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"/>
-    </com.google.android.material.textfield.TextInputLayout>
+            android:padding="24dp">
 
-    <!-- Mật khẩu -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilPassword"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Mật khẩu"
-        app:boxStrokeColor="@color/primary"
-        app:boxBackgroundColor="#FFFAFAFA"
-        app:passwordToggleEnabled="true"
-        app:layout_constraintTop_toBottomOf="@id/tilEmail"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp">
+            <!-- Email Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEmail"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                app:boxStrokeColor="@color/primary"
+                app:startIconDrawable="@android:drawable/ic_dialog_email"
+                app:startIconTint="@color/primary"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"/>
-    </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/secondary"
+                    android:paddingVertical="16dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Quên mật khẩu -->
-    <TextView
-        android:id="@+id/tvForgot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Quên mật khẩu?"
-        android:textSize="14sp"
-        android:textColor="@color/primary"
-        app:layout_constraintTop_toBottomOf="@id/tilPassword"
-        app:layout_constraintEnd_toEndOf="@id/tilPassword"
-        android:layout_marginTop="8dp"/>
+            <!-- Password Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPassword"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Mật khẩu"
+                app:boxStrokeColor="@color/primary"
+                app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
+                app:startIconTint="@color/primary"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/primary"
+                app:layout_constraintTop_toBottomOf="@id/tilEmail"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp">
 
-    <!-- Nút Đăng nhập -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLogin"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:text="Đăng nhập"
-        android:textSize="16sp"
-        android:textAllCaps="false"
-        app:cornerRadius="28dp"
-        app:backgroundTint="@color/primary"
-        app:layout_constraintTop_toBottomOf="@id/tvForgot"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="24dp"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:textColor="@color/secondary"
+                    android:paddingVertical="16dp"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Tạo tài khoản mới -->
-    <TextView
-        android:id="@+id/tvRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tạo tài khoản mới"
-        android:textSize="14sp"
-        android:textColor="@android:color/black"
-        app:layout_constraintTop_toBottomOf="@id/btnLogin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
+            <!-- Forgot Password Link -->
+            <TextView
+                android:id="@+id/tvForgot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quên mật khẩu?"
+                android:textSize="14sp"
+                android:textColor="@color/primary"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/tilPassword"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
 
-    <!-- Hoặc tiếp tục với -->
+            <!-- Login Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Đăng nhập"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                app:cornerRadius="28dp"
+                app:backgroundTint="@color/primary"
+                android:elevation="4dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintTop_toBottomOf="@id/tvForgot"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="24dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Social Login Section -->
     <TextView
         android:id="@+id/tvOr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hoặc tiếp tục với"
+        android:text="hoặc đăng nhập với"
         android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@id/tvRegister"
+        android:textColor="@color/secondary"
+        app:layout_constraintTop_toBottomOf="@id/cardLogin"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"/>
 
+    <LinearLayout
+        android:id="@+id/socialLoginContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tvOr"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
 
+        <!-- Google Button (Replace with actual Google icon) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnGoogle"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            app:cardCornerRadius="29dp"
+            app:cardElevation="2dp"
+            android:layout_marginEnd="24dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#E0E0E0"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground">
+            
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="14dp">
+                
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_google_simplified"
+                    android:scaleType="fitCenter"/>
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
 
+        <!-- Facebook Button (Replace with actual Facebook icon) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnFacebook"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            app:cardCornerRadius="29dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="#E0E0E0"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground">
+            
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="14dp">
+                
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_facebook"
+                    android:scaleType="fitCenter"/>
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+    <!-- Register Link -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="32dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chưa có tài khoản? "
+            android:textSize="14sp"
+            android:textColor="@color/secondary"/>
+
+        <TextView
+            android:id="@+id/tvRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đăng ký ngay"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

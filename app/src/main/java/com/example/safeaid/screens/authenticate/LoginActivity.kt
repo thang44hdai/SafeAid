@@ -34,9 +34,11 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+        // Set up login button click listener
         binding.btnLogin.setOnClickListener {
             val email = binding.etEmail.text.toString().trim()
-            val pass  = binding.etPassword.text.toString().trim()
+            val pass = binding.etPassword.text.toString().trim()
+            
             if (email.isEmpty() || pass.isEmpty()) {
                 Toast.makeText(this, "Vui lòng nhập đầy đủ email và mật khẩu", Toast.LENGTH_SHORT).show()
             } else {
@@ -44,10 +46,28 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+        // Set up register link click listener
         binding.tvRegister.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }
 
+        // Set up forgot password link click listener
+        binding.tvForgot.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        }
+
+        // Set up social login buttons
+        binding.btnGoogle.setOnClickListener {
+            Toast.makeText(this, "Đăng nhập bằng Google đang được phát triển", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.btnFacebook.setOnClickListener {
+            Toast.makeText(this, "Đăng nhập bằng Facebook đang được phát triển", Toast.LENGTH_SHORT).show()
+        }
+
+        // Observe authentication state
         vm.state.observe(this) { state ->
             when (state) {
                 is AuthState.Loading -> {
@@ -58,7 +78,12 @@ class LoginActivity : AppCompatActivity() {
                     binding.btnLogin.isEnabled = true
                     binding.btnLogin.text = "Đăng nhập"
                     Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, MainActivity::class.java))
+                    
+                    // Chuyển đến MainActivity và xóa activity stack
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
                 }
                 is AuthState.Error -> {
                     binding.btnLogin.isEnabled = true

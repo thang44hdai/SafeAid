@@ -46,6 +46,9 @@
             android:name="com.example.safeaid.screens.authenticate.LoginActivity"
             android:exported="false" />
         <activity
+            android:name="com.example.safeaid.screens.authenticate.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name="com.example.safeaid.screens.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
