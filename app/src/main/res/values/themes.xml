@@ -7,7 +7,7 @@
 
     <style name="Theme.AndroidTraining" parent="Base.Theme.AndroidTraining" />
 
-    <style name="Theme.NoStatusBar" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.NoStatusBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowFullscreen">false</item>
         <item name="android:statusBarColor">@color/primary</item>
         <item name="android:windowLightStatusBar">true</item> <!-- false -> light, true -> dark-->

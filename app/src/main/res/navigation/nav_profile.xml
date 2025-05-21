@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/fingerFragment"
-        android:name="com.example.safeaid.screens.finger.FingerFragment"
+        android:name="com.example.safeaid.screens.person.PersonFragment"
         android:label="FingerFragment" />
 </navigation>

@@ -1,26 +1,45 @@
 package com.example.safeaid.core.service
 
 import QuizCategoryResponse
+import com.example.safeaid.core.request.LoginRequest
 import com.example.safeaid.core.request.QuizAttemptRequest
+
 import com.example.safeaid.core.response.BookmarkResponse
 import com.example.safeaid.core.response.Guide
 import com.example.safeaid.core.response.GuideCategoryResponse
 import com.example.safeaid.core.response.GuideResponse
 import com.example.safeaid.core.response.GuideStepMediaResponse
 import com.example.safeaid.core.response.GuideStepResponse
+
+import com.example.safeaid.core.request.RegisterRequest
+import com.example.safeaid.core.response.CommentDto
+import com.example.safeaid.core.response.CreatePostResponse
+import com.example.safeaid.core.response.LoginResponse
+import com.example.safeaid.core.response.PostListResponse
+
 import com.example.safeaid.core.response.QuizAttemptResponse
 import com.example.safeaid.core.response.QuizHistoryDetailResponse
 import com.example.safeaid.core.response.QuizResponse
+import com.example.safeaid.core.response.RegisterResponse
 import kotlinx.serialization.json.JsonObject
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import com.example.safeaid.core.response.NewsListResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
+
+import retrofit2.http.Multipart
+
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
+    // quiz
     @GET("/api/quiz-categories/with-quizzes")
     suspend fun getCategoryQuiz(): Response<QuizCategoryResponse>
 
@@ -50,6 +69,7 @@ interface ApiService {
         @Path("quiz_attempt_id") quizAttemptId: String,
         @Path("quiz_id") quizId: String
     ): Response<QuizHistoryDetailResponse>
+
     
     // Thêm endpoint mới cho Guide Categories
     @GET("/api/guide-categories")
@@ -105,4 +125,71 @@ interface ApiService {
         @Body request: Map<String, String>, // Thay đổi kiểu dữ liệu của request body
         @Header("Authorization") token: String
     ): Response<Unit>
+
+
+    //community
+    @GET("/api/posts")
+    suspend fun getPosts(
+        @Header("Authorization") bearerToken: String,
+        @Query("page")  page: Int   = 1,
+        @Query("limit") limit: Int  = 10
+    ): Response<PostListResponse>
+
+    @Multipart
+    @POST("/api/posts")
+    suspend fun createPost(
+        @Header("Authorization") bearerToken: String,
+        @Part("content") content: RequestBody,
+        @Part("title") title: RequestBody?,
+        @Part images: List<MultipartBody.Part>?
+    ): Response<CreatePostResponse>
+
+    @GET("/api/posts/{postId}/comments")
+    suspend fun getComments(
+        @Header("Authorization") bearer: String,
+        @Path("postId") postId: String
+    ): Response<List<CommentDto>>
+
+    @POST("/api/posts/{postId}/comments")
+    suspend fun createComment(
+        @Header("Authorization") bearer: String,
+        @Path("postId") postId: String,
+        @Body body: Map<String, String>
+    ): Response<CommentDto>
+
+    @POST("/api/posts/{postId}/like")
+    suspend fun likePost(
+        @Header("Authorization") bearer: String,
+        @Path("postId") postId: String
+    ): Response<Unit>
+
+    @DELETE("/api/posts/{postId}/like")
+    suspend fun unLikePost(
+        @Header("Authorization") bearer: String,
+        @Path("postId") postId: String
+    ): Response<Unit>
+
+    //Authentication
+    @POST("/api/auth/login")
+    suspend fun login(
+        @Body body: LoginRequest
+    ): retrofit2.Response<LoginResponse>
+
+    @POST("/api/auth/register")
+    suspend fun register(
+        @Body request: RegisterRequest
+    ): Response<RegisterResponse>
+
+    @GET("/api/news")
+    suspend fun getNewsList(): Response<NewsListResponse>
+
+    @Multipart
+    @POST("/api/news")
+    suspend fun createNews(
+        @Header("Authorization") bearerToken: String,
+        @Part("title") title: RequestBody,
+        @Part("content") content: RequestBody,
+        @Part thumbnail: RequestBody,
+        @Part media: List<MultipartBody.Part>? = null
+    ): Response<NewsListResponse>
 }

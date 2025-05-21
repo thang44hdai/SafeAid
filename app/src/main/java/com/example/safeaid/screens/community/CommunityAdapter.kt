@@ -1,0 +1,90 @@
+package com.example.safeaid.screens.community
+
+import android.graphics.Color
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.NO_POSITION
+import com.bumptech.glide.Glide
+import com.example.androidtraining.R
+import com.example.androidtraining.databinding.ItemPostBinding
+import com.example.safeaid.screens.community.data.PostDto
+import kotlin.math.log
+
+class CommunityAdapter(
+    private var items: List<PostDto>,
+    private val onCommentsClick: (PostDto) -> Unit,
+    private val onLikeToggle: (PostDto, Boolean) -> Unit
+) : RecyclerView.Adapter<CommunityAdapter.PostViewHolder>() {
+
+    fun updateList(newList: List<PostDto>) {
+        items = newList
+        notifyDataSetChanged()
+    }
+
+    inner class PostViewHolder(private val binding: ItemPostBinding)
+        : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: PostDto) {
+            Glide.with(binding.ivAvatar.context)
+                .load(item.user.profile_image_path ?: R.drawable.default_avt)
+                .placeholder(R.drawable.default_avt)
+                .into(binding.ivAvatar)
+
+            // header
+            binding.tvUser.text = item.user.username
+            binding.tvTime.text = item.created_at
+                .substringAfter('T')
+                .substringBefore('.')
+
+
+//            binding.tvTitle.text = item.title
+            binding.tvContent.text = item.content
+
+            if (item.media.isNotEmpty()) {
+                binding.ivMedia.visibility = View.VISIBLE
+                val media = item.media[0]
+                Glide.with(binding.ivMedia.context)
+                    .load(media.media_link)
+                    .into(binding.ivMedia)
+            } else {
+                binding.ivMedia.visibility = View.GONE
+            }
+
+            // stats
+            binding.tvLikes.text    = item.like_count.toString()
+            binding.tvLikes.setTextColor(
+                if (item.liked_by_user) Color.RED else Color.GRAY
+            )
+
+            binding.tvLikes.setOnClickListener {
+                val pos = bindingAdapterPosition.takeIf { it != NO_POSITION } ?: return@setOnClickListener
+                val post = items[pos]
+                post.liked_by_user = if (post.liked_by_user) false else true
+                post.like_count += if (post.liked_by_user) +1 else -1
+                notifyItemChanged(pos)
+                onLikeToggle(post, post.liked_by_user)
+            }
+            binding.tvComments.text = item.comment_count.toString()
+//            binding.tvViews.text    = item.view_count.toString()
+
+            binding.tvComments.setOnClickListener { onCommentsClick(item) }
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
+        val binding = ItemPostBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return PostViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+        holder.bind(items[position])
+    }
+
+    override fun getItemCount(): Int = items.size
+}
