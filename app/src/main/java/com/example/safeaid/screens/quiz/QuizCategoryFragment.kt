@@ -219,7 +219,8 @@ class QuizCategoryFragment : BaseFragment<FragmentQuizCategoryBinding>() {
                         duration = 30 + index * 5,
                         quizId = "math_quiz_${index + 1}",
                         thumbnailUrl = "https://example.com/math_${index + 1}.jpg",
-                        title = "Toán cấp độ ${index + 1}"
+                        title = "Toán cấp độ ${index + 1}",
+                        guideId = "guide_${index + 1}",
                     )
                 }
             ),

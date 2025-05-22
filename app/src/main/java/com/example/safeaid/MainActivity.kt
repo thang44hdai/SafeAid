@@ -155,6 +155,7 @@ class MainActivity : AppCompatActivity() {
             
             is GoToGuideDetail -> {
                 val bundle = Bundle().apply {
+                    putString("categoryId", event.extras?.getString("categoryId"))
                     putString("guideId", event.extras?.getString("guideId"))
                 }
                 navController.navigate(R.id.guideDetailFragment, bundle)

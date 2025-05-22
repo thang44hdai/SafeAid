@@ -77,6 +77,7 @@ class GuideFragment : BaseFragment<FragmentGuideBinding>() {
 
     private fun navigateToGuideDetail(guide: Guide) {
         val bundle = Bundle().apply {
+            putString("categoryId", guide.categoryId)
             putString("guideId", guide.guideId)
             putString("guideTitle", guide.title)
         }

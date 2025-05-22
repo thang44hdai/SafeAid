@@ -1,4 +1,4 @@
-package com.example.safeaid.screens.guide
+package com.example.safeaid.screens.guide.tablayout
 
 import android.os.Build
 import android.os.Bundle
@@ -8,11 +8,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidtraining.databinding.FragmentGuideTabBinding
 import com.example.safeaid.MainNavigator
+import com.example.safeaid.core.response.GuideStepResponse
 import com.example.safeaid.core.ui.BaseFragment
+import com.example.safeaid.screens.guide.GoToStepDetail
+import com.example.safeaid.screens.guide.StepAdapter
 import com.example.safeaid.screens.guide.viewmodel.GuideViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import com.example.safeaid.core.response.GuideStepResponse
-import kotlin.getValue
 
 @AndroidEntryPoint
 class GuideTabFragment : BaseFragment<FragmentGuideTabBinding>() {

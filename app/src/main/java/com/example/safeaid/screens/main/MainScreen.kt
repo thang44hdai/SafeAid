@@ -7,7 +7,6 @@ import com.example.safeaid.core.ui.BaseFragment
 import com.example.androidtraining.databinding.FragmentMainScreenBinding
 import com.example.safeaid.screens.camera.CameraFragment
 
-import com.example.safeaid.screens.finger.FingerFragment
 import com.example.safeaid.screens.guide.GuideFragment
 
 import com.example.safeaid.screens.person.PersonFragment

@@ -170,7 +170,7 @@ class GuideListAdapter(
             rvGuides.apply {
                 layoutManager = LinearLayoutManager(
                     itemView.context,
-                    LinearLayoutManager.HORIZONTAL,
+                    LinearLayoutManager.VERTICAL,
                     false
                 )
                 adapter = guidesAdapter
