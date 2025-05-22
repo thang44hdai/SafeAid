@@ -222,4 +222,10 @@ interface ApiService {
         @Part("username") username: String,
         @Part("phone_number") phone_number: String
     ): Response<EditProfileRequest>
+
+    @POST("/api/auth/change-password")
+    suspend fun changePassword(
+        @Header("Authorization") bearerToken: String,
+        @Body requestBody: Map<String, String>
+    ): Response<Map<String, String>>
 }
