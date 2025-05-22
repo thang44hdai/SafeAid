@@ -2,6 +2,7 @@
 package com.example.safeaid.screens.community.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.safeaid.core.base.ApiCaller
@@ -24,12 +25,14 @@ sealed class CommentState {
     data class Success(val items: List<CommentDto>)  : CommentState()
     data class Added  (val comment: CommentDto)      : CommentState()
     data class Error  (val message: String)          : CommentState()
+    data class Deleted(val commentId: String) : CommentState()
 }
 
 // --- Các event để trigger trong ViewModel ---
 sealed class CommentEvent {
     object Load            : CommentEvent()
     data class Post(val content: String) : CommentEvent()
+    data class Delete(val commentId: String) : CommentEvent()
 }
 
 @HiltViewModel
@@ -40,13 +43,39 @@ class CommentViewModel @Inject constructor(
 ) : BaseViewModel<CommentState, CommentEvent>() {
 
     private val postId: String = checkNotNull(savedState["post_id"]) {
-        "post_id must be passed via NavArgs or Intent extras"
+
     }
 
     override fun onTriggerEvent(event: CommentEvent) {
         when (event) {
             CommentEvent.Load       -> loadComments()
             is CommentEvent.Post    -> postComment(event.content)
+            is CommentEvent.Delete  -> deleteComment(event.commentId)
+        }
+    }
+
+    // Add new function
+    private fun deleteComment(commentId: String) {
+        Log.d("CommentViewModel", "deleteComment: $commentId")
+        Log.d("CommentViewModel", "POSTID: $postId")
+        viewModelScope.launch {
+            ApiCaller.safeApiCall(
+                apiCall = {
+                    api.deleteComment(
+                        bearer = "Bearer ${Prefs.getToken(context)}",
+                        postId = postId,
+                        commentId = commentId
+                    )
+                },
+                callback = { result ->
+                    result.doIfSuccess {
+                        updateState(DataResult.Success(CommentState.Deleted(commentId)))
+                    }
+                    result.doIfFailure { err ->
+                        updateState(DataResult.Success(CommentState.Error(err.message ?: "Không thể xóa bình luận")))
+                    }
+                }
+            )
         }
     }
 
