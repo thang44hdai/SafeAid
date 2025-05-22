@@ -56,4 +56,8 @@
         android:id="@+id/bookmarkFragment"
         android:name="com.example.safeaid.screens.bookmark.BookmarkFragment"
         android:label="BookmarkFragment" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.example.safeaid.screens.notification.NotificationFragment"
+        android:label="NotificationFragment" />
 </navigation>
