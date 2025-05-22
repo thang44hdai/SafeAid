@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_noti_unread"
@@ -23,7 +24,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tvNewsTitle"
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="VinMec: Nguyên tắc so cấp cứu"
@@ -32,7 +33,15 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvNewsTime"
+            android:id="@+id/tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="10 phút trước"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -41,7 +50,7 @@
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/tvNewsReadMore"
+            android:id="@+id/tvNext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"

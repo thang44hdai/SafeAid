@@ -50,7 +50,7 @@
             app:spinner_popup_elevation="14dp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcv_quiz"
+            android:id="@+id/rcv_noti"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="20dp"

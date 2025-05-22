@@ -19,6 +19,9 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import com.example.safeaid.core.response.NewsListResponse
 import com.example.safeaid.core.response.PersonalRankResponse
+import com.example.safeaid.core.response.NotificationRes
+import com.example.safeaid.core.response.QuizIdRes
+import com.example.safeaid.core.response.Quizze
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -48,14 +51,14 @@ interface ApiService {
         @Body request: QuizAttemptRequest
     ): Response<JsonObject>
 
-    @GET("/api/quiz-attempts/user/{userId}")
+    @GET("/api/quiz-attempts/user")
     suspend fun getResultQuiz(
-        @Path("userId") userId: String
+        @Header("Authorization") bearerToken: String,
     ): Response<QuizAttemptResponse>
 
-    @GET("/api/quiz-attempts/{userId}/{quizId}")
+    @GET("/api/quiz-attempts/{quizId}")
     suspend fun getHistoryOfQuiz(
-        @Path("userId") userId: String,
+        @Header("Authorization") bearerToken: String,
         @Path("quizId") quizId: String
     ): Response<QuizAttemptResponse>
 
@@ -65,7 +68,7 @@ interface ApiService {
         @Path("quiz_id") quizId: String
     ): Response<QuizHistoryDetailResponse>
 
-    
+
     // Thêm endpoint mới cho Guide Categories
     @GET("/api/guide-categories")
     suspend fun getGuideCategories(
@@ -126,8 +129,8 @@ interface ApiService {
     @GET("/api/posts")
     suspend fun getPosts(
         @Header("Authorization") bearerToken: String,
-        @Query("page")  page: Int   = 1,
-        @Query("limit") limit: Int  = 10
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10
     ): Response<PostListResponse>
 
     @Multipart
@@ -235,4 +238,13 @@ interface ApiService {
         @Header("Authorization") bearerToken: String,
         @Body requestBody: Map<String, String>
     ): Response<Map<String, String>>
+    @GET("/api/notifications")
+    suspend fun getNotifications(
+        @Header("Authorization") bearerToken: String,
+    ): Response<NotificationRes>
+
+    @GET("/api/quizzes/{quizId}")
+    suspend fun getQuizById(
+        @Path("quizId") quizId: String,
+    ): Response<QuizIdRes>
 }
