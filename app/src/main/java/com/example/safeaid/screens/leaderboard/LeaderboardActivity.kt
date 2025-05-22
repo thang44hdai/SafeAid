@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.androidtraining.R
 import com.example.androidtraining.databinding.ActivityLeaderboardBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LeaderboardActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLeaderboardBinding
