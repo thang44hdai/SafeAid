@@ -1,9 +1,11 @@
 package com.example.safeaid.screens.news
 
+import android.content.Intent
 import android.os.Bundle
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import com.example.androidtraining.databinding.ActivityNewDetailsBinding
+import com.example.safeaid.MainActivity
 
 class NewsDetailsActivity : AppCompatActivity() {
 
@@ -17,7 +19,11 @@ class NewsDetailsActivity : AppCompatActivity() {
         // 1. Cấu hình Toolbar
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.toolbar.setNavigationOnClickListener { finish() }
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
+            val intent = Intent(binding.root.context, MainActivity::class.java)
+            startActivity(intent)
+        }
 
         // 2. Lấy dữ liệu từ Intent
         val title = intent.getStringExtra("news_title") ?: ""
@@ -66,8 +72,8 @@ class NewsDetailsActivity : AppCompatActivity() {
 
         // 5. Cấu hình WebView
         with(binding.webViewDetail.settings) {
-            javaScriptEnabled    = true
-            useWideViewPort      = true
+            javaScriptEnabled = true
+            useWideViewPort = true
             loadWithOverviewMode = true
         }
         binding.webViewDetail.webViewClient = WebViewClient()

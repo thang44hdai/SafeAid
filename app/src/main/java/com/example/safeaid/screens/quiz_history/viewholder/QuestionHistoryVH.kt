@@ -25,7 +25,7 @@ class QuestionHistoryVH(view: View, private val callBack: (Question) -> Unit) :
         }
 
         viewBinding.line.isInvisible = true
-        viewBinding.icFlag.isInvisible = true
+        viewBinding.icFlag.isInvisible = !item.isSelected
 
         viewBinding.root.setOnDebounceClick {
             callBack.invoke(item)

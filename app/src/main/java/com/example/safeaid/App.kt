@@ -12,9 +12,9 @@ class App() : Application() {
         FirebaseMessaging.getInstance().subscribeToTopic("news")
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Log.d("hihihi", "Subscribed to 'news' topic thành công")
+//                    Log.d("hihihi", "Subscribed to 'news' topic thành công")
                 } else {
-                    Log.e("hihihi", "Lỗi khi subscribe topic", task.exception)
+//                    Log.e("hihihi", "Lỗi khi subscribe topic", task.exception)
                 }
             }
 
