@@ -22,6 +22,15 @@ class LeaderboardActivity : AppCompatActivity() {
         binding = ActivityLeaderboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Set up the toolbar with back navigation
+        val toolbar = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        // Set up back button click listener
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
         // set Toolbar back
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
