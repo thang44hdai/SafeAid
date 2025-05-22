@@ -116,7 +116,7 @@ class PersonFragment : BaseFragment<FragmentFingerBinding>(){
 
     private fun updateProfileUi() {
         // Update username from UserManager
-        viewBinding.tvName.text = userManager.getUsername(requireContext())
+        viewBinding.tvName.text = "@" + userManager.getUsername(requireContext())
 
         // Update avatar using Glide
         val avatarUrl = userManager.getAvatarUrl(requireContext())
