@@ -45,6 +45,20 @@
             android:name="com.example.safeaid.screens.community.CommunityActivity"
             android:exported="false" />
         <activity
+            android:name="com.example.safeaid.screens.editprofile.EditProfileActivity"
+            android:exported="false"
+            android:label="Edit Profile" />
+        <activity
+            android:name="com.example.safeaid.screens.community.CreatePostActivity"
+            android:exported="false"
+            android:label="Create Post"
+            android:parentActivityName="com.example.safeaid.screens.community.CommunityActivity">
+        </activity>
+        <activity
+            android:name="com.example.safeaid.screens.changepassword.ChangePasswordActivity"
+            android:exported="false"
+            android:label="Change Password" />
+        <activity
             android:name="com.example.safeaid.screens.authenticate.LoginActivity"
             android:exported="false" />
         <activity
