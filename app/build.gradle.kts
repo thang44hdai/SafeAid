@@ -106,4 +106,7 @@ dependencies {
 
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
+
+    implementation ("androidx.media3:media3-exoplayer:1.3.1")
+    implementation ("androidx.media3:media3-ui:1.3.1")
 }

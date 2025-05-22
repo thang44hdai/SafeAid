@@ -97,9 +97,9 @@ class GuideDetailFragment : BaseFragment<FragmentGuideDetailBinding>() {
                 state.guide?.let { guide ->
                     viewBinding.tvGuideTitle.text = guide.title
                     viewBinding.tvGuideDescription.text = guide.description
-//                    Glide.with(viewBinding.ivGuideImage.context)
-//                        .load(guide.media[0].mediaUrl)
-//                        .into(viewBinding.ivGuideImage)
+                    Glide.with(viewBinding.ivGuideImage.context)
+                        .load(guide.media[0].mediaUrl)
+                        .into(viewBinding.ivGuideImage)
                 }
             }
             else -> {}
