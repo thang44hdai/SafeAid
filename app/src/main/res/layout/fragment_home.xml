@@ -58,7 +58,7 @@
                 app:srcCompat="@drawable/leaderboard_btn" />
 
             <ImageButton
-                android:id="@+id/imageButton3"
+                    android:id="@+id/imageButton3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"

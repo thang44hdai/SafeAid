@@ -191,6 +191,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 else -> {}
             }
         }
+
+        viewBinding.imageButton3.setOnDebounceClick {
+            mainNavigator.offerNavEvent(GoToNotificationScreen())
+        }
     }
 
     private fun bindNewsItem(idx: Int, news: NewsDto) {
@@ -233,3 +237,4 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 }
 
 class GoToQuizHistory() : BaseContainerFragment.NavigationEvent()
+class GoToNotificationScreen() : BaseContainerFragment.NavigationEvent()
