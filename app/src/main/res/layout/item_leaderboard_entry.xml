@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="4dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/textRank"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_circle_small"
+            android:backgroundTint="@android:color/darker_gray"
+            android:gravity="center"
+            android:text="#4"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"/>
+
+        <ImageView
+            android:id="@+id/imageAvatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/default_avt"
+            android:scaleType="centerCrop"
+            android:background="@drawable/bg_circle"
+            android:clipToOutline="true"/>
+
+        <TextView
+            android:id="@+id/textUsername"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:text="John Doe"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/textScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1250"
+            android:textSize="16sp"
+            android:textColor="@color/primary"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -105,4 +105,6 @@ dependencies {
     implementation ("androidx.activity:activity-ktx:1.7.2")
 
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
 }

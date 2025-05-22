@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name="com.example.safeaid.App"
@@ -42,6 +44,20 @@
         <activity
             android:name="com.example.safeaid.screens.community.CommunityActivity"
             android:exported="false" />
+        <activity
+            android:name="com.example.safeaid.screens.editprofile.EditProfileActivity"
+            android:exported="false"
+            android:label="Edit Profile" />
+        <activity
+            android:name="com.example.safeaid.screens.community.CreatePostActivity"
+            android:exported="false"
+            android:label="Create Post"
+            android:parentActivityName="com.example.safeaid.screens.community.CommunityActivity">
+        </activity>
+        <activity
+            android:name="com.example.safeaid.screens.changepassword.ChangePasswordActivity"
+            android:exported="false"
+            android:label="Change Password" />
         <activity
             android:name="com.example.safeaid.screens.authenticate.LoginActivity"
             android:exported="false" />

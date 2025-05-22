@@ -14,6 +14,7 @@ import com.example.safeaid.core.response.GuideStepResponse
 import com.example.safeaid.core.request.RegisterRequest
 import com.example.safeaid.core.response.CommentDto
 import com.example.safeaid.core.response.CreatePostResponse
+import com.example.safeaid.core.response.LeaderboardResponse
 import com.example.safeaid.core.response.LoginResponse
 import com.example.safeaid.core.response.PostListResponse
 
@@ -25,6 +26,7 @@ import kotlinx.serialization.json.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import com.example.safeaid.core.response.NewsListResponse
+import com.example.safeaid.core.response.PersonalRankResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -192,4 +194,21 @@ interface ApiService {
         @Part thumbnail: RequestBody,
         @Part media: List<MultipartBody.Part>? = null
     ): Response<NewsListResponse>
+
+    @Multipart
+    @POST("/api/users/update-avatar")
+    suspend fun updateAvatar(
+        @Header("Authorization") bearerToken: String,
+        @Part avatar: MultipartBody.Part
+    ): Response<Unit>
+
+    @GET("/api/leaderboard")
+    suspend fun getLeaderboard(
+        @Header("Authorization") bearerToken: String
+    ): Response<LeaderboardResponse>
+
+    @GET("/api/leaderboard/my-rank")
+    suspend fun getMyRank(
+        @Header("Authorization") bearerToken: String
+    ): Response<PersonalRankResponse>
 }
