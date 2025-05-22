@@ -1,5 +1,6 @@
 package com.example.safeaid.screens.quiz.viewholder
 
+import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
 import com.example.androidtraining.databinding.QuizHistoryItemBinding
@@ -22,9 +23,11 @@ class QuizHistoryVH(view: View, private val callBack: ((Quizze) -> Unit)?) :
         viewBinding.tvResult.text = "${item.score} / ${item.maxScore}"
 
         item.quiz?.thumbnailUrl?.let { url ->
-            Glide.with(viewBinding.root.context)
+            Log.i("hihihi", "${url}")
+
+            Glide.with(viewBinding.thumbnail.context)
                 .load(url)
-                .into(viewBinding.thumbnail) // Set the image into the ImageView
+                .into(viewBinding.thumbnail)
         }
 
         viewBinding.cv.setOnDebounceClick {

@@ -1,6 +1,7 @@
 package com.example.safeaid.screens.quiz_history.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.safeaid.core.base.ApiCaller
 import com.example.safeaid.core.base.BaseViewModel
@@ -87,6 +88,7 @@ class QuizHistoryViewModel @Inject constructor(
                                 it1.copy()
                             }
                         }
+                        Log.i("hihihi", "${data}")
                         updateState(
                             DataResult.Success(
                                 QuizHistoryState.HistoryDetail(

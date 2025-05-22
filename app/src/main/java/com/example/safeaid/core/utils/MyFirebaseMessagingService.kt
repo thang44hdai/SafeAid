@@ -16,7 +16,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         val content = remoteMessage.data["content"] ?: "Bạn có một tin tức mới"
         val refId = remoteMessage.data["ref_id"] ?: ""
         val type = remoteMessage.data["type"] ?: ""
-        Log.i("hihihi", "receiver noti ${title} ${content} ${refId} ${type}")
+//        Log.i("hihihi", "receiver noti ${title} ${content} ${refId} ${type}")
         // Tạo channel nếu cần
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationUtils.createNotificationChannel(this)
@@ -29,6 +29,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 title = title,
                 content = content,
                 refId = refId,
+                icon = R.drawable.ic_noti_unread
+            )
+        } else if (type == "news") {
+            NotificationUtils.showNewsNotification(
+                context = this,
+                title = title,
+                content = content,
+                refId = refId,
+                htmlContent = content, // <-- truyền nội dung bài viết HTML vào
                 icon = R.drawable.ic_noti_unread
             )
         }
