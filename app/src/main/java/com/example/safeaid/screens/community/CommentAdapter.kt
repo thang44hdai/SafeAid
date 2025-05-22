@@ -3,7 +3,9 @@ package com.example.safeaid.screens.community
 import android.content.Context
 import com.example.safeaid.screens.community.data.CommentItem
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.androidtraining.R
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 class CommentAdapter(
     private var commentList: List<CommentItem>,
-    private val userManager: UserManager
+    private val userManager: UserManager,
+    private val onDeleteClick: (String) -> Unit
 ) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
 
@@ -26,6 +29,35 @@ class CommentAdapter(
 
             // Load avatar for this specific user
             loadUserAvatar(binding.root.context, item, binding)
+
+
+            // Set up long click listener for comment deletion
+            val currentUsername = userManager.getUsername(binding.root.context)
+            val isCurrentUser = item.userName == currentUsername || item.userName == "Bạn"
+
+            binding.cardComment.setOnLongClickListener { view ->
+                if (isCurrentUser) {
+                    showPopupMenu(view, item.id)
+                    true
+                } else {
+                    false
+                }
+            }
+        }
+
+        private fun showPopupMenu(view: View, commentId: String) {
+            val popup = PopupMenu(view.context, view)
+            popup.inflate(R.menu.menu_comment_options)
+            popup.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.action_delete_comment -> {
+                        onDeleteClick(commentId)
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popup.show()
         }
 
         private fun loadUserAvatar(context: Context, comment: CommentItem, binding: ItemCommentBinding) {
@@ -76,5 +108,15 @@ class CommentAdapter(
     fun updateData(newList: List<CommentItem>) {
         commentList = newList
         notifyDataSetChanged()
+    }
+
+    fun removeItem(commentId: String) {
+        val position = commentList.indexOfFirst { it.id == commentId }
+        if (position != -1) {
+            val newList = commentList.toMutableList()
+            newList.removeAt(position)
+            commentList = newList
+            notifyItemRemoved(position)
+        }
     }
 }

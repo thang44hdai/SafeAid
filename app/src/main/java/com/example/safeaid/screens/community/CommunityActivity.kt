@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.R
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -50,6 +51,12 @@ class CommunityActivity : AppCompatActivity() {
             v.setPadding(sb.left, sb.top, sb.right, sb.bottom)
             insets
         }
+
+        // Set up the toolbar with back navigation
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
 
         binding.cardShare.setOnClickListener {
             createPostLauncher.launch(Intent(this, CreatePostActivity::class.java))

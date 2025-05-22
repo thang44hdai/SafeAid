@@ -164,6 +164,13 @@ interface ApiService {
         @Path("postId") postId: String
     ): Response<Unit>
 
+    @DELETE("/api/posts/{postId}/comments/{commentId}")
+    suspend fun deleteComment(
+        @Header("Authorization") bearer: String,
+        @Path("postId") postId: String,
+        @Path("commentId") commentId: String
+    ): Response<Unit>
+
     //Authentication
     @POST("/api/auth/login")
     suspend fun login(
