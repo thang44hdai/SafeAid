@@ -50,7 +50,8 @@ class UpdateAvatarViewModel @Inject constructor(
             ApiCaller.safeApiCall(
                 apiCall = {
                     val file = uriToFile(context, imageUri)
-                    val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+                    val mimeType = context.contentResolver.getType(imageUri) ?: "image/jpeg"
+                    val requestBody = file.asRequestBody(mimeType.toMediaTypeOrNull())
                     val filePart = MultipartBody.Part.createFormData("avatar", file.name, requestBody)
                     apiService.updateAvatar("Bearer ${Prefs.getToken(context)}", filePart)
                 },

@@ -21,6 +21,7 @@ import com.example.safeaid.core.utils.setOnDebounceClick
 import com.example.safeaid.screens.community.CommentActivity
 import com.example.safeaid.screens.community.CommunityActivity
 import com.example.safeaid.screens.community.CommunityAdapter
+import com.example.safeaid.screens.community.data.PostDto
 import com.example.safeaid.screens.community.viewmodel.CommunityEvent
 import com.example.safeaid.screens.community.viewmodel.CommunityState
 import com.example.safeaid.screens.community.viewmodel.CommunityViewModel
@@ -63,6 +64,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                     communityVM.onTriggerEvent(CommunityEvent.LikePost(post.post_id))
                 else
                     communityVM.onTriggerEvent(CommunityEvent.UnLikePost(post.post_id))
+            },
+            onShareClick = { post ->
+                sharePost(post)
             }
         )
 
@@ -229,6 +233,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 .putExtra("news_id", news.id)
             startActivity(intent)
         }
+    }
+
+    private fun sharePost(post: PostDto) {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, "Check out this post")
+
+            // Create share content with post details
+            val shareText = "${post.user.username}: ${post.content}\n\nShared from SafeAid App"
+            putExtra(Intent.EXTRA_TEXT, shareText)
+        }
+
+        startActivity(Intent.createChooser(shareIntent, "Share via"))
     }
 }
 

@@ -93,13 +93,20 @@ class PersonFragment : BaseFragment<FragmentFingerBinding>(){
     }
 
     private fun openImagePicker() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        val intent = Intent(Intent.ACTION_PICK).apply {
+            type = "image/*"
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("image/jpeg", "image/png", "image/gif", "image/webp"))
+        }
         getContent.launch(intent)
     }
+
+
 
     private fun showLoading(isLoading: Boolean) {
         // Implement loading indicator logic
         // For example, if you have a progress bar in your layout:
         // viewBinding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
+
+
 }
