@@ -48,13 +48,13 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
     override fun onInit() {
         viewBinding.rcvNoti.adapter = adapter
         viewModel.getNotification()
-        viewBinding.dropdownMenu.setItems(
-            listOf(
-                "Toàn bộ",
-                "Chưa đọc",
-                "Đã đọc"
-            )
+        val listData = listOf(
+            "Toàn bộ",
+            "Chưa đọc",
+            "Đã đọc"
         )
+        viewBinding.dropdownMenu.setItems(listData)
+        viewBinding.dropdownMenu.selectItemByIndex(listData.indexOf(viewModel.state))
     }
 
     override fun onInitObserver() {
@@ -70,7 +70,17 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
         }
 
         viewBinding.dropdownMenu.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
-            Log.i("hihihi", "${text}")
+            viewModel.state = text
+            if (text == "Toàn bộ") {
+                val dataToView = viewModel.dataList
+                adapter.submitList(dataToView)
+            } else if (text == "Chưa đọc") {
+                val dataToView = viewModel.dataList.filter { it.isRead == false }
+                adapter.submitList(dataToView)
+            } else if (text == "Đã đọc") {
+                val dataToView = viewModel.dataList.filter { it.isRead == true }
+                adapter.submitList(dataToView)
+            }
         }
     }
 
@@ -89,11 +99,14 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
     }
 
     private fun onClickNotiItem(item: Notification) {
+        viewModel.markAsRead(item)
+
         if (item.type == "exam") {
             viewModel.getHistoryQuiz(item.refId) {
                 mainNavigator.offerNavEvent(GoToQuizHistoryDetail(it))
             }
         } else if (item.title == "news") {
+
         } else if (item.title == "community") {
         }
     }

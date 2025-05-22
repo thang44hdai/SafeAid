@@ -28,12 +28,16 @@ class NotificationViewModel @Inject constructor(
     @ApplicationContext private val context: Context
 ) : BaseViewModel<NotificationState, NotificationEvent>() {
 
+    var dataList: MutableList<Notification> = mutableListOf()
+    var state: String = "Toàn bộ"
+
     fun getNotification() {
         viewModelScope.launch {
             ApiCaller.safeApiCall(
                 apiCall = { apiService.getNotifications("Bearer ${getToken(context)}") },
                 callback = { result ->
                     result.doIfSuccess {
+                        dataList = it.data?.toMutableList() ?: mutableListOf()
                         updateState(
                             DataResult.Success(
                                 NotificationState.NotificationList(
@@ -83,6 +87,22 @@ class NotificationViewModel @Inject constructor(
             } catch (e: SocketTimeoutException) {
             } catch (e: Exception) {
             }
+        }
+    }
+
+    fun markAsRead(item: Notification) {
+        viewModelScope.launch {
+            ApiCaller.safeApiCall(
+                apiCall = {
+                    apiService.markAsRead(
+                        "Bearer ${getToken(context)}",
+                        item.notificationId ?: ""
+                    )
+                },
+                callback = { result ->
+                    result.doIfSuccess {}
+                }
+            )
         }
     }
 

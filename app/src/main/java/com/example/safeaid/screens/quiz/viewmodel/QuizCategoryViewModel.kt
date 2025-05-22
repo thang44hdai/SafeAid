@@ -68,7 +68,7 @@ class QuizCategoryViewModel @Inject constructor(
     fun saveQuizResult(request: QuizAttemptRequest, callback: () -> Unit) {
         viewModelScope.launch {
             ApiCaller.safeApiCall(
-                apiCall = { apiService.saveResultQuiz(request) },
+                apiCall = { apiService.saveResultQuiz("Bearer ${getToken(context)}", request) },
                 callback = { result ->
                     result.doIfSuccess {
                         callback.invoke()
