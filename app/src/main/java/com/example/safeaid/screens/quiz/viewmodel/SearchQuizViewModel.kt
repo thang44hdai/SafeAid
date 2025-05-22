@@ -1,16 +1,19 @@
 package com.example.safeaid.screens.quiz.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.example.safeaid.core.base.ApiCaller
 import com.example.safeaid.core.base.BaseViewModel
 import com.example.safeaid.core.response.Category
 import com.example.safeaid.core.service.ApiService
 import com.example.safeaid.core.utils.DataResult
+import com.example.safeaid.core.utils.Prefs.getToken
 import com.example.safeaid.core.utils.doIfFailure
 import com.example.safeaid.core.utils.doIfSuccess
 import com.example.safeaid.core.utils.onLoading
 import com.example.safeaid.screens.quiz.data.QuizFilterItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -19,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchQuizViewModel @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    @ApplicationContext private val context: Context
 ) : BaseViewModel<SearchQuizState, SearchQuizEvent>() {
 
     fun getQuizCategory() {
@@ -44,7 +48,7 @@ class SearchQuizViewModel @Inject constructor(
                 coroutineScope {
                     val categoryDeferred = async { apiService.getCategoryQuiz() }
                     val resultDeferred =
-                        async { apiService.getResultQuiz("5e7e033d-c4e7-42bc-88e5-dbc2555e38a3") }
+                        async { apiService.getResultQuiz("Bearer ${getToken(context)}") }
 
                     val categoryResponse = categoryDeferred.await()
                     val resultResponse = resultDeferred.await()
