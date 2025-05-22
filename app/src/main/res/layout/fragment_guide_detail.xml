@@ -11,7 +11,8 @@
         <!-- Header với hình ảnh -->
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="240dp">
+            android:layout_height="240dp"
+            android:layout_marginBottom="-20dp">
 
             <ImageView
                 android:id="@+id/ivGuideImage"
@@ -62,7 +63,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_marginTop="-20dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="0dp">
 
@@ -71,6 +71,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:backgroundTint="#F2F2F2"
+                app:cardCornerRadius="20dp"
                 android:padding="16dp">
 
                 <!-- Indicator line -->

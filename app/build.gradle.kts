@@ -105,4 +105,5 @@ dependencies {
     implementation ("androidx.activity:activity-ktx:1.7.2")
 
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("com.github.chrisbanes:PhotoView:2.3.0")
 }
