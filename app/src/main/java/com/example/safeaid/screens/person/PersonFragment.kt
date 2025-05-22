@@ -1,5 +1,6 @@
 package com.example.safeaid.screens.person
 
+import android.R
 import android.app.Activity
 import android.content.Intent
 import android.provider.MediaStore
@@ -7,19 +8,25 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.safeaid.core.ui.BaseFragment
 import com.example.androidtraining.databinding.FragmentFingerBinding
 import com.example.safeaid.core.utils.Prefs
+import com.example.safeaid.core.utils.UserManager
 import com.example.safeaid.screens.authenticate.LoginActivity
 import com.example.safeaid.screens.changepassword.ChangePasswordActivity
 import com.example.safeaid.screens.editprofile.EditProfileActivity
 import com.example.safeaid.screens.person.viewmodel.AvatarUploadState
 import com.example.safeaid.screens.person.viewmodel.UpdateAvatarViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PersonFragment : BaseFragment<FragmentFingerBinding>(){
     private val viewModel: UpdateAvatarViewModel by viewModels()
+
+    @Inject
+    lateinit var userManager: UserManager
 
     private val getContent = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -35,6 +42,12 @@ class PersonFragment : BaseFragment<FragmentFingerBinding>(){
     }
 
     override fun onInit() {
+        // Load user profile when fragment starts
+        userManager.ensureProfileLoaded(requireContext()) { success ->
+            if (success) {
+                updateProfileUi()
+            }
+        }
 
         // Observe upload state changes
         viewModel.uploadState.observe(viewLifecycleOwner) { state ->
@@ -46,7 +59,8 @@ class PersonFragment : BaseFragment<FragmentFingerBinding>(){
                 is AvatarUploadState.Success -> {
                     // Update UI with new avatar
                     showLoading(false)
-                    viewBinding.ivAvatar.setImageURI(state.uri)
+                    // Refresh UI with latest data
+                    updateProfileUi()
                     Toast.makeText(requireContext(), "Avatar đã được cập nhật thành công", Toast.LENGTH_SHORT).show()
                 }
                 is AvatarUploadState.Error -> {
@@ -100,7 +114,21 @@ class PersonFragment : BaseFragment<FragmentFingerBinding>(){
         getContent.launch(intent)
     }
 
+    private fun updateProfileUi() {
+        // Update username from UserManager
+        viewBinding.tvName.text = userManager.getUsername(requireContext())
 
+        // Update avatar using Glide
+        val avatarUrl = userManager.getAvatarUrl(requireContext())
+        if (avatarUrl.isNotEmpty()) {
+            Glide.with(requireContext())
+                .load(avatarUrl)
+                .placeholder(com.example.androidtraining.R.drawable.default_avt)
+                .error(com.example.androidtraining.R.drawable.default_avt)
+                .circleCrop()
+                .into(viewBinding.ivAvatar)
+        }
+    }
 
     private fun showLoading(isLoading: Boolean) {
         // Implement loading indicator logic

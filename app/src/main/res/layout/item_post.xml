@@ -19,12 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/ivAvatar"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:src="@drawable/default_avt"
                 android:scaleType="centerCrop"
-                android:background="@drawable/circular_background"
+                app:shapeAppearanceOverlay="@style/CircularImageView"
+                android:background="@drawable/bg_circle"
                 android:clipToOutline="true"/>
 
             <!-- đổi size của container thành wrap-content -->

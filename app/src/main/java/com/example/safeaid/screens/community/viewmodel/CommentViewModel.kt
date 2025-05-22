@@ -1,6 +1,7 @@
 // java/com/example/safeaid/screens/community/viewmodel/CommentViewModel.kt
 package com.example.safeaid.screens.community.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.safeaid.core.base.ApiCaller
@@ -8,10 +9,12 @@ import com.example.safeaid.core.base.BaseViewModel
 import com.example.safeaid.core.response.CommentDto
 import com.example.safeaid.core.service.ApiService
 import com.example.safeaid.core.utils.DataResult
+import com.example.safeaid.core.utils.Prefs
 import com.example.safeaid.core.utils.doIfFailure
 import com.example.safeaid.core.utils.doIfSuccess
 import com.example.safeaid.core.utils.onLoading
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +35,8 @@ sealed class CommentEvent {
 @HiltViewModel
 class CommentViewModel @Inject constructor(
     private val api: ApiService,
-    savedState: SavedStateHandle
+    savedState: SavedStateHandle,
+    @ApplicationContext private val context: Context
 ) : BaseViewModel<CommentState, CommentEvent>() {
 
     private val postId: String = checkNotNull(savedState["post_id"]) {
@@ -51,12 +55,13 @@ class CommentViewModel @Inject constructor(
         updateState(DataResult.Success(CommentState.Loading))
         viewModelScope.launch {
             ApiCaller.safeApiCall(
-                apiCall  = { api.getComments("Bearer ${getToken()}", postId) },
+                apiCall  = { api.getComments("Bearer ${Prefs.getToken(context)}", postId) },
                 callback = { result ->
                     result.onLoading {
                         updateState(DataResult.Success(CommentState.Loading))
                     }
                     result.doIfSuccess { resp: List<CommentDto> ->
+                        // Always treat response as success, even if empty
                         updateState(DataResult.Success(CommentState.Success(resp)))
                     }
                     result.doIfFailure { err ->
@@ -73,7 +78,7 @@ class CommentViewModel @Inject constructor(
         viewModelScope.launch {
             ApiCaller.safeApiCall(
                 apiCall  = { api.createComment(
-                    bearer = "Bearer ${getToken()}",
+                    bearer = "Bearer ${Prefs.getToken(context)}",
                     postId       = postId,
                     body         = mapOf("content" to content)
                 )
@@ -93,8 +98,4 @@ class CommentViewModel @Inject constructor(
         }
     }
 
-    private fun getToken(): String {
-        // TODO: lấy token thật từ SharedPrefs / DataStore
-        return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZGQ5NWE1NDctODAyNC00N2U5LTgzODEtOTFmNjJjOWI4MDM4IiwiZW1haWwiOiJobmFtMTIzQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2OTQwNDQ0fQ.kuMBBlgYiqhVgvNF1gaM0yCQX61rSbI8vpRem-kEviA"
-    }
 }

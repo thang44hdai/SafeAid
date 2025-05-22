@@ -7,6 +7,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/tvEmptyState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chưa có bình luận nào. Hãy là người đầu tiên bình luận!"
+        android:textAlignment="center"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/layoutAppBar"
+        app:layout_constraintBottom_toTopOf="@+id/layoutCommentInput"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
@@ -71,9 +86,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="8dp"
+        android:padding="12dp"
         android:background="@android:color/white"
-        android:elevation="2dp"
+        android:elevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -83,21 +98,29 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Bình luận dưới tên Hải Nam..."
+            android:hint="Viết bình luận..."
             android:background="@drawable/bg_comment_input"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="4dp"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp"
+            android:minHeight="48dp"
+            android:maxHeight="120dp"
             android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:layout_marginEnd="8dp"/>
+            android:textColorHint="#9E9E9E"
+            android:textSize="15sp"
+            android:layout_marginEnd="12dp"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:scrollbars="vertical"/>
 
         <ImageButton
             android:id="@+id/btnSendComment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
             android:src="@drawable/send_btn"
             android:contentDescription="Gửi"
-            android:background="?android:selectableItemBackgroundBorderless" />
+            android:background="@drawable/bg_send_button"
+            app:tint="@color/white" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

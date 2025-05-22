@@ -17,6 +17,7 @@ import com.example.safeaid.MainNavigator
 import com.example.safeaid.core.response.NewsDto
 import com.example.safeaid.core.ui.BaseContainerFragment
 import com.example.safeaid.core.utils.DataResult
+import com.example.safeaid.core.utils.UserManager
 import com.example.safeaid.core.utils.setOnDebounceClick
 import com.example.safeaid.screens.community.CommentActivity
 import com.example.safeaid.screens.community.CommunityActivity
@@ -30,6 +31,7 @@ import com.example.safeaid.screens.news.NewsActivity
 import com.example.safeaid.screens.news.viewmodel.NewsState
 import com.example.safeaid.screens.news.viewmodel.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>() {
@@ -41,6 +43,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         ownerProducer = { requireActivity() }
     )
 
+    @Inject
+    lateinit var userManager: UserManager
+
     private lateinit var communityAdapter: CommunityAdapter
 
     private lateinit var newsAdapter: NewsAdapter
@@ -50,6 +55,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun isHostFragment(): Boolean = true
 
     override fun onInit() {
+        loadUserProfile()
+
         // 1) Thiết lập RecyclerView cho Community
         communityAdapter = CommunityAdapter(
             items = emptyList(),
@@ -93,6 +100,35 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
         newsVM.loadNews()
     }
+
+    private fun loadUserProfile() {
+        userManager.ensureProfileLoaded(requireContext()) { success ->
+            if (success) {
+                updateUserInterface()
+            } else {
+                Log.e("HomeFragment", "Failed to load user profile")
+            }
+        }
+    }
+
+    private fun updateUserInterface() {
+        // Get username and display it
+        val username = userManager.getUsername(requireContext())
+        viewBinding.textView?.text = "Xin chào,\n${username}".ifEmpty { "Người dùng" }
+
+        // Load avatar image
+        val avatarUrl = userManager.getAvatarUrl(requireContext())
+        if (avatarUrl.isNotEmpty()) {
+            viewBinding.imageView2?.let { imageView ->
+                Glide.with(requireContext())
+                    .load(avatarUrl)
+                    .placeholder(com.example.androidtraining.R.drawable.default_avt)
+                    .error(com.example.androidtraining.R.drawable.default_avt)
+                    .into(imageView)
+            }
+        }
+    }
+
 
     override fun onInitObserver() {
         // Khi có dữ liệu trả về từ CommunityViewModel
@@ -195,6 +231,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 else -> {}
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Refresh user data when returning to this fragment
+        loadUserProfile()
     }
 
     private fun bindNewsItem(idx: Int, news: NewsDto) {
