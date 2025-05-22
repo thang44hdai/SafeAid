@@ -21,7 +21,7 @@ class UserManager @Inject constructor(
     companion object {
         private const val PREFS_NAME = "user_profile_prefs"
         private const val KEY_USERNAME = "username"
-        private const val KEY_AVATAR_URL = ""
+        private const val KEY_AVATAR_URL = "avatar_url"
         private const val KEY_USER_ID = "user_id"
         private const val KEY_EMAIL = "email"
         private const val KEY_PHONE = "phone_number"
@@ -32,16 +32,16 @@ class UserManager @Inject constructor(
     // Save user info to SharedPreferences
     fun saveUserInfo(context: Context, userInfo: UserInfo) {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit {
-            putString(KEY_USER_ID, userInfo.userId)
+            putString(KEY_USER_ID, userInfo.user_id)
             putString(KEY_USERNAME, userInfo.username)
             putString(KEY_EMAIL, userInfo.email)
-            putString(KEY_PHONE, userInfo.phoneNumber)
+            putString(KEY_PHONE, userInfo.phone_number)
             putString(KEY_ROLE, userInfo.role)
-            putString(KEY_AVATAR_URL, userInfo.profileImagePath)
+            putString(KEY_AVATAR_URL, userInfo.profile_image_path)
             putBoolean(KEY_PROFILE_LOADED, true)
         }
 
-        Log.d("UserManager", "User info saved: ${userInfo.username}, ${userInfo.email}, ${userInfo.phoneNumber}, ${userInfo.role}, ${userInfo.profileImagePath}")
+        Log.d("UserManager", "User info saved: ${userInfo.username}, ${userInfo.email}, ${userInfo.phone_number}, ${userInfo.role}, ${userInfo.profile_image_path}")
     }
 
     // Get username from SharedPreferences
