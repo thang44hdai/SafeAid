@@ -1,59 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="8dp">
+    android:paddingVertical="10dp">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivUserAvatar"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:scaleType="centerCrop"
-        android:layout_marginEnd="8dp"
         android:src="@drawable/default_avt"
+        app:shapeAppearanceOverlay="@style/CircularImageView"
         android:background="@drawable/circular_background"
-        android:clipToOutline="true"/>
+        android:clipToOutline="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_comment_bubble"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardBackgroundColor="#F5F5F5"
+        app:cardElevation="0dp"
+        app:layout_constraintStart_toEndOf="@id/ivUserAvatar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.0">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="12dp">
 
-            <TextView
-                android:id="@+id/tvUserName"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Quoc Viet"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Quoc Viet"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/black"/>
+
+                <TextView
+                    android:id="@+id/tvCommentTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="06:36"
+                    android:textSize="12sp"
+                    android:textColor="@android:color/darker_gray"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvCommentContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nội dung bình luận"
+                android:layout_marginTop="6dp"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/black"/>
-
-            <TextView
-                android:id="@+id/tvCommentTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="06:36"
-                android:textSize="12sp"
-                android:textColor="@android:color/darker_gray"
-                android:layout_marginStart="8dp"/>
+                android:textColor="#333333"
+                android:lineSpacingExtra="2dp"/>
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvCommentContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Contrary to popular belief..."
-            android:layout_marginTop="4dp"
-            android:textSize="14sp"
-            android:textColor="@android:color/black"/>
-    </LinearLayout>
-</LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

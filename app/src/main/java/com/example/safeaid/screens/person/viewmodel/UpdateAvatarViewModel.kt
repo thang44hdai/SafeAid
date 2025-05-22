@@ -11,6 +11,7 @@ import com.example.safeaid.core.base.BaseViewModel
 import com.example.safeaid.core.service.ApiService
 import com.example.safeaid.core.utils.DataResult
 import com.example.safeaid.core.utils.Prefs
+import com.example.safeaid.core.utils.UserManager
 import com.example.safeaid.core.utils.doIfFailure
 import com.example.safeaid.core.utils.doIfSuccess
 import com.example.safeaid.core.utils.onLoading
@@ -38,6 +39,7 @@ sealed class AvatarUploadEvent {
 @HiltViewModel
 class UpdateAvatarViewModel @Inject constructor(
     private val apiService: ApiService,
+    private val userManager: UserManager,
     @ApplicationContext private val context: Context
 ): BaseViewModel<AvatarUploadState, AvatarUploadEvent>() {
 
@@ -45,12 +47,18 @@ class UpdateAvatarViewModel @Inject constructor(
     val uploadState: LiveData<AvatarUploadState> = _uploadState
 
     fun uploadAvatar(context: Context, imageUri: Uri) {
+        if (!isValidImageType(context, imageUri)) {
+            _uploadState.value = AvatarUploadState.Error("Chỉ chấp nhận file hình ảnh! Các định dạng cho phép: JPG, PNG, GIF, WEBP")
+            return
+        }
+
         _uploadState.value = AvatarUploadState.Loading
         viewModelScope.launch {
             ApiCaller.safeApiCall(
                 apiCall = {
                     val file = uriToFile(context, imageUri)
-                    val requestBody = file.asRequestBody("image/*".toMediaTypeOrNull())
+                    val mimeType = context.contentResolver.getType(imageUri) ?: "image/jpeg"
+                    val requestBody = file.asRequestBody(mimeType.toMediaTypeOrNull())
                     val filePart = MultipartBody.Part.createFormData("avatar", file.name, requestBody)
                     apiService.updateAvatar("Bearer ${Prefs.getToken(context)}", filePart)
                 },
@@ -59,7 +67,11 @@ class UpdateAvatarViewModel @Inject constructor(
                         _uploadState.value = AvatarUploadState.Loading
                     }
                     result.doIfSuccess { _ ->
-                        _uploadState.value = AvatarUploadState.Success(imageUri)
+                        // After successful upload, refresh user info to get the new avatar URL
+                        viewModelScope.launch {
+                            val success = userManager.fetchUserInfo(context)
+                            _uploadState.value = AvatarUploadState.Success(imageUri)
+                        }
                     }
                     result.doIfFailure { error ->
                         _uploadState.value = AvatarUploadState.Error(error.message ?: "Unknown error")
@@ -80,6 +92,13 @@ class UpdateAvatarViewModel @Inject constructor(
         }
 
         return tempFile
+    }
+
+    private fun isValidImageType(context: Context, uri: Uri): Boolean {
+        val mimeType = context.contentResolver.getType(uri)
+        return mimeType != null && arrayOf(
+            "image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"
+        ).contains(mimeType.lowercase())
     }
 
     override fun onTriggerEvent(event: AvatarUploadEvent) {

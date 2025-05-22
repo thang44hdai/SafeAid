@@ -2,14 +2,17 @@ package com.example.safeaid.core.response
 
 data class PersonalRankResponse(
     val success: Boolean,
-    val user: UserInfo,
+    val user: UserProfileInfo,
     val stats: UserStats
 )
 
-data class UserInfo(
+data class UserProfileInfo(
     val user_id: String,
     val username: String,
-    val avatar: String?
+    val avatar: String?,
+    val email: String,
+    val phone_number: String,
+    val role: String,
 )
 
 data class UserStats(

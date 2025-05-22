@@ -207,4 +207,9 @@ interface ApiService {
     suspend fun getMyRank(
         @Header("Authorization") bearerToken: String
     ): Response<PersonalRankResponse>
+
+    @GET("/api/users")
+    suspend fun getUserInfo(
+        @Header("Authorization") bearerToken: String
+    ): Response<UserInfoResponse>
 }
