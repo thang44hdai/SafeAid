@@ -53,18 +53,18 @@ class GuideDetailFragment : BaseFragment<FragmentGuideDetailBinding>() {
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewModel.guideSteps.observe(viewLifecycleOwner) { steps ->
-
             // Gắn adapter khi đã có dữ liệu
-            val pagerAdapter = GuideDetailPagerAdapter(this, steps, categoryId ?: "")
+            val guideId = arguments?.getString("guideId") ?: ""
+            val pagerAdapter = GuideDetailPagerAdapter(this, steps, categoryId ?: "", guideId)
             viewBinding.viewPager.adapter = pagerAdapter
 
-            // Attach TabLayout lại
+            // Gắn TabLayout với ViewPager2
             TabLayoutMediator(viewBinding.tabLayout, viewBinding.viewPager) { tab, position ->
                 tab.text = when (position) {
                     0 -> "Hướng dẫn"
                     1 -> "Liên quan"
-                    2 -> "Đánh giá"
-                    else -> null
+                    2 -> "Ôn tập"
+                    else -> ""
                 }
             }.attach()
         }

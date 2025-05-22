@@ -1,15 +1,18 @@
 package com.example.safeaid.screens.bookmark.viewholder
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.example.safeaid.core.base.ApiCaller
 import com.example.safeaid.core.base.BaseViewModel
 import com.example.safeaid.core.service.ApiService
 import com.example.safeaid.core.utils.DataResult
+import com.example.safeaid.core.utils.Prefs.getToken
 import com.example.safeaid.core.utils.doIfFailure
 import com.example.safeaid.core.utils.doIfSuccess
 import com.example.safeaid.core.utils.onLoading
 import com.example.safeaid.screens.guide.GuideItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,11 +21,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookmarkViewModel @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    @ApplicationContext private val appContext: Context
 ) : BaseViewModel<BookmarkState, BookmarkEvent>() {
 
-    private val token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZTJhNDAzNjQtZTBmNS00YjBmLWIyNDAtZWY0ODM0NTBlMmFkIiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NDYwMTgxMTR9.1R9cmZKSC6hED9SWaNdJR0_TC82nk5_QYopGeleyFMI"
-    
+    private val token = getToken(appContext).orEmpty()
+
     private val _bookmarks = MutableStateFlow<List<GuideItem>>(emptyList())
     val bookmarks: StateFlow<List<GuideItem>> = _bookmarks.asStateFlow()
 
@@ -38,7 +42,7 @@ class BookmarkViewModel @Inject constructor(
             _error.value = null
             
             ApiCaller.safeApiCall(
-                apiCall = { apiService.getFavouriteList(token) },
+                apiCall = { apiService.getFavouriteList("Bearer $token") },
                 callback = { result ->
                     result.doIfSuccess { response ->
                         val guideItems = response.items.map { item ->
@@ -65,7 +69,7 @@ class BookmarkViewModel @Inject constructor(
             _error.value = null
             
             ApiCaller.safeApiCall(
-                apiCall = { apiService.deleteFavouriteGuide(guideId, token) },
+                apiCall = { apiService.deleteFavouriteGuide(guideId, "Bearer $token") },
                 callback = { result ->
                     result.doIfSuccess { 
                         // Reload danh sách sau khi xóa thành công

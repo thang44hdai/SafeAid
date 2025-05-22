@@ -13,5 +13,7 @@ data class Quizze(
     @SerializedName("thumbnail_url")
     val thumbnailUrl: String?,
     @SerializedName("title")
-    val title: String
+    val title: String,
+    @SerializedName("guide_id")
+    val guideId: String
 ) : Serializable

@@ -22,6 +22,7 @@ import javax.inject.Inject
 import com.example.safeaid.core.utils.Prefs.getToken
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.example.safeaid.core.response.GuideResponse
+import com.example.safeaid.core.response.Quizze
 
 
 @HiltViewModel
@@ -31,7 +32,7 @@ class GuideViewModel @Inject constructor(
 ) : BaseViewModel<GuideState, GuideEvent>() {
     
     // Token lấy từ SharedPreferences hoặc DataStore trong thực tế
-    private val token = getToken(appContext).toString()
+    private val token = getToken(appContext).orEmpty()
     
     // Danh sách categories để lưu trữ và lọc
     private var allCategories: List<GuideCategoryResponse> = emptyList()
@@ -42,7 +43,7 @@ class GuideViewModel @Inject constructor(
      fun getGuideCategories() {
          viewModelScope.launch {
              ApiCaller.safeApiCall(
-                 apiCall = { apiService.getGuideCategories(token) },
+                 apiCall = { apiService.getGuideCategories("Bearer $token") },
                  callback = { result ->
                      result.doIfSuccess { categories ->
                          allCategories = categories
@@ -86,7 +87,7 @@ class GuideViewModel @Inject constructor(
     fun loadGuidesByCategory(categoryId: String) {
         viewModelScope.launch {
             ApiCaller.safeApiCall(
-                apiCall = { apiService.getGuideCategories(token) },
+                apiCall = { apiService.getGuideCategories("Bearer $token") },
                 callback = { result ->
                     result.doIfSuccess { response ->
                         // Lọc guides theo categoryId
@@ -144,7 +145,7 @@ class GuideViewModel @Inject constructor(
     fun loadGuideDetails(guideId: String) {
         viewModelScope.launch {
             ApiCaller.safeApiCall(
-                apiCall = { apiService.getGuideById(guideId, token) },
+                apiCall = { apiService.getGuideById(guideId, "Bearer $token") },
                 callback = { result ->
                     result.doIfSuccess { response ->
                         _selectedGuide.value = response
@@ -160,7 +161,7 @@ class GuideViewModel @Inject constructor(
     private fun loadGuideSteps(guideId: String) {
         viewModelScope.launch {
             ApiCaller.safeApiCall(
-                apiCall = { apiService.getGuideSteps(guideId, token) },
+                apiCall = { apiService.getGuideSteps(guideId, "Bearer $token") },
                 callback = { result ->
                     result.doIfSuccess { steps ->
                         _guideSteps.value = steps
@@ -178,7 +179,7 @@ class GuideViewModel @Inject constructor(
     fun loadGuideStepMedia(stepId: String) {
         viewModelScope.launch {
             ApiCaller.safeApiCall(
-                apiCall = { apiService.getGuideStepMedia(stepId, token) },
+                apiCall = { apiService.getGuideStepMedia(stepId, "Bearer $token") },
                 callback = { result ->
                     result.doIfSuccess { medias ->
                         _stepMedias.value = medias
@@ -195,13 +196,38 @@ class GuideViewModel @Inject constructor(
         viewModelScope.launch {
             val request = mapOf("guide_id" to guideId) // Tạo request body đúng format
             ApiCaller.safeApiCall(
-                apiCall = { apiService.addFavouriteGuide(request, token) },
+                apiCall = { apiService.addFavouriteGuide(request, "Bearer $token") },
                 callback = { result ->
                     result.doIfSuccess {
                         // Xử lý khi thêm thành công
                     }
                     result.doIfFailure { error ->
                         // Xử lý khi có lỗi
+                    }
+                }
+            )
+        }
+    }
+
+    private val _quizz = MutableLiveData<List<Quizze>>()
+    val quizz: LiveData<List<Quizze>> = _quizz
+
+    fun loadRelatedQuizzes(guideId: String) {
+        viewModelScope.launch {
+            ApiCaller.safeApiCall(
+                apiCall = { apiService.getCategoryQuiz() },
+                callback = { result ->
+                    result.doIfSuccess { quizCategoryResponse ->
+                        // Lọc ra các quiz có guide_id tương ứng từ tất cả các category
+                        val relatedQuizzes = quizCategoryResponse.categories
+                            .flatMap { it.quizzes }
+                            .filter { it.guideId == guideId }
+                        
+                        _quizz.value = relatedQuizzes
+                        updateState(DataResult.Success(GuideState.RelatedQuizzes(relatedQuizzes)))
+                    }
+                    result.doIfFailure { error ->
+                        updateState(DataResult.Error(error))
                     }
                 }
             )
@@ -224,6 +250,7 @@ sealed class GuideState {
     data class GuideStepDetail(val step: GuideStepResponse?) : GuideState()
     data class GuideStepMediaDetail(val media: List<GuideStepMediaResponse>?) : GuideState()
     data class ListGuidesByCategory(val guides: List<GuideCategoryResponse>) : GuideState()
+    data class RelatedQuizzes(val quizzes: List<Quizze>) : GuideState()
 }
 
 // Event class cho Guide
