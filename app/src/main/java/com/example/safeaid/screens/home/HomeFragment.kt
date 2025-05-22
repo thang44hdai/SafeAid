@@ -114,7 +114,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     private fun updateUserInterface() {
         // Get username and display it
         val username = userManager.getUsername(requireContext())
-        viewBinding.textView?.text = "Xin chào,\n${username}".ifEmpty { "Người dùng" }
+        viewBinding.textView?.text = "Xin chào,\n@${username}".ifEmpty { "Người dùng" }
 
         // Load avatar image
         val avatarUrl = userManager.getAvatarUrl(requireContext())

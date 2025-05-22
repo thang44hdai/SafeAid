@@ -1,6 +1,7 @@
 package com.example.safeaid.core.service
 
 import QuizCategoryResponse
+import com.example.safeaid.core.request.EditProfileRequest
 import com.example.safeaid.core.request.LoginRequest
 import com.example.safeaid.core.request.QuizAttemptRequest
 
@@ -27,6 +28,7 @@ import retrofit2.http.Header
 import retrofit2.http.Multipart
 
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -212,4 +214,12 @@ interface ApiService {
     suspend fun getUserInfo(
         @Header("Authorization") bearerToken: String
     ): Response<UserInfoResponse>
+
+    @Multipart
+    @PUT("/api/users")
+    suspend fun updateProfile(
+        @Header("Authorization") bearerToken: String,
+        @Part("username") username: String,
+        @Part("phone_number") phone_number: String
+    ): Response<EditProfileRequest>
 }
