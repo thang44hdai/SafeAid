@@ -82,7 +82,7 @@ class CommentActivity : AppCompatActivity() {
                         when (val st = result.data as? CommentState) {
                             is CommentState.Success -> {
                                 val list = st.items.map { dto ->
-                                    val time = dto.createdAt?.substring(11,16) ?: ""
+                                    val time = dto.timeAgo
                                     val content = dto.content ?: ""
                                     CommentItem(
                                         id = dto.commentId ?: "",

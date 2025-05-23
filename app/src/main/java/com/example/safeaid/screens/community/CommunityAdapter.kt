@@ -35,9 +35,7 @@ class CommunityAdapter(
 
             // header
             binding.tvUser.text = item.user.username
-            binding.tvTime.text = item.created_at
-                .substringAfter('T')
-                .substringBefore('.')
+            binding.tvTime.text = item.time_ago
 
 
 //            binding.tvTitle.text = item.title

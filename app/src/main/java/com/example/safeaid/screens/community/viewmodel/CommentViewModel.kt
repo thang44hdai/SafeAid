@@ -42,9 +42,7 @@ class CommentViewModel @Inject constructor(
     @ApplicationContext private val context: Context
 ) : BaseViewModel<CommentState, CommentEvent>() {
 
-    private val postId: String = checkNotNull(savedState["post_id"]) {
-
-    }
+    private val postId: String = checkNotNull(savedState["post_id"]) {}
 
     override fun onTriggerEvent(event: CommentEvent) {
         when (event) {
