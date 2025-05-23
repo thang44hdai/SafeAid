@@ -1,10 +1,12 @@
 package com.example.safeaid
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -59,6 +61,13 @@ class MainActivity : AppCompatActivity() {
         setUpNav()
         observeNavigator()
         handleIntent(intent)
+
+        // Cho phép layout vẽ phía sau status bar
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+
+        // Làm status bar trong suốt
+        window.statusBarColor = Color.TRANSPARENT
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
