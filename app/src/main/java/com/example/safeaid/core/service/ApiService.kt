@@ -255,4 +255,19 @@ interface ApiService {
         @Header("Authorization") bearerToken: String,
         @Path("notification_id") notificationId: String,
     ): Response<QuizIdRes>
+
+    @GET("/api/news/search")
+    suspend fun searchNews(
+        @Query("keyword") keyword: String,
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10
+    ): Response<NewsListResponse>
+
+    @GET("/api/guides/search")
+    suspend fun searchGuides(
+        @Query("keyword") keyword: String,
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10,
+        @Query("category_id") categoryId: String? = null
+    ): Response<GuideSearchResponse>
 }

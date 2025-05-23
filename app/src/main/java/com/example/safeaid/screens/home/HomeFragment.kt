@@ -77,6 +77,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
             }
         )
 
+        viewBinding.searchContainer.setOnClickListener {
+            startActivity(Intent(requireContext(), SearchActivity::class.java))
+        }
+
         viewBinding.rvHomeCommunity.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = communityAdapter
