@@ -1,5 +1,6 @@
 package com.example.safeaid.screens.community
 
+import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -33,12 +34,8 @@ class CommunityAdapter(
                 .placeholder(R.drawable.default_avt)
                 .into(binding.ivAvatar)
 
-            // header
             binding.tvUser.text = item.user.username
             binding.tvTime.text = item.time_ago
-
-
-//            binding.tvTitle.text = item.title
             binding.tvContent.text = item.content
 
             if (item.media.isNotEmpty()) {
@@ -47,17 +44,19 @@ class CommunityAdapter(
                 Glide.with(binding.ivMedia.context)
                     .load(media.media_link)
                     .into(binding.ivMedia)
+
+                binding.ivMedia.setOnClickListener {
+                    val context = binding.ivMedia.context
+                    val intent = Intent(context, ImageViewerActivity::class.java).apply {
+                        putExtra("image_url", media.media_link)
+                    }
+                    context.startActivity(intent)
+                }
             } else {
                 binding.ivMedia.visibility = View.GONE
             }
 
-            // stats
             binding.tvLikes.text    = item.like_count.toString()
-//            binding.tvLikes.setTextColor(
-//                if (item.liked_by_user) Color.RED else Color.GRAY
-//            )
-
-            //nếu liked thì thay icon ic_liked
             binding.tvLikes.setCompoundDrawablesWithIntrinsicBounds(
                 if (item.liked_by_user) R.drawable.ic_liked else R.drawable.ic_like,
                 0, 0, 0
@@ -72,7 +71,6 @@ class CommunityAdapter(
                 onLikeToggle(post, post.liked_by_user)
             }
             binding.tvComments.text = item.comment_count.toString()
-//            binding.tvViews.text    = item.view_count.toString()
 
             binding.tvShares.setOnClickListener {
                 onShareClick(item)
