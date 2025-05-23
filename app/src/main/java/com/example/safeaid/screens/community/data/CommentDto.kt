@@ -8,8 +8,7 @@ data class CommentDto(
     @SerializedName("user_id")      val userId:    String,
     @SerializedName("content")      val content:   String,
     @SerializedName("created_at")   val createdAt: String,
-
-    // nếu API trả kèm object user
+    @SerializedName("time_ago")   val timeAgo:   String,
     @SerializedName("user")         val user:      UserDto?
 )
 
