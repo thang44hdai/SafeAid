@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        
+        android:layout_height="match_parent"
+        android:paddingTop="6dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -15,10 +17,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
                 android:text="Hướng dẫn sơ cứu"
                 android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp"/>
+                android:textStyle="bold" />
 
             <SearchView
                 android:id="@+id/searchView"
@@ -28,19 +30,19 @@
                 android:layout_marginBottom="16dp"
                 android:layout_marginHorizontal="2dp"
                 android:background="@drawable/search_background"
-                android:queryHint="Tìm kiếm hướng dẫn..."
+                android:elevation="2dp"
                 android:iconifiedByDefault="false"
-                android:searchIcon="@drawable/ic_search"
                 android:queryBackground="@android:color/transparent"
-                android:elevation="2dp"/>
+                android:queryHint="Tìm kiếm hướng dẫn..."
+                android:searchIcon="@drawable/ic_search" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvEmergency"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
         </LinearLayout>
-            
+
     </FrameLayout>
 </layout>

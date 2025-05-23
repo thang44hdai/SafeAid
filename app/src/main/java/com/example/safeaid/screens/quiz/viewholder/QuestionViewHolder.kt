@@ -13,7 +13,7 @@ class QuestionViewHolder(view: View, private val callBack: (Question) -> Unit) :
     private val viewBinding = LayoutQuestionItemBinding.bind(view)
 
     override fun bind(position: Int, item: Question) {
-        viewBinding.tv.text = position.toString()
+        viewBinding.tv.text = (position+1).toString()
 
         if (item.isSelected) {
             viewBinding.tv.setBackgroundResource(R.drawable.bg_question)
