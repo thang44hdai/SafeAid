@@ -157,13 +157,6 @@ class TestQuizFragment : BaseFragment<FragmentTestQuizBinding>() {
                 quiz
             )
         )
-
-        NotificationUtils.showNotification(
-            requireContext(),
-            "Bài làm đã được nộp",
-            "Chúc mừng bạn đã hoàn thành bài thi ${quiz.title}",
-            R.drawable.ic_noti_unread
-        )
     }
 
     private fun onClickQuestion(question: Question) {
@@ -234,12 +227,6 @@ class TestQuizFragment : BaseFragment<FragmentTestQuizBinding>() {
                         getCurrentTimestamp(),
                         quiz
                     )
-                )
-                NotificationUtils.showNotification(
-                    requireContext(),
-                    "Bài làm đã được nộp",
-                    "Chúc mừng bạn đã hoàn thành bài thi ${quiz.title}",
-                    R.drawable.ic_noti_unread
                 )
             }
         }.start()

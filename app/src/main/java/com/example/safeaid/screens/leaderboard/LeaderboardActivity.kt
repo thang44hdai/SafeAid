@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.androidtraining.R
 import com.example.androidtraining.databinding.ActivityLeaderboardBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LeaderboardActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLeaderboardBinding
@@ -19,6 +21,15 @@ class LeaderboardActivity : AppCompatActivity() {
 
         binding = ActivityLeaderboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Set up the toolbar with back navigation
+        val toolbar = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
+        // Set up back button click listener
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
 
         // set Toolbar back
         setSupportActionBar(binding.toolbar)

@@ -1,10 +1,13 @@
 // java/com/example/safeaid/screens/community/viewmodel/CreatePostViewModel.kt
 package com.example.safeaid.screens.community.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.*
 import com.example.safeaid.core.response.CreatePostResponse
 import com.example.safeaid.core.service.ApiService
+import com.example.safeaid.core.utils.Prefs
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -21,7 +24,8 @@ sealed class CreatePostState {
 
 @HiltViewModel
 class CreatePostViewModel @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _state = MutableLiveData<CreatePostState>(CreatePostState.Idle)
@@ -34,7 +38,6 @@ class CreatePostViewModel @Inject constructor(
      * @param images  zero or more `MultipartBody.Part` created in the Activity
      */
     fun createPost(
-        token: String,
         content: RequestBody,
         title: RequestBody?,
         images: List<MultipartBody.Part>
@@ -44,7 +47,7 @@ class CreatePostViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val response = apiService.createPost(
-                    bearerToken = token,
+                    bearerToken = "Bearer " + getToken(),
                     content     = content,
                     title       = title ?: "".toRequestBody("text/plain".toMediaType()),
                     images      = images
@@ -61,6 +64,15 @@ class CreatePostViewModel @Inject constructor(
             } catch (e: Exception) {
                 _state.value = CreatePostState.Error(e.localizedMessage ?: "Unknown error")
             }
+        }
+    }
+
+    private fun getToken(): String {
+        val token = Prefs.getToken(context) ?: ""
+        return if (token.isNotEmpty()) {
+            token
+        } else {
+            ""
         }
     }
 }

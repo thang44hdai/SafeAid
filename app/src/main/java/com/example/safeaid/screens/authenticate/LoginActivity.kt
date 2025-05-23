@@ -34,20 +34,62 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        binding.btnLogin.setOnClickListener {
-            val email = binding.etEmail.text.toString().trim()
-            val pass  = binding.etPassword.text.toString().trim()
-            if (email.isEmpty() || pass.isEmpty()) {
-                Toast.makeText(this, "Vui lòng nhập đầy đủ email và mật khẩu", Toast.LENGTH_SHORT).show()
-            } else {
-                vm.login(email, pass)
+        setupInputValidation()
+        setupClickListeners()
+        observeViewModel()
+    }
+    
+    private fun setupInputValidation() {
+        // Xóa thông báo lỗi khi người dùng bắt đầu nhập lại
+        binding.etEmail.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.tilEmail.error = null
             }
         }
-
-        binding.tvRegister.setOnClickListener {
-            startActivity(Intent(this, RegisterActivity::class.java))
+        
+        binding.etPassword.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.tilPassword.error = null
+            }
+        }
+    }
+    
+    private fun setupClickListeners() {
+        // Set up login button click listener
+        binding.btnLogin.setOnClickListener {
+            // Xóa các thông báo lỗi cũ
+            binding.tilEmail.error = null
+            binding.tilPassword.error = null
+            
+            val email = binding.etEmail.text.toString().trim()
+            val pass = binding.etPassword.text.toString().trim()
+            vm.login(email, pass)
         }
 
+        // Set up register link click listener
+        binding.tvRegister.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        }
+
+        // Set up forgot password link click listener
+        binding.tvForgot.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        }
+
+        // Set up social login buttons
+        binding.btnGoogle.setOnClickListener {
+            Toast.makeText(this, "Đăng nhập bằng Google đang được phát triển", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.btnFacebook.setOnClickListener {
+            Toast.makeText(this, "Đăng nhập bằng Facebook đang được phát triển", Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    private fun observeViewModel() {
+        // Observe authentication state
         vm.state.observe(this) { state ->
             when (state) {
                 is AuthState.Loading -> {
@@ -58,15 +100,55 @@ class LoginActivity : AppCompatActivity() {
                     binding.btnLogin.isEnabled = true
                     binding.btnLogin.text = "Đăng nhập"
                     Toast.makeText(this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, MainActivity::class.java))
+                    
+                    // Chuyển đến MainActivity và xóa activity stack
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
                 }
                 is AuthState.Error -> {
                     binding.btnLogin.isEnabled = true
                     binding.btnLogin.text = "Đăng nhập"
-                    Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
+                    
+                    // Hiển thị lỗi trên trường tương ứng
+                    when {
+                        state.message.contains("Email không được để trống") -> {
+                            binding.tilEmail.error = state.message
+                        }
+                        state.message.contains("Email không hợp lệ") -> {
+                            binding.tilEmail.error = state.message
+                        }
+                        state.message.contains("Mật khẩu không được để trống") -> {
+                            binding.tilPassword.error = state.message
+                        }
+                        state.message.contains("Thông tin đăng nhập không hợp lệ") -> {
+                            // Hiển thị lỗi thông tin đăng nhập không chính xác
+                            binding.tilEmail.error = " "
+                            binding.tilPassword.error = state.message
+                            
+                            // Hiển thị dialog thông báo nếu cần
+                            showErrorDialog(state.message)
+                        }
+                        else -> {
+                            // Lỗi khác hiển thị thông qua Toast
+                            Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
+                        }
+                    }
                 }
                 else -> { /* Idle */ }
             }
         }
+    }
+
+    private fun showErrorDialog(message: String) {
+        val builder = androidx.appcompat.app.AlertDialog.Builder(this)
+        builder.setTitle("Đăng nhập thất bại")
+        builder.setMessage(message)
+        builder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 }

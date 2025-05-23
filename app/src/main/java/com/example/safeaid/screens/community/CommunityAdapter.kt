@@ -15,7 +15,8 @@ import kotlin.math.log
 class CommunityAdapter(
     private var items: List<PostDto>,
     private val onCommentsClick: (PostDto) -> Unit,
-    private val onLikeToggle: (PostDto, Boolean) -> Unit
+    private val onLikeToggle: (PostDto, Boolean) -> Unit,
+    private val onShareClick: (PostDto) -> Unit,
 ) : RecyclerView.Adapter<CommunityAdapter.PostViewHolder>() {
 
     fun updateList(newList: List<PostDto>) {
@@ -54,8 +55,14 @@ class CommunityAdapter(
 
             // stats
             binding.tvLikes.text    = item.like_count.toString()
-            binding.tvLikes.setTextColor(
-                if (item.liked_by_user) Color.RED else Color.GRAY
+//            binding.tvLikes.setTextColor(
+//                if (item.liked_by_user) Color.RED else Color.GRAY
+//            )
+
+            //nếu liked thì thay icon ic_liked
+            binding.tvLikes.setCompoundDrawablesWithIntrinsicBounds(
+                if (item.liked_by_user) R.drawable.ic_liked else R.drawable.ic_like,
+                0, 0, 0
             )
 
             binding.tvLikes.setOnClickListener {
@@ -68,6 +75,10 @@ class CommunityAdapter(
             }
             binding.tvComments.text = item.comment_count.toString()
 //            binding.tvViews.text    = item.view_count.toString()
+
+            binding.tvShares.setOnClickListener {
+                onShareClick(item)
+            }
 
             binding.tvComments.setOnClickListener { onCommentsClick(item) }
         }

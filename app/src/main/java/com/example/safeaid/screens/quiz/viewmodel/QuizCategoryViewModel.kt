@@ -1,5 +1,6 @@
 package com.example.safeaid.screens.quiz.viewmodel
 
+import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.viewModelScope
@@ -12,17 +13,20 @@ import com.example.safeaid.core.response.QuizResponse
 import com.example.safeaid.core.response.Quizze
 import com.example.safeaid.core.service.ApiService
 import com.example.safeaid.core.utils.DataResult
+import com.example.safeaid.core.utils.Prefs.getToken
 import com.example.safeaid.core.utils.doIfFailure
 import com.example.safeaid.core.utils.doIfSuccess
 import com.example.safeaid.core.utils.onLoading
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class QuizCategoryViewModel @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    @ApplicationContext private val context: Context
 ) : BaseViewModel<QuizCategoryState, QuizCategoryEvent>() {
     var selectedQuizCategoryPostition: Int = 0
     var currentPage = 1
@@ -64,7 +68,7 @@ class QuizCategoryViewModel @Inject constructor(
     fun saveQuizResult(request: QuizAttemptRequest, callback: () -> Unit) {
         viewModelScope.launch {
             ApiCaller.safeApiCall(
-                apiCall = { apiService.saveResultQuiz(request) },
+                apiCall = { apiService.saveResultQuiz("Bearer ${getToken(context)}", request) },
                 callback = { result ->
                     result.doIfSuccess {
                         callback.invoke()
@@ -80,7 +84,7 @@ class QuizCategoryViewModel @Inject constructor(
     fun getHistoryQuiz() {
         viewModelScope.launch {
             ApiCaller.safeApiCall(
-                apiCall = { apiService.getResultQuiz("5e7e033d-c4e7-42bc-88e5-dbc2555e38a3") },
+                apiCall = { apiService.getResultQuiz("Bearer ${getToken(context)}") },
                 callback = { result ->
                     result.doIfSuccess {
                         it.sortQuizAttemptsByCompletedAt()
@@ -98,10 +102,7 @@ class QuizCategoryViewModel @Inject constructor(
         viewModelScope.launch {
             ApiCaller.safeApiCall(
                 apiCall = {
-                    apiService.getHistoryOfQuiz(
-                        "5e7e033d-c4e7-42bc-88e5-dbc2555e38a3",
-                        quiz.quizId
-                    )
+                    apiService.getHistoryOfQuiz("Bearer ${getToken(context)}", quiz.quizId)
                 },
                 callback = { result ->
                     result.doIfSuccess {

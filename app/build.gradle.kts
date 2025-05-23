@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("io.realm.kotlin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -63,6 +64,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.activity)
+    implementation(libs.firebase.messaging.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -105,8 +107,14 @@ dependencies {
     implementation ("androidx.activity:activity-ktx:1.7.2")
 
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
     implementation("com.github.chrisbanes:PhotoView:2.3.0")
 
     implementation ("androidx.media3:media3-exoplayer:1.3.1")
     implementation ("androidx.media3:media3-ui:1.3.1")
+
+
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
+    implementation("com.google.firebase:firebase-bom:33.13.0")
+
 }

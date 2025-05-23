@@ -7,21 +7,18 @@
     android:layout_height="match_parent"
     tools:context="com.example.safeaid.screens.editprofile.EditProfileActivity">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
+        style="@style/Widget.MaterialComponents.Toolbar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
-        android:layout_marginTop="28dp"
-        android:background="@android:color/white"
-        android:gravity="center"
-        app:contentInsetEnd="0dp"
-        app:contentInsetStart="0dp"
-        app:contentInsetStartWithNavigation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/white"
         app:navigationIcon="@drawable/back_btn"
-        app:title="Chỉnh sửa thông tin" />
+        app:title="Chỉnh sửa thông tin"
+        app:titleCentered="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/tvPhonenumberLabel"
@@ -58,15 +55,15 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
-        android:id="@+id/tvFullnameLabel"
+        android:id="@+id/tvUserName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Họ tên"
+        android:text="Username"
         android:textColor="#333333"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/etFullname"
+        app:layout_constraintBottom_toTopOf="@+id/etUserName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,14 +71,14 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
-        android:id="@+id/etFullname"
+        android:id="@+id/etUserName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="44dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/bg_input_rounded"
-        android:hint="Nhập họ tên"
+        android:hint="Nhập username"
         android:padding="16dp"
         android:textColor="#000000"
         android:textColorHint="#757575"
@@ -91,39 +88,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etPhonenumber" />
 
-    <TextView
-        android:id="@+id/tvAddressLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="Địa chỉ"
-        android:textColor="#333333"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/etAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
 
-    <EditText
-        android:id="@+id/etAddress"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/bg_input_rounded"
-        android:hint="Nhập địa chỉ"
-        android:padding="16dp"
-        android:textColor="#000000"
-        android:textColorHint="#757575"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etFullname" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_start"

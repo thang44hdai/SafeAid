@@ -15,14 +15,18 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.bumptech.glide.Glide
 import com.example.androidtraining.R
 import com.example.androidtraining.databinding.ActivityCreatePostBinding
+import com.example.safeaid.core.utils.Prefs
+import com.example.safeaid.core.utils.UserManager
 import com.example.safeaid.screens.community.viewmodel.CreatePostState
 import com.example.safeaid.screens.community.viewmodel.CreatePostViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.MultipartBody
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CreatePostActivity : AppCompatActivity() {
@@ -30,6 +34,9 @@ class CreatePostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCreatePostBinding
     private val viewModel: CreatePostViewModel by viewModels()
     private var selectedImageUri: Uri? = null
+
+    @Inject
+    lateinit var userManager: UserManager
 
     private val pickImage =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -57,6 +64,20 @@ class CreatePostActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { finish() }
+
+        // Display current user info
+        val username = userManager.getUsername(this)
+        binding.tvUsername.text = if (username.isNotEmpty()) username else "Bạn"
+
+        // Load user avatar if available
+        val avatarUrl = userManager.getAvatarUrl(this)
+        if (avatarUrl.isNotEmpty()) {
+            Glide.with(this)
+                .load(avatarUrl)
+                .placeholder(R.drawable.default_avt)
+                .error(R.drawable.default_avt)
+                .into(binding.ivAvatar)
+        }
 
         // image pick / remove
         binding.btnAddImage.setOnClickListener { pickImage.launch("image/*") }
@@ -116,6 +137,8 @@ class CreatePostActivity : AppCompatActivity() {
             return
         }
 
+
+
         // 1) Build RequestBody for text
         val contentRb = contentText
             .toRequestBody("text/plain".toMediaType())
@@ -135,10 +158,7 @@ class CreatePostActivity : AppCompatActivity() {
             }
         } ?: emptyList()
 
-        // 3) Grab your JWT however you store it
-        val token = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiZGQ5NWE1NDctODAyNC00N2U5LTgzODEtOTFmNjJjOWI4MDM4IiwiZW1haWwiOiJobmFtMTIzQGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ2OTQwNDQ0fQ.kuMBBlgYiqhVgvNF1gaM0yCQX61rSbI8vpRem-kEviA"
-
         // 4) Call ViewModel
-        viewModel.createPost(token, contentRb, titleRb, parts)
+        viewModel.createPost(contentRb, titleRb, parts)
     }
 }

@@ -23,13 +23,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/imageView2"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/circular_background"
+                android:layout_marginTop="8dp"
+                app:shapeAppearanceOverlay="@style/CircularImageView"
                 android:clipToOutline="true"
                 android:src="@drawable/default_avt"
                 app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +58,7 @@
                 app:srcCompat="@drawable/leaderboard_btn" />
 
             <ImageButton
-                android:id="@+id/imageButton3"
+                    android:id="@+id/imageButton3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -288,7 +288,8 @@
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:text="Bài viết cộng đồng"
+            android:text="Khám phá cộng đồng"
+            android:textColor="@android:color/black"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"

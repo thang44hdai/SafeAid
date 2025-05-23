@@ -1,30 +1,27 @@
 package com.example.safeaid.core.service
 
 import QuizCategoryResponse
+import com.example.safeaid.core.request.EditProfileRequest
 import com.example.safeaid.core.request.LoginRequest
 import com.example.safeaid.core.request.QuizAttemptRequest
 
-import com.example.safeaid.core.response.BookmarkResponse
-import com.example.safeaid.core.response.Guide
-import com.example.safeaid.core.response.GuideCategoryResponse
-import com.example.safeaid.core.response.GuideResponse
-import com.example.safeaid.core.response.GuideStepMediaResponse
-import com.example.safeaid.core.response.GuideStepResponse
-
 import com.example.safeaid.core.request.RegisterRequest
+import com.example.safeaid.core.request.ResetPasswordRequest
+import com.example.safeaid.core.response.*
 import com.example.safeaid.core.response.CommentDto
 import com.example.safeaid.core.response.CreatePostResponse
+import com.example.safeaid.core.response.LeaderboardResponse
 import com.example.safeaid.core.response.LoginResponse
 import com.example.safeaid.core.response.PostListResponse
 
-import com.example.safeaid.core.response.QuizAttemptResponse
-import com.example.safeaid.core.response.QuizHistoryDetailResponse
-import com.example.safeaid.core.response.QuizResponse
-import com.example.safeaid.core.response.RegisterResponse
 import kotlinx.serialization.json.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import com.example.safeaid.core.response.NewsListResponse
+import com.example.safeaid.core.response.PersonalRankResponse
+import com.example.safeaid.core.response.NotificationRes
+import com.example.safeaid.core.response.QuizIdRes
+import com.example.safeaid.core.response.Quizze
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -32,8 +29,10 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -50,17 +49,18 @@ interface ApiService {
 
     @POST("/api/quiz-attempts")
     suspend fun saveResultQuiz(
+        @Header("Authorization") bearerToken: String,
         @Body request: QuizAttemptRequest
     ): Response<JsonObject>
 
-    @GET("/api/quiz-attempts/user/{userId}")
+    @GET("/api/quiz-attempts/user")
     suspend fun getResultQuiz(
-        @Path("userId") userId: String
+        @Header("Authorization") bearerToken: String,
     ): Response<QuizAttemptResponse>
 
-    @GET("/api/quiz-attempts/{userId}/{quizId}")
+    @GET("/api/quiz-attempts/{quizId}")
     suspend fun getHistoryOfQuiz(
-        @Path("userId") userId: String,
+        @Header("Authorization") bearerToken: String,
         @Path("quizId") quizId: String
     ): Response<QuizAttemptResponse>
 
@@ -70,7 +70,7 @@ interface ApiService {
         @Path("quiz_id") quizId: String
     ): Response<QuizHistoryDetailResponse>
 
-    
+
     // Thêm endpoint mới cho Guide Categories
     @GET("/api/guide-categories")
     suspend fun getGuideCategories(
@@ -131,8 +131,8 @@ interface ApiService {
     @GET("/api/posts")
     suspend fun getPosts(
         @Header("Authorization") bearerToken: String,
-        @Query("page")  page: Int   = 1,
-        @Query("limit") limit: Int  = 10
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 10
     ): Response<PostListResponse>
 
     @Multipart
@@ -169,6 +169,13 @@ interface ApiService {
         @Path("postId") postId: String
     ): Response<Unit>
 
+    @DELETE("/api/posts/{postId}/comments/{commentId}")
+    suspend fun deleteComment(
+        @Header("Authorization") bearer: String,
+        @Path("postId") postId: String,
+        @Path("commentId") commentId: String
+    ): Response<Unit>
+
     //Authentication
     @POST("/api/auth/login")
     suspend fun login(
@@ -179,6 +186,11 @@ interface ApiService {
     suspend fun register(
         @Body request: RegisterRequest
     ): Response<RegisterResponse>
+
+    @POST("/api/auth/reset-password")
+    suspend fun resetPassword(
+        @Body request: ResetPasswordRequest
+    ): Response<ResetPasswordResponse>
 
     @GET("/api/news")
     suspend fun getNewsList(): Response<NewsListResponse>
@@ -192,4 +204,55 @@ interface ApiService {
         @Part thumbnail: RequestBody,
         @Part media: List<MultipartBody.Part>? = null
     ): Response<NewsListResponse>
+
+    @Multipart
+    @POST("/api/users/update-avatar")
+    suspend fun updateAvatar(
+        @Header("Authorization") bearerToken: String,
+        @Part avatar: MultipartBody.Part
+    ): Response<Unit>
+
+    @GET("/api/leaderboard")
+    suspend fun getLeaderboard(
+        @Header("Authorization") bearerToken: String
+    ): Response<LeaderboardResponse>
+
+    @GET("/api/leaderboard/my-rank")
+    suspend fun getMyRank(
+        @Header("Authorization") bearerToken: String
+    ): Response<PersonalRankResponse>
+
+    @GET("/api/users")
+    suspend fun getUserInfo(
+        @Header("Authorization") bearerToken: String
+    ): Response<UserInfoResponse>
+
+    @Multipart
+    @PUT("/api/users")
+    suspend fun updateProfile(
+        @Header("Authorization") bearerToken: String,
+        @Part("username") username: String,
+        @Part("phone_number") phone_number: String
+    ): Response<EditProfileRequest>
+
+    @POST("/api/auth/change-password")
+    suspend fun changePassword(
+        @Header("Authorization") bearerToken: String,
+        @Body requestBody: Map<String, String>
+    ): Response<Map<String, String>>
+    @GET("/api/notifications")
+    suspend fun getNotifications(
+        @Header("Authorization") bearerToken: String,
+    ): Response<NotificationRes>
+
+    @GET("/api/quizzes/{quizId}")
+    suspend fun getQuizById(
+        @Path("quizId") quizId: String,
+    ): Response<QuizIdRes>
+
+    @PATCH("/api/notifications/{notification_id}/read")
+    suspend fun markAsRead(
+        @Header("Authorization") bearerToken: String,
+        @Path("notification_id") notificationId: String,
+    ): Response<QuizIdRes>
 }

@@ -13,6 +13,8 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.safeaid.MainActivity
+import com.example.safeaid.screens.news.NewsDetailsActivity
 import kotlin.random.Random
 
 
@@ -70,4 +72,79 @@ object NotificationUtils {
         }
         return false
     }
+
+    @SuppressLint("MissingPermission")
+    fun showExamNotification(
+        context: Context,
+        title: String,
+        content: String,
+        refId: String,
+        @DrawableRes icon: Int
+    ) {
+        val intent = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra("navigate_to_quiz_detail", true)
+            putExtra("ref_id", refId)
+            putExtra("title", title)
+            putExtra("content", content)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+        )
+
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(icon)
+            .setContentTitle(title)
+            .setContentText(content)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+        val notificationManager = NotificationManagerCompat.from(context)
+        val id = Random(System.currentTimeMillis()).nextInt(1000)
+        notificationManager.notify(id, builder.build())
+    }
+
+    @SuppressLint("MissingPermission")
+    fun showNewsNotification(
+        context: Context,
+        title: String,
+        content: String,
+        refId: String, // refId dùng để lấy chi tiết bài viết nếu cần
+        htmlContent: String,
+        @DrawableRes icon: Int
+    ) {
+        val intent = Intent(context, NewsDetailsActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra("news_title", title)
+            putExtra("news_html", htmlContent)
+            putExtra("ref_id", refId)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            1, // ID khác với exam để phân biệt
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+        )
+
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(icon)
+            .setContentTitle(title)
+            .setContentText(content)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+        val notificationManager = NotificationManagerCompat.from(context)
+        val id = Random(System.currentTimeMillis()).nextInt(1000)
+        notificationManager.notify(id, builder.build())
+    }
+
+
+
 }

@@ -97,6 +97,7 @@ class QuizHistoryListFragment : BaseFragment<FragmentQuizHistoryBinding>() {
     override fun onInitListener() {
         viewBinding.icBack.setOnDebounceClick {
             mainNavigator.offerNavEvent(PopBackStack())
+            viewModel.currentFilter = FilterCriteria()
         }
 
         viewBinding.layoutFilter.setOnDebounceClick {

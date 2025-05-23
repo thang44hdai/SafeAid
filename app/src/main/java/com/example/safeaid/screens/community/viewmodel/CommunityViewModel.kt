@@ -115,7 +115,6 @@ class CommunityViewModel @Inject constructor(
     }
 
     private fun getToken(): String {
-        // TODO: lấy token thật từ SharedPrefs / DataStore
         val token = Prefs.getToken(context) ?: ""
         return if (token.isNotEmpty()) {
             token

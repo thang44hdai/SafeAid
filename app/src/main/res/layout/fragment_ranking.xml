@@ -7,13 +7,17 @@
     android:fillViewport="true"
     android:paddingTop="16dp"
     android:paddingBottom="16dp">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingHorizontal="16dp">
-
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
         <!-- Top 3 -->
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,8 +33,10 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
                 app:cardCornerRadius="12dp"
+                app:cardUseCompatPadding="true"
                 app:cardElevation="2dp">
                 <LinearLayout
+                    android:id="@+id/second_place_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -42,6 +48,7 @@
                         android:layout_height="64dp">
 
                         <ImageView
+                            android:id="@+id/imageAvatar2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/default_avt"
@@ -53,6 +60,7 @@
                             android:layout_height="20dp"
                             android:layout_gravity="bottom|end"
                             android:background="@drawable/bg_circle_small"
+                            android:backgroundTint="#009BD6"
                             android:gravity="center"
                             android:text="2"
                             android:textSize="12sp"
@@ -60,6 +68,7 @@
                     </FrameLayout>
 
                     <TextView
+                        android:id="@+id/textUsername3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -68,18 +77,13 @@
                         android:textSize="14sp"/>
 
                     <TextView
+                        android:id="@+id/textScore2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1847"
                         android:textSize="16sp"
                         android:textColor="#009BD6"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="username"
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -90,8 +94,10 @@
                 android:layout_weight="1"
                 android:layout_marginHorizontal="4dp"
                 app:cardCornerRadius="12dp"
+                app:cardUseCompatPadding="true"
                 app:cardElevation="2dp">
                 <LinearLayout
+                    android:id="@+id/first_place_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -100,10 +106,11 @@
                     android:background="#CBD6FF">
 
                     <FrameLayout
-                        android:layout_width="80dp"
-                        android:layout_height="80dp">
+                        android:layout_width="70dp"
+                        android:layout_height="70dp">
 
                         <ImageView
+                            android:id="@+id/imageAvatar1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/default_avt"
@@ -127,6 +134,7 @@
                     </FrameLayout>
 
                     <TextView
+                        android:id="@+id/textUsername1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -135,18 +143,13 @@
                         android:textSize="16sp"/>
 
                     <TextView
+                        android:id="@+id/textScore1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2430"
                         android:textSize="18sp"
                         android:textColor="@color/primary"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="username"
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="12sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -157,8 +160,10 @@
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 app:cardCornerRadius="12dp"
+                app:cardUseCompatPadding="true"
                 app:cardElevation="2dp">
                 <LinearLayout
+                    android:id="@+id/third_place_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -170,6 +175,7 @@
                         android:layout_height="64dp">
 
                         <ImageView
+                            android:id="@+id/imageAvatar3"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/default_avt"
@@ -188,6 +194,7 @@
                     </FrameLayout>
 
                     <TextView
+                        android:id="@+id/textUsername2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -196,18 +203,14 @@
                         android:textSize="14sp"/>
 
                     <TextView
+                        android:id="@+id/textScore3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1674"
                         android:textSize="16sp"
                         android:textColor="#00D95F"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="username"
-                        android:textColor="@android:color/darker_gray"
-                        android:textSize="12sp"/>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -220,7 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_rank_list" />
+            tools:listitem="@layout/item_leaderboard_entry" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

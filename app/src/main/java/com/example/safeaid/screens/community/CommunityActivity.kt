@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.R
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -16,6 +17,7 @@ import androidx.lifecycle.asLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.androidtraining.databinding.ActivityCommunityBinding
 import com.example.safeaid.core.utils.DataResult
+import com.example.safeaid.screens.community.data.PostDto
 import com.example.safeaid.screens.community.viewmodel.CommunityEvent
 import com.example.safeaid.screens.community.viewmodel.CommunityState
 import com.example.safeaid.screens.community.viewmodel.CommunityViewModel
@@ -50,6 +52,12 @@ class CommunityActivity : AppCompatActivity() {
             insets
         }
 
+        // Set up the toolbar with back navigation
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
+
         binding.cardShare.setOnClickListener {
             createPostLauncher.launch(Intent(this, CreatePostActivity::class.java))
         }
@@ -71,6 +79,9 @@ class CommunityActivity : AppCompatActivity() {
             onLikeToggle = { post, nowLiked ->
                 if (nowLiked) viewModel.onTriggerEvent(CommunityEvent.LikePost(post.post_id))
                 else         viewModel.onTriggerEvent(CommunityEvent.UnLikePost(post.post_id))
+            },
+            onShareClick = { post ->
+                sharePost(post)
             }
         )
         binding.rvPosts.apply {
@@ -120,5 +131,18 @@ class CommunityActivity : AppCompatActivity() {
             })
 
         viewModel.onTriggerEvent(com.example.safeaid.screens.community.viewmodel.CommunityEvent.LoadPosts)
+    }
+
+    private fun sharePost(post: PostDto) {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, "Check out this post")
+
+            // Create share content with post details
+            val shareText = "${post.user.username}: ${post.content}\n\nShared from SafeAid App"
+            putExtra(Intent.EXTRA_TEXT, shareText)
+        }
+
+        startActivity(Intent.createChooser(shareIntent, "Share via"))
     }
 }
