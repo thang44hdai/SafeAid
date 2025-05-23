@@ -231,6 +231,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 else -> {}
             }
         }
+
+        viewBinding.imageButton3.setOnDebounceClick {
+            mainNavigator.offerNavEvent(GoToNotificationScreen())
+        }
     }
 
     override fun onResume() {
@@ -292,3 +296,4 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 }
 
 class GoToQuizHistory() : BaseContainerFragment.NavigationEvent()
+class GoToNotificationScreen() : BaseContainerFragment.NavigationEvent()

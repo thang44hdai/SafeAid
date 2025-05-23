@@ -1,5 +1,6 @@
 package com.example.safeaid
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -20,7 +21,9 @@ import com.example.safeaid.core.ui.BaseContainerFragment
 import com.example.safeaid.screens.guide.GoToBookmark
 import com.example.safeaid.screens.guide.GoToGuideDetail
 import com.example.safeaid.screens.guide.GoToStepDetail
+import com.example.safeaid.screens.home.GoToNotificationScreen
 import com.example.safeaid.screens.home.GoToQuizHistory
+import com.example.safeaid.screens.notification.viewmodel.NotificationViewModel
 import com.example.safeaid.screens.quiz.GoToDoQuizFragment
 import com.example.safeaid.screens.quiz.GoToMainScreen
 import com.example.safeaid.screens.quiz.GoToQuizFragment
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navHostFragment: NavHostFragment
     private val mainNavigator: MainNavigator by viewModels()
+    private val notificationViewModel: NotificationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
         setUpNav()
         observeNavigator()
+        handleIntent(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -72,6 +77,22 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        val shouldNavigate = intent?.getBooleanExtra("navigate_to_quiz_detail", false) ?: false
+        val refId = intent?.getStringExtra("ref_id")
+
+        if (shouldNavigate && refId != null) {
+            notificationViewModel.getHistoryQuiz(refId) { item ->
+                mainNavigator.offerNavEvent(GoToQuizHistoryDetail(item))
+            }
+        }
     }
 
     private fun setUpNav() {
@@ -152,7 +173,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 navController.navigate(R.id.quizHistoryDetailFragment, bundle)
             }
-            
+
             is GoToGuideDetail -> {
                 val bundle = Bundle().apply {
                     putString("categoryId", event.extras?.getString("categoryId"))
@@ -160,16 +181,20 @@ class MainActivity : AppCompatActivity() {
                 }
                 navController.navigate(R.id.guideDetailFragment, bundle)
             }
-        
+
             is GoToStepDetail -> {
                 val bundle = Bundle().apply {
                     putParcelable("step", event.extras?.getParcelable("step"))
                 }
                 navController.navigate(R.id.stepDetailFragment, bundle)
             }
-        
+
             is GoToBookmark -> {
                 navController.navigate(R.id.bookmarkFragment)
+            }
+
+            is GoToNotificationScreen -> {
+                navController.navigate(R.id.notificationFragment)
             }
         }
     }

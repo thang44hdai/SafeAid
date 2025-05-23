@@ -58,8 +58,8 @@ class QuizResultFragment : BaseFragment<FragmentQuizResultBinding>() {
         viewBinding.tvResultCount.text = numberCorrectQuestion.toString()
 
         val request = QuizAttemptRequest(
-            userId = "69eca16c-30c1-4c3f-9a2b-bf0a0cc1ab91",
             quizId = quiz?.quizId ?: "",
+            quizContent = quiz?.title ?: "",
             score = numberCorrectQuestion,
             maxScore = numberQuestion,
             duration = duration,

@@ -1,5 +1,7 @@
 package com.example.safeaid.screens.quiz_history.viewmodel
 
+import android.content.Context
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.example.safeaid.core.base.ApiCaller
 import com.example.safeaid.core.base.BaseViewModel
@@ -8,12 +10,14 @@ import com.example.safeaid.core.response.Question
 import com.example.safeaid.core.response.QuizHistoryDetailResponse
 import com.example.safeaid.core.service.ApiService
 import com.example.safeaid.core.utils.DataResult
+import com.example.safeaid.core.utils.Prefs.getToken
 import com.example.safeaid.core.utils.doIfFailure
 import com.example.safeaid.core.utils.doIfSuccess
 import com.example.safeaid.core.utils.onLoading
 import com.example.safeaid.screens.quiz.data.FilterCriteria
 import com.example.safeaid.screens.quiz_history.data.QuizHistory
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -22,7 +26,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuizHistoryViewModel @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    @ApplicationContext private val context: Context
 ) : BaseViewModel<QuizHistoryState, QuizHistoryEvent>() {
     var listCategory: MutableList<Category> = mutableListOf()
     var currentFilter = FilterCriteria()
@@ -33,7 +38,7 @@ class QuizHistoryViewModel @Inject constructor(
                 coroutineScope {
                     val categoryDeferred = async { apiService.getCategoryQuiz() }
                     val historyDeferred =
-                        async { apiService.getResultQuiz("5e7e033d-c4e7-42bc-88e5-dbc2555e38a3") }
+                        async { apiService.getResultQuiz("Bearer ${getToken(context)}") }
 
                     val categoryResponse = categoryDeferred.await()
                     val historyResponse = historyDeferred.await()
@@ -83,6 +88,7 @@ class QuizHistoryViewModel @Inject constructor(
                                 it1.copy()
                             }
                         }
+                        Log.i("hihihi", "${data}")
                         updateState(
                             DataResult.Success(
                                 QuizHistoryState.HistoryDetail(

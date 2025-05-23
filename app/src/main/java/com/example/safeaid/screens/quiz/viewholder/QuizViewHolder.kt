@@ -1,5 +1,6 @@
 package com.example.safeaid.screens.quiz.viewholder
 
+import android.util.Log
 import android.view.View
 import com.bumptech.glide.Glide
 import com.example.androidtraining.databinding.QuizItemBinding
@@ -13,13 +14,14 @@ class QuizViewHolder(view: View, private val callBack: (Quizze) -> Unit) :
 
     override fun bind(position: Int, item: Quizze) {
         viewBinding.tvTitle.text = item.title
-        viewBinding.tvDescription.text = formatSecondsToTime(item.duration)
-        viewBinding.tvTime.text = item.duration.toString()
+        viewBinding.tvDescription.text = item.description
+        viewBinding.tvTime.text = formatSecondsToTime(item.duration)
 
         item.thumbnailUrl?.let { url ->
-            Glide.with(viewBinding.root.context)
+            Log.i("hihihi", "${url}")
+            Glide.with(viewBinding.thumbnail.context)
                 .load(url)
-                .into(viewBinding.thumbnail) // Set the image into the ImageView
+                .into(viewBinding.thumbnail)
         }
 
         viewBinding.cv.setOnDebounceClick {

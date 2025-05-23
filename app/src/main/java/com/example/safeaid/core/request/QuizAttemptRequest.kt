@@ -16,8 +16,8 @@ data class QuizAttemptRequest(
     val quizId: String,
     @SerializedName("score")
     val score: Int,
-    @SerializedName("user_id")
-    val userId: String
+    @SerializedName("quiz_content")
+    val quizContent: String,
 )
 
 data class AnswerRequest(
