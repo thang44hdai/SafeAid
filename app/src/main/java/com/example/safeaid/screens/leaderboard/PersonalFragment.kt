@@ -7,19 +7,33 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.androidtraining.R
 import com.example.androidtraining.databinding.FragmentPersonalBinding
 import com.example.safeaid.core.response.PersonalRankResponse
+import com.example.safeaid.core.response.QuizAttemptResponse
+import com.example.safeaid.core.service.ApiService
+import com.example.safeaid.core.utils.Prefs
+import com.example.safeaid.screens.leaderboard.adapter.PersonalQuizAdapter
 import com.example.safeaid.screens.leaderboard.viewmodel.LeaderboardViewModel
 import com.example.safeaid.screens.leaderboard.viewmodel.PersonalRankState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PersonalFragment : Fragment() {
     private var _binding: FragmentPersonalBinding? = null
     private val binding get() = _binding!!
     private val viewModel: LeaderboardViewModel by activityViewModels()
+    
+    @Inject
+    lateinit var apiService: ApiService
+    
+    private val quizAdapter = PersonalQuizAdapter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentPersonalBinding.inflate(inflater, container, false)
@@ -28,8 +42,36 @@ class PersonalFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
         observeViewModel()
         viewModel.loadPersonalRank()
+        loadQuizAttempts()
+    }
+
+    private fun setupRecyclerView() {
+        binding.recyclerQuizzes.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = quizAdapter
+        }
+    }
+
+    private fun loadQuizAttempts() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiService.getResultQuiz("Bearer ${Prefs.getToken(requireContext())}")
+                if (response.isSuccessful) {
+                    response.body()?.let { quizAttempts ->
+                        activity?.runOnUiThread {
+                            quizAttempts.quizAttempts?.let { attempts ->
+                                quizAdapter.setData(attempts)
+                            }
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     private fun observeViewModel() {
@@ -84,13 +126,6 @@ class PersonalFragment : Fragment() {
         binding.textRank.text = "#${stats.rank}"
         binding.textAccuracy.text = "${stats.overall_accuracy}%"
         binding.textProgress.text = "${stats.progress.percentage}%"
-
-        // You can also update the category/quiz progress if you have those views
-        // For example:
-        // binding.progressBar1.progress = stats.progress.percentage
-
-        // If you want to show the quizzes list, you'd need to add a RecyclerView
-        // and adapter for that, but that's beyond the current layout
     }
 
     override fun onDestroyView() {
