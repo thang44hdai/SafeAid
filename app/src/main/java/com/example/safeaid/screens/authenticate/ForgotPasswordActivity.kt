@@ -133,7 +133,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
     private fun showSuccessUI(message: String) {
         // Hiển thị giao diện thành công
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+        //Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         
         // Thay đổi UI khi gửi thành công
         binding.tvTitle.text = "Đã gửi email!"
