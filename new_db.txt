@@ -1,0 +1,68 @@
+-- 2. Thêm Quiz 4
+
+INSERT INTO Quizzes (quiz_id, title, description, category_id, thumbnail_url, duration, guide_id)
+VALUES
+('quiz_004', 'Quiz Sơ cứu khi điện giật 2', 'Kiểm tra kiến thức sơ cứu cơ bản về điện', 'cat_001', 'https://tamanhhospital.vn/wp-content/uploads/2022/05/so-cuu-nguoi-bi-dien-giat.jpg', 1800, '4d901216-9c86-4a04-bd38-dfa92e8341dd'),
+
+-- Câu hỏi cho quiz_004
+INSERT INTO Question (question_id, content, quiz_id, point)
+VALUES
+('q_004_01', 'Khi thấy người bị điện giật, bước đầu tiên cần làm là gì?', 'quiz_004', 1),
+('q_004_02', 'Tại sao cần ngắt nguồn điện trước khi cứu người bị điện giật?', 'quiz_004', 1),
+('q_004_03', 'Dụng cụ nào an toàn để tách nạn nhân ra khỏi nguồn điện?', 'quiz_004', 1),
+('q_004_04', 'Nếu người bị điện giật bất tỉnh nhưng còn thở, bạn nên:', 'quiz_004', 1),
+('q_004_05', 'Nếu người bị điện giật ngừng thở và không có mạch, bạn nên:', 'quiz_004', 1),
+('q_004_06', 'Khi thực hiện ép tim ngoài lồng ngực, tay bạn đặt ở đâu?', 'quiz_004', 1),
+('q_004_07', 'Tần suất ép tim trong hồi sức tim phổi (CPR) là bao nhiêu?', 'quiz_004', 1),
+('q_004_08', 'Sau khi người bị điện giật tỉnh lại, bạn nên làm gì?', 'quiz_004', 1);
+
+
+-- Đáp án cho quiz_004
+INSERT INTO Answer (answer_id, content, is_correct, question_id) VALUES
+-- q_004_01
+('a_004_01_1', 'Chạm vào người đó để kéo ra', 0, 'q_004_01'),
+('a_004_01_2', 'Hô hấp nhân tạo ngay', 0, 'q_004_01'),
+('a_004_01_3', 'Ngắt nguồn điện ngay lập tức', 1, 'q_004_01'),
+('a_004_01_4', 'Gọi người nhà nạn nhân', 0, 'q_004_01'),
+
+-- q_004_02
+('a_004_02_1', 'Để người bị giật được thoải mái hơn', 0, 'q_004_02'),
+('a_004_02_2', 'Tránh gây cháy nổ', 0, 'q_004_02'),
+('a_004_02_3', 'Tránh nguy hiểm cho người cứu', 1, 'q_004_02'),
+('a_004_02_4', 'Để tiết kiệm điện', 0, 'q_004_02'),
+
+-- q_004_03
+('a_004_03_1', 'Gậy gỗ hoặc vật cách điện', 1, 'q_004_03'),
+('a_004_03_2', 'Gậy sắt', 0, 'q_004_03'),
+('a_004_03_3', 'Tay trần', 0, 'q_004_03'),
+('a_004_03_4', 'Dây điện khác', 0, 'q_004_03'),
+
+-- q_004_04
+('a_004_04_1', 'Cho uống nước', 0, 'q_004_04'),
+('a_004_04_2', 'Để nằm ngửa và quan sát', 0, 'q_004_04'),
+('a_004_04_3', 'Đặt ở tư thế hồi phục và theo dõi', 1, 'q_004_04'),
+('a_004_04_4', 'Di chuyển người đó đến nơi khác', 0, 'q_004_04'),
+
+-- q_004_05
+('a_004_05_1', 'Đợi cấp cứu tới', 0, 'q_004_05'),
+('a_004_05_2', 'Cho uống thuốc hồi sức', 0, 'q_004_05'),
+('a_004_05_3', 'Thực hiện CPR ngay lập tức', 1, 'q_004_05'),
+('a_004_05_4', 'Xoa bóp tay chân', 0, 'q_004_05'),
+
+-- q_004_06
+('a_004_06_1', 'Ở giữa ngực, giữa hai núm vú', 1, 'q_004_06'),
+('a_004_06_2', 'Trên bụng', 0, 'q_004_06'),
+('a_004_06_3', 'Dưới cổ', 0, 'q_004_06'),
+('a_004_06_4', 'Bên trái lồng ngực', 0, 'q_004_06'),
+
+-- q_004_07
+('a_004_07_1', '60 lần/phút', 0, 'q_004_07'),
+('a_004_07_2', '100 - 120 lần/phút', 1, 'q_004_07'),
+('a_004_07_3', '40 lần/phút', 0, 'q_004_07'),
+('a_004_07_4', '150 lần/phút', 0, 'q_004_07'),
+
+-- q_004_08
+('a_004_08_1', 'Cho về nhà nghỉ ngơi', 0, 'q_004_08'),
+('a_004_08_2', 'Cho uống nước và quay lại làm việc', 0, 'q_004_08'),
+('a_004_08_3', 'Đưa đến bệnh viện kiểm tra', 1, 'q_004_08'),
+('a_004_08_4', 'Chỉ cần theo dõi tại chỗ', 0, 'q_004_08');

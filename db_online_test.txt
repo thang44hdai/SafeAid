@@ -1,0 +1,181 @@
+INSERT INTO QuizCategory (category_id, name, description) VALUES
+('cat_001', 'Sơ cứu', 'Các kỹ thuật sơ cứu cơ bản cần thiết'),
+('cat_002', 'Cấp cứu', 'Cấp cứu'),
+('cat_003', 'Xử lý tai nạn', 'Xử lý tình huống khẩn cấp đặc biệt');
+
+INSERT INTO Quizzes (quiz_id, title, description, category_id, thumbnail_url, duration, guide_id)
+VALUES
+('quiz_001', 'Quiz Sơ cứu cơ bản', 'Kiểm tra kiến thức sơ cứu cơ bản', 'cat_001', 'https://www.vinmec.com/static/uploads/20200802_031548_058959_cc_max_1800x1800_jpg_8957fd52a9.jpg', 3600, 'guide_001'),	1
+('quiz_002', 'Quiz Cấp cứu gãy xương tay', 'Kiểm tra kiến thức chấn thương', 'cat_002', 'https://suckhoedoisong.qltns.mediacdn.vn/324455921873985536/2022/5/8/chan-thuong-the-thao-16520100262631548321182.jpg' , 3600, 'guide_002'),
+('quiz_003', 'Quiz Tai nạn với lửa', 'Kiểm tra cách xử lý khi bỏng ở nhiệt độ cao', 'cat_003', 'https://bvdklangson.com.vn/sites/default/files/1b1edcc2b834796a2025_0.jpg', 3600, 'guide_003');
+
+
+-- Quiz 1: 8 câu hỏi, mỗi câu 4 đáp án, 1 đáp án đúng
+INSERT INTO Question (question_id, content, quiz_id, point)
+VALUES
+('q_001_01', 'Bước đầu tiên khi gặp người bị ngất là gì?', 'quiz_001', 1),
+('q_001_02', 'Khi bị chảy máu cam, nên làm gì?', 'quiz_001', 1),
+('q_001_03', 'Khi bị bỏng nhẹ, nên xử lý thế nào?', 'quiz_001', 1),
+('q_001_04', 'Khi bị ong đốt, nên?', 'quiz_001', 1),
+('q_001_05', 'Khi bị thương chảy máu nhiều, việc đầu tiên là?', 'quiz_001', 1),
+('q_001_06', 'Khi bị điện giật, việc đầu tiên là?', 'quiz_001', 1),
+('q_001_07', 'Khi bị gãy xương, nên?', 'quiz_001', 1),
+('q_001_08', 'Khi bị dị vật vào mắt, nên?', 'quiz_001', 1);
+
+-- Đáp án cho từng câu hỏi (chỉ 1 đáp án đúng, is_correct = 1)
+INSERT INTO Answer (answer_id, content, is_correct, question_id) VALUES
+-- q_001_01
+('a_001_01_1', 'Kiểm tra phản ứng và gọi cấp cứu', 1, 'q_001_01'),
+('a_001_01_2', 'Cho uống nước', 0, 'q_001_01'),
+('a_001_01_3', 'Để nằm ngửa', 0, 'q_001_01'),
+('a_001_01_4', 'Đắp chăn', 0, 'q_001_01'),
+-- q_001_02
+('a_001_02_1', 'Ngửa đầu ra sau và bóp mũi', 0, 'q_001_02'),
+('a_001_02_2', 'Cúi đầu về phía trước và bóp mũi', 1, 'q_001_02'),
+('a_001_02_3', 'Nằm xuống', 0, 'q_001_02'),
+('a_001_02_4', 'Uống nước lạnh', 0, 'q_001_02'),
+-- q_001_03
+('a_001_03_1', 'Ngâm vùng bỏng vào nước mát', 1, 'q_001_03'),
+('a_001_03_2', 'Bôi kem đánh răng', 0, 'q_001_03'),
+('a_001_03_3', 'Bôi nước mắm', 0, 'q_001_03'),
+('a_001_03_4', 'Che kín bằng vải dày', 0, 'q_001_03'),
+-- q_001_04
+('a_001_04_1', 'Lấy ngòi ong ra và rửa sạch', 1, 'q_001_04'),
+('a_001_04_2', 'Chườm đá trực tiếp', 0, 'q_001_04'),
+('a_001_04_3', 'Bôi kem đánh răng', 0, 'q_001_04'),
+('a_001_04_4', 'Để nguyên không làm gì', 0, 'q_001_04'),
+-- q_001_05
+('a_001_05_1', 'Đè ép lên vết thương', 1, 'q_001_05'),
+('a_001_05_2', 'Rửa bằng nước', 0, 'q_001_05'),
+('a_001_05_3', 'Băng bó lỏng lẻo', 0, 'q_001_05'),
+('a_001_05_4', 'Cho uống thuốc giảm đau', 0, 'q_001_05'),
+-- q_001_06
+('a_001_06_1', 'Ngắt nguồn điện trước', 1, 'q_001_06'),
+('a_001_06_2', 'Chạm vào nạn nhân', 0, 'q_001_06'),
+('a_001_06_3', 'Đổ nước lên người', 0, 'q_001_06'),
+('a_001_06_4', 'Gọi người giúp', 0, 'q_001_06'),
+-- q_001_07
+('a_001_07_1', 'Cố nắn lại xương', 0, 'q_001_07'),
+('a_001_07_2', 'Cố định vị trí gãy', 1, 'q_001_07'),
+('a_001_07_3', 'Cho uống thuốc giảm đau', 0, 'q_001_07'),
+('a_001_07_4', 'Để tự nhiên', 0, 'q_001_07'),
+-- q_001_08
+('a_001_08_1', 'Dụi mắt mạnh', 0, 'q_001_08'),
+('a_001_08_2', 'Rửa mắt bằng nước sạch', 1, 'q_001_08'),
+('a_001_08_3', 'Nhắm mắt lại', 0, 'q_001_08'),
+('a_001_08_4', 'Dùng tay lấy dị vật', 0, 'q_001_08');
+
+
+-- Câu hỏi cho Quiz 2
+INSERT INTO Question (question_id, content, quiz_id, point)
+VALUES
+('q_002_01', 'Khi bị hóc dị vật, nạn nhân không thể ho hay nói, bạn nên?', 'quiz_002', 1),
+('q_002_02', 'Để tránh sốc nhiệt khi trời nắng, bạn nên?', 'quiz_002', 1),
+('q_002_03', 'Khi bị động kinh, bạn nên?', 'quiz_002', 1),
+('q_002_04', 'Khi bị đuối nước, việc đầu tiên cần làm là?', 'quiz_002', 1),
+('q_002_05', 'Khi bị ong đốt nhiều vết, bạn nên?', 'quiz_002', 1),
+('q_002_06', 'Khi bị rắn cắn, bạn nên làm gì trước?', 'quiz_002', 1),
+('q_002_07', 'Triệu chứng của say nắng bao gồm?', 'quiz_002', 1),
+('q_002_08', 'Việc đầu tiên khi sơ cứu người bị bỏng nặng là?', 'quiz_002', 1);
+
+-- Đáp án cho Quiz 2
+INSERT INTO Answer (answer_id, content, is_correct, question_id) VALUES
+-- q_002_01
+('a_002_01_1', 'Thực hiện thủ thuật Heimlich', 1, 'q_002_01'),
+('a_002_01_2', 'Cho uống nước', 0, 'q_002_01'),
+('a_002_01_3', 'Vỗ nhẹ lưng', 0, 'q_002_01'),
+('a_002_01_4', 'Để yên và quan sát', 0, 'q_002_01'),
+-- q_002_02
+('a_002_02_1', 'Đội nón, uống đủ nước, tránh ra ngoài vào trưa', 1, 'q_002_02'),
+('a_002_02_2', 'Mặc đồ tối màu', 0, 'q_002_02'),
+('a_002_02_3', 'Tập thể dục dưới nắng', 0, 'q_002_02'),
+('a_002_02_4', 'Uống cà phê', 0, 'q_002_02'),
+-- q_002_03
+('a_002_03_1', 'Để nạn nhân nằm nghiêng an toàn và bảo vệ khỏi va đập', 1, 'q_002_03'),
+('a_002_03_2', 'Cố gắng giữ chặt người bệnh', 0, 'q_002_03'),
+('a_002_03_3', 'Cho uống thuốc', 0, 'q_002_03'),
+('a_002_03_4', 'Ép người bệnh ngồi dậy', 0, 'q_002_03'),
+-- q_002_04
+('a_002_04_1', 'Gọi người giúp, đưa nạn nhân ra khỏi nước và kiểm tra nhịp thở', 1, 'q_002_04'),
+('a_002_04_2', 'Lắc mạnh người nạn nhân', 0, 'q_002_04'),
+('a_002_04_3', 'Để tự tỉnh', 0, 'q_002_04'),
+('a_002_04_4', 'Quấn khăn ấm', 0, 'q_002_04'),
+-- q_002_05
+('a_002_05_1', 'Gọi cấp cứu và nằm yên, không vận động', 1, 'q_002_05'),
+('a_002_05_2', 'Tự nặn hết ngòi', 0, 'q_002_05'),
+('a_002_05_3', 'Chườm nóng', 0, 'q_002_05'),
+('a_002_05_4', 'Tắm ngay', 0, 'q_002_05'),
+-- q_002_06
+('a_002_06_1', 'Giữ yên chi bị cắn và gọi cấp cứu', 1, 'q_002_06'),
+('a_002_06_2', 'Chích rút máu', 0, 'q_002_06'),
+('a_002_06_3', 'Rửa bằng xà phòng', 0, 'q_002_06'),
+('a_002_06_4', 'Chạy đi tìm thuốc', 0, 'q_002_06'),
+-- q_002_07
+('a_002_07_1', 'Đau đầu, chóng mặt, buồn nôn, da nóng đỏ', 1, 'q_002_07'),
+('a_002_07_2', 'Ho và đau bụng', 0, 'q_002_07'),
+('a_002_07_3', 'Sốt nhẹ và tiêu chảy', 0, 'q_002_07'),
+('a_002_07_4', 'Tay lạnh và nổi mề đay', 0, 'q_002_07'),
+-- q_002_08
+('a_002_08_1', 'Loại bỏ nguồn nhiệt và gọi cấp cứu', 1, 'q_002_08'),
+('a_002_08_2', 'Bôi kem đánh răng', 0, 'q_002_08'),
+('a_002_08_3', 'Dội nước lạnh ngay lập tức lên toàn thân', 0, 'q_002_08'),
+('a_002_08_4', 'Cho uống thuốc giảm đau', 0, 'q_002_08');
+
+
+-- Quiz 3: Hướng dẫn tai nạn đặc biệt
+-- Câu hỏi
+INSERT INTO Question (question_id, content, quiz_id, point)
+VALUES
+('q_003_01', 'Khi có người bị ngộ độc khí gas, bạn nên làm gì trước tiên?', 'quiz_003', 1),
+('q_003_02', 'Nếu bị động vật cắn (chó, mèo), bước xử lý đầu tiên là gì?', 'quiz_003', 1),
+('q_003_03', 'Khi bị sét đánh, nạn nhân thường có biểu hiện gì đầu tiên?', 'quiz_003', 1),
+('q_003_04', 'Việc đầu tiên cần làm khi thấy người bị đuối nước là gì?', 'quiz_003', 1),
+('q_003_05', 'Người bị dị ứng nặng (sốc phản vệ) cần được xử lý như thế nào?', 'quiz_003', 1),
+('q_003_06', 'Khi bị ngộ độc thực phẩm, nên làm gì?', 'quiz_003', 1),
+('q_003_07', 'Khi bị gãy răng do tai nạn, nên?', 'quiz_003', 1),
+('q_003_08', 'Tai nạn do bỏng hóa chất cần xử lý như thế nào?', 'quiz_003', 1);
+
+-- Đáp án
+INSERT INTO Answer (answer_id, content, is_correct, question_id) VALUES
+-- q_003_01
+('a_003_01_1', 'Đưa nạn nhân ra khỏi khu vực có khí gas', 1, 'q_003_01'),
+('a_003_01_2', 'Cho uống nước đường', 0, 'q_003_01'),
+('a_003_01_3', 'Lắc mạnh để nạn nhân tỉnh', 0, 'q_003_01'),
+('a_003_01_4', 'Mở cửa sổ rồi chạy ra ngoài', 0, 'q_003_01'),
+-- q_003_02
+('a_003_02_1', 'Rửa vết thương bằng xà phòng và nước sạch', 1, 'q_003_02'),
+('a_003_02_2', 'Đắp đá lạnh lên vết thương', 0, 'q_003_02'),
+('a_003_02_3', 'Băng kín vết thương', 0, 'q_003_02'),
+('a_003_02_4', 'Chà muối vào vết thương', 0, 'q_003_02'),
+-- q_003_03
+('a_003_03_1', 'Mất ý thức hoặc ngừng tim', 1, 'q_003_03'),
+('a_003_03_2', 'Chảy máu cam', 0, 'q_003_03'),
+('a_003_03_3', 'Ho dữ dội', 0, 'q_003_03'),
+('a_003_03_4', 'Rối loạn tiêu hóa', 0, 'q_003_03'),
+-- q_003_04
+('a_003_04_1', 'Gọi người hỗ trợ và đảm bảo an toàn cho bản thân', 1, 'q_003_04'),
+('a_003_04_2', 'Nhảy xuống cứu ngay', 0, 'q_003_04'),
+('a_003_04_3', 'La hét thật to để gây chú ý', 0, 'q_003_04'),
+('a_003_04_4', 'Gọi xe cứu thương rồi bỏ đi', 0, 'q_003_04'),
+-- q_003_05
+('a_003_05_1', 'Tiêm Epinephrine nếu có và gọi cấp cứu', 1, 'q_003_05'),
+('a_003_05_2', 'Cho uống nước đường', 0, 'q_003_05'),
+('a_003_05_3', 'Để nạn nhân nằm nghỉ', 0, 'q_003_05'),
+('a_003_05_4', 'Chườm nóng', 0, 'q_003_05'),
+-- q_003_06
+('a_003_06_1', 'Gây nôn và uống nhiều nước sạch', 1, 'q_003_06'),
+('a_003_06_2', 'Cho uống sữa', 0, 'q_003_06'),
+('a_003_06_3', 'Ngủ một giấc', 0, 'q_003_06'),
+('a_003_06_4', 'Không làm gì cả', 0, 'q_003_06'),
+-- q_003_07
+('a_003_07_1', 'Bảo quản răng trong sữa và đến nha sĩ càng sớm càng tốt', 1, 'q_003_07'),
+('a_003_07_2', 'Chà sạch răng rồi cất vào túi', 0, 'q_003_07'),
+('a_003_07_3', 'Vứt răng đi', 0, 'q_003_07'),
+('a_003_07_4', 'Dán lại bằng keo', 0, 'q_003_07'),
+-- q_003_08
+('a_003_08_1', 'Xối rửa vùng bỏng bằng nước chảy liên tục', 1, 'q_003_08'),
+('a_003_08_2', 'Bôi dầu ăn', 0, 'q_003_08'),
+('a_003_08_3', 'Đắp khăn lạnh', 0, 'q_003_08'),
+('a_003_08_4', 'Băng kín vùng bỏng', 0, 'q_003_08');
+
+

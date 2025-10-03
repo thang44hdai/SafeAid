@@ -1,0 +1,65 @@
+INSERT INTO Quizzes (quiz_id, title, description, category_id, thumbnail_url, duration, guide_id)
+VALUES
+('quiz_005', 'Sơ cứu điện giật sao cho đúng', 'Kiểm tra kiến thức sơ cứu cơ bản về điện', 'cat_001', 'https://cdn.nhathuoclongchau.com.vn/unsafe/800x0/filters:quality(95)/https://cms-prod.s3-sgn09.fptcloud.com/hinh_anh_so_cuu_nguoi_bi_dien_giat_1_d3b822247d.jpg', 1800, '4d901216-9c86-4a04-bd38-dfa92e8341dd'),
+
+
+-- Thêm câu hỏi cho quiz_005
+INSERT INTO Question (question_id, content, quiz_id, point) VALUES
+('q_005_01', 'Điều đầu tiên cần làm khi thấy người bị điện giật là gì?', 'quiz_005', 1),
+('q_005_02', 'Nếu không thể ngắt nguồn điện, bạn nên làm gì?', 'quiz_005', 1),
+('q_005_03', 'Sau khi ngắt điện, bước tiếp theo là gì?', 'quiz_005', 1),
+('q_005_04', 'Dụng cụ nào an toàn để tách nạn nhân khỏi nguồn điện?', 'quiz_005', 1),
+('q_005_05', 'Triệu chứng nào thường gặp khi bị điện giật nhẹ?', 'quiz_005', 1),
+('q_005_06', 'Trong trường hợp nạn nhân bất tỉnh sau điện giật, bạn nên?', 'quiz_005', 1),
+('q_005_07', 'Nếu nạn nhân ngừng thở, bạn nên?', 'quiz_005', 1),
+('q_005_08', 'Tại sao không nên chạm tay trần vào nạn nhân đang bị điện giật?', 'quiz_005', 1);
+
+-- Thêm đáp án cho từng câu hỏi
+INSERT INTO Answer (answer_id, content, is_correct, question_id) VALUES
+-- q_005_01
+('a_005_01_1', 'Ngắt nguồn điện ngay lập tức', 1, 'q_005_01'),
+('a_005_01_2', 'Chạy đến kéo nạn nhân ra', 0, 'q_005_01'),
+('a_005_01_3', 'Gọi điện thoại cho người thân nạn nhân', 0, 'q_005_01'),
+('a_005_01_4', 'Tưới nước vào nạn nhân', 0, 'q_005_01'),
+
+-- q_005_02
+('a_005_02_1', 'Dùng vật cách điện để tách nạn nhân', 1, 'q_005_02'),
+('a_005_02_2', 'Cầm tay nạn nhân kéo ra', 0, 'q_005_02'),
+('a_005_02_3', 'Đợi người khác tới giúp', 0, 'q_005_02'),
+('a_005_02_4', 'Hét lớn để nạn nhân tỉnh lại', 0, 'q_005_02'),
+
+-- q_005_03
+('a_005_03_1', 'Kiểm tra hô hấp và tim đập', 1, 'q_005_03'),
+('a_005_03_2', 'Đưa nạn nhân đi tắm', 0, 'q_005_03'),
+('a_005_03_3', 'Cho uống thuốc giảm đau', 0, 'q_005_03'),
+('a_005_03_4', 'Để nạn nhân nằm yên không làm gì', 0, 'q_005_03'),
+
+-- q_005_04
+('a_005_04_1', 'Gậy gỗ hoặc nhựa khô', 1, 'q_005_04'),
+('a_005_04_2', 'Dây kim loại', 0, 'q_005_04'),
+('a_005_04_3', 'Ống nước bằng đồng', 0, 'q_005_04'),
+('a_005_04_4', 'Tay trần', 0, 'q_005_04'),
+
+-- q_005_05
+('a_005_05_1', 'Tê tay chân và co giật nhẹ', 1, 'q_005_05'),
+('a_005_05_2', 'Sốt cao và đau đầu', 0, 'q_005_05'),
+('a_005_05_3', 'Buồn nôn kéo dài', 0, 'q_005_05'),
+('a_005_05_4', 'Đau bụng dữ dội', 0, 'q_005_05'),
+
+-- q_005_06
+('a_005_06_1', 'Kiểm tra phản ứng và gọi cấp cứu', 1, 'q_005_06'),
+('a_005_06_2', 'Để nằm ngửa và bỏ mặc', 0, 'q_005_06'),
+('a_005_06_3', 'Cho uống nước đường', 0, 'q_005_06'),
+('a_005_06_4', 'Làm mát cơ thể bằng đá lạnh', 0, 'q_005_06'),
+
+-- q_005_07
+('a_005_07_1', 'Tiến hành hô hấp nhân tạo', 1, 'q_005_07'),
+('a_005_07_2', 'Chạy đi tìm người giúp', 0, 'q_005_07'),
+('a_005_07_3', 'Lắc mạnh người nạn nhân', 0, 'q_005_07'),
+('a_005_07_4', 'Gọi điện thoại', 0, 'q_005_07'),
+
+-- q_005_08
+('a_005_08_1', 'Có thể bị điện giật theo', 1, 'q_005_08'),
+('a_005_08_2', 'Làm nạn nhân giật mình', 0, 'q_005_08'),
+('a_005_08_3', 'Làm rối loạn hiện trường', 0, 'q_005_08'),
+('a_005_08_4', 'Gây thương tích nhẹ', 0, 'q_005_08');
